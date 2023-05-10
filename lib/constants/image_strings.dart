@@ -1,0 +1,17 @@
+// -- OnBoarding Screen Images
+
+const String tOnBoardingImage1 =
+    "assets/images/onboarding_images/onboarding-1.png";
+const String tOnBoardingImage2 =
+    "assets/images/onboarding_images/onboarding-2.png";
+const String tOnBoardingImage3 =
+    "assets/images/onboarding_images/onboarding-3.png";
+
+// -- Login Screen Images
+
+const String tLoginImage1 = "assets/images/login_page.png";
+
+// -- Login Screen Images
+
+const String tRegistrationImage1 = "assets/images/registration_images/2.png";
+const String tRegistrationImage2 = "assets/images/registration_images/3.png";
