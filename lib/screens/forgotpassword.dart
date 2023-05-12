@@ -1,49 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/screens/forgotpassword.dart';
+import 'package:mashtaly_app/constants/image_strings.dart';
 import 'package:mashtaly_app/screens/reg_screen.dart';
 
 import '../constants/colors.dart';
-import '../constants/image_strings.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/text_strings.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatelessWidget {
+  const ForgotPasswordScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  bool isRememberMe = false;
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          reverse: false,
           child: Column(
             children: [
-              Image(
-                image: AssetImage(tLoginImage1),
-                width: width,
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 70),
+                  child: Center(
+                    child: Image(
+                      image: AssetImage(tResetPasswordImage1),
+                      width: width - 25,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               Container(
                 child: Column(
                   children: [
                     Text(
-                      "Welcome to Mashtaly",
+                      tEmailAcc,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: tPrimaryTextColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 25),
+                    SizedBox(height: 45),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -75,97 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      height: 48,
-                      width: 343,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: TextField(
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Password",
-                            hintStyle: TextStyle(color: tSecondActionColor),
-                            icon: Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: Icon(
-                                Icons.lock_outline_rounded,
-                                color: tSecondActionColor,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IntrinsicWidth(
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                activeColor: tPrimaryActionColor,
-                                side: BorderSide(
-                                  width: 1,
-                                  color: tSecondActionColor,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                value: isRememberMe,
-                                onChanged: (bool? value) {
-                                  setState(
-                                    () {
-                                      isRememberMe = value!;
-                                    },
-                                  );
-                                },
-                              ),
-                              Text(
-                                "Remember me",
-                                style: TextStyle(
-                                  color: tSecondTextColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordScreen(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "Forgot Password?",
-                            style: TextStyle(
-                              color: tPrimaryActionColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: height - 738),
+                    SizedBox(height: height - 699),
                     Container(
                       child: Column(
                         children: [
@@ -181,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               fillColor: tPrimaryActionColor,
                               elevation: 0,
                               child: Text(
-                                "Login",
+                                "Send Instructions",
                                 style: TextStyle(
                                   color: tThirdTextColor,
                                   fontWeight: FontWeight.bold,

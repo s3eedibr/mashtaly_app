@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/images/onboarding_images/
     - assets/images/registration_images/
+    - assets/images/resetpassword_images/
     - assets/images/
     - assets/fonts/
 

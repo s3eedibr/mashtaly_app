@@ -18,3 +18,7 @@ const String tInvalidEmailError = "Please Enter Valid Email";
 const String tPassNullError = "Please Enter Your Password";
 const String tShortPassError = "Password Is Too Short";
 const String tMatchPassError = "Password Don't Match";
+
+// -- Reset Password Text Screen
+const String tEmailAcc =
+    "Enter the email associated with your account to receive reset instructions";
