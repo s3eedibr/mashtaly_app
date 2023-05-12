@@ -1,19 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/screens/forgotpassword.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:mashtaly_app/screens/forgotpassword_screen.dart';
 import 'package:mashtaly_app/screens/reg_screen.dart';
 
 import '../constants/colors.dart';
 import '../constants/image_strings.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final VoidCallback showRegScreen;
+  const LoginScreen({
+    Key? key,
+    required this.showRegScreen,
+  }) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emilController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future login() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emilController.text.trim(),
+        password: _passwordController.text.trim());
+  }
+
+  @override
+  void dispose() {
+    _emilController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   bool isRememberMe = false;
   @override
   Widget build(BuildContext context) {
@@ -53,6 +75,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 343,
                       alignment: Alignment.center,
                       child: TextField(
+                        controller: _emilController,
+                        cursorColor: tPrimaryActionColor,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -87,6 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SizedBox(
                         width: double.infinity,
                         child: TextField(
+                          controller: _passwordController,
+                          cursorColor: tPrimaryActionColor,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -109,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -169,38 +195,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       child: Column(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            width: 343,
-                            height: 50,
-                            child: RawMaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6)),
-                              fillColor: tPrimaryActionColor,
-                              elevation: 0,
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                  color: tThirdTextColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                          GestureDetector(
+                            onTap: login,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: tPrimaryActionColor,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              width: 343,
+                              height: 50,
+                              child: Center(
+                                child: Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    color: tThirdTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
-                              onPressed: () {},
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegistrationScreen(),
-                                ),
-                              );
-                            },
-                            style: ButtonStyle(),
+                          SizedBox(height: 15),
+                          GestureDetector(
+                            onTap: widget.showRegScreen,
                             child: Text.rich(
                               TextSpan(
                                 text: "Don't have an account?",

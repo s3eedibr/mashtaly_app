@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mashtaly_app/firebase_options.dart';
+import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:mashtaly_app/screens/login_screen.dart';
 import 'package:mashtaly_app/screens/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.black));
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isViewed = prefs.getInt('onBoard');
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +28,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Introduction screen',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Mulish'),
-      home: isViewed != 0 ? OnBoardingScreen() : LoginScreen(),
+      theme: ThemeData(fontFamily: 'Mulish', useMaterial3: true),
+      home: isViewed != 0 ? OnBoardingScreen() : Auth(),
     );
   }
 }

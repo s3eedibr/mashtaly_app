@@ -1,11 +1,56 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:mashtaly_app/screens/login_screen.dart';
+import 'package:mashtaly_app/screens/verify_screen.dart';
 
 import '../constants/colors.dart';
 import '../constants/image_strings.dart';
 
-class RegistrationScreen extends StatelessWidget {
-  const RegistrationScreen({super.key});
+class RegistrationScreen extends StatefulWidget {
+  final VoidCallback showLoginScreen;
+  const RegistrationScreen({
+    Key? key,
+    required this.showLoginScreen,
+  }) : super(key: key);
+
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _nameController = TextEditingController();
+  final _emilController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmpasswordController = TextEditingController();
+
+  Future registration() async {
+    if (passwordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emilController.text.trim(),
+          password: _passwordController.text.trim());
+    }
+  }
+
+  bool passwordConfirmed() {
+    if (_passwordController.text.trim() ==
+        _confirmpasswordController.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emilController.dispose();
+    _passwordController.dispose();
+    _confirmpasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +94,8 @@ class RegistrationScreen extends StatelessWidget {
                       width: 343,
                       alignment: Alignment.center,
                       child: TextField(
+                        controller: _nameController,
+                        cursorColor: tPrimaryActionColor,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -81,6 +128,8 @@ class RegistrationScreen extends StatelessWidget {
                       width: 343,
                       alignment: Alignment.center,
                       child: TextField(
+                        controller: _emilController,
+                        cursorColor: tPrimaryActionColor,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -113,6 +162,8 @@ class RegistrationScreen extends StatelessWidget {
                       width: 343,
                       alignment: Alignment.center,
                       child: TextField(
+                        controller: _passwordController,
+                        cursorColor: tPrimaryActionColor,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -148,6 +199,8 @@ class RegistrationScreen extends StatelessWidget {
                       child: SizedBox(
                         width: double.infinity,
                         child: TextField(
+                          controller: _confirmpasswordController,
+                          cursorColor: tPrimaryActionColor,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -177,38 +230,30 @@ class RegistrationScreen extends StatelessWidget {
               Container(
                 child: Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      width: 343,
-                      height: 50,
-                      child: RawMaterialButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
-                        fillColor: tPrimaryActionColor,
-                        elevation: 0,
-                        child: Text(
-                          "Register",
-                          style: TextStyle(
-                            color: tThirdTextColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                    GestureDetector(
+                      onTap: registration,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: tPrimaryActionColor,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        width: 343,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                              color: tThirdTextColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
-                        onPressed: () {},
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(),
+                    SizedBox(height: 15),
+                    GestureDetector(
+                      onTap: widget.showLoginScreen,
                       child: Text.rich(
                         TextSpan(
                           text: "Already have an account?",

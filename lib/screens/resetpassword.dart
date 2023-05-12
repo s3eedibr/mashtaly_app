@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/constants/image_strings.dart';
-import 'package:mashtaly_app/screens/reg_screen.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:mashtaly_app/screens/home_screen.dart';
+import 'package:mashtaly_app/screens/login_screen.dart';
 
 import '../constants/colors.dart';
+import '../constants/image_strings.dart';
 import '../constants/text_strings.dart';
+import 'forgotpassword_screen.dart';
+import 'otp_screen.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({super.key});
+class ResetPasswordScreen extends StatelessWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +23,10 @@ class ForgotPasswordScreen extends StatelessWidget {
             children: [
               SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 70),
+                  padding: const EdgeInsets.only(top: 84),
                   child: Center(
                     child: Image(
-                      image: AssetImage(tResetPasswordImage1),
+                      image: AssetImage(tResetPasswordImage3),
                       width: width - 25,
                     ),
                   ),
@@ -33,7 +37,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      tEmailAcc,
+                      tResetPass,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: tPrimaryTextColor,
@@ -51,21 +55,23 @@ class ForgotPasswordScreen extends StatelessWidget {
                       width: 343,
                       alignment: Alignment.center,
                       child: TextField(
+                        cursorColor: tPrimaryActionColor,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                         ),
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Email",
+                          hintText: "Password",
                           hintStyle: TextStyle(
                             color: tSecondActionColor,
                           ),
                           icon: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: Icon(
-                              Icons.email_outlined,
+                              Icons.lock_outline_rounded,
                               color: tSecondActionColor,
                               size: 28,
                             ),
@@ -73,7 +79,42 @@ class ForgotPasswordScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: height - 699),
+                    SizedBox(height: 15),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      height: 48,
+                      width: 343,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: TextField(
+                          cursorColor: tPrimaryActionColor,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Confirm Password",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            icon: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Icon(
+                                Icons.lock_outline_rounded,
+                                color: tSecondActionColor,
+                                size: 28,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: height - 694),
                     Container(
                       child: Column(
                         children: [
@@ -89,47 +130,23 @@ class ForgotPasswordScreen extends StatelessWidget {
                               fillColor: tPrimaryActionColor,
                               elevation: 0,
                               child: Text(
-                                "Send Instructions",
+                                "Reset Password",
                                 style: TextStyle(
                                   color: tThirdTextColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegistrationScreen(),
-                                ),
-                              );
-                            },
-                            style: ButtonStyle(),
-                            child: Text.rich(
-                              TextSpan(
-                                text: "Don't have an account?",
-                                style: TextStyle(
-                                  color: tPrimaryTextColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: " Register now",
-                                    style: TextStyle(
-                                      color: tPrimaryActionColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
