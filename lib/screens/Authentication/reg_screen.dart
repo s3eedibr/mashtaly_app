@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,10 +26,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
   Future registration() async {
+    addUser();
     if (passwordConfirmed()) {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emilController.text.trim(),
           password: _passwordController.text.trim());
+    }
+  }
+
+// Reference the collection
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection("test");
+
+// Add a document with some data
+  void addUser() async {
+    try {
+      await usersCollection.add({
+        "email": _emilController.text.trim(),
+        "name": _nameController.text.trim(),
+      });
+      print('User added successfully');
+    } catch (e) {
+      print('Error adding user: $e');
     }
   }
 

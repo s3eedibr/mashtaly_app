@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:mashtaly_app/Constants/image_strings.dart';
+import 'package:mashtaly_app/Screens/Authentication/reg_screen.dart';
 import 'package:mashtaly_app/Screens/home_screen.dart';
 
 import '../../Constants/colors.dart';
@@ -110,16 +112,14 @@ class ForgotPasswordScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
+                          SizedBox(height: 15),
+                          GestureDetector(
+                            onTap: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
-                                ),
+                                MaterialPageRoute(builder: (context) => Auth()),
                               );
                             },
-                            style: ButtonStyle(),
                             child: Text.rich(
                               TextSpan(
                                 text: "Don't have an account?",

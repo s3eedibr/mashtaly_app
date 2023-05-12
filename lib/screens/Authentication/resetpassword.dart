@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mashtaly_app/Auth/auth.dart';
+import 'package:mashtaly_app/Screens/Authentication/login_screen.dart';
 import 'package:mashtaly_app/Screens/home_screen.dart';
 
 import '../../Constants/colors.dart';
@@ -139,7 +141,7 @@ class ResetPasswordScreen extends StatelessWidget {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
+                                    builder: (context) => Auth(),
                                   ),
                                 );
                               },
