@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:mashtaly_app/Auth/auth.dart';
-import 'package:mashtaly_app/screens/login_screen.dart';
-import 'package:mashtaly_app/screens/resetpassword.dart';
 
-import '../constants/colors.dart';
-import '../constants/image_strings.dart';
+import '../../Constants/colors.dart';
+import '../../Constants/image_strings.dart';
 import 'forgotpassword_screen.dart';
 
 class VerifyScreen extends StatelessWidget {

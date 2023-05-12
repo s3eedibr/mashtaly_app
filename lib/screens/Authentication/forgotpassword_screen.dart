@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/constants/image_strings.dart';
-import 'package:mashtaly_app/screens/home_screen.dart';
-import 'package:mashtaly_app/screens/reg_screen.dart';
+import 'package:mashtaly_app/Constants/image_strings.dart';
+import 'package:mashtaly_app/Screens/home_screen.dart';
 
-import '../constants/colors.dart';
-import '../constants/text_strings.dart';
+import '../../Constants/colors.dart';
+import '../../Constants/text_strings.dart';
 import 'otp_screen.dart';
 
 String? email = "";

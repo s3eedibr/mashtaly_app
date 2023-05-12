@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mashtaly_app/firebase_options.dart';
 import 'package:mashtaly_app/Auth/auth.dart';
-import 'package:mashtaly_app/screens/login_screen.dart';
-import 'package:mashtaly_app/screens/onboarding_screen.dart';
+import 'package:mashtaly_app/Screens/Onborading%20Screen/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int? isViewed;

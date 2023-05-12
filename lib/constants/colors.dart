@@ -9,3 +9,4 @@ const Color tThirdTextColor = Colors.white;
 
 const Color tPrimaryActionColor = Color(0xFF3ED400);
 const Color tSecondActionColor = Color(0xFFD2D8CF);
+const Color tThirdTextErrorColor = Color(0xFFFF6724);

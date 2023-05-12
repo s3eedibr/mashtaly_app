@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:mashtaly_app/screens/forgotpassword_screen.dart';
-import 'package:mashtaly_app/screens/reg_screen.dart';
-
-import '../constants/colors.dart';
-import '../constants/image_strings.dart';
+import '../../Constants/colors.dart';
+import '../../Constants/image_strings.dart';
+import 'forgotpassword_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback showRegScreen;
@@ -191,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       ],
                     ),
-                    SizedBox(height: height - 738),
+                    SizedBox(height: height - 739),
                     Container(
                       child: Column(
                         children: [

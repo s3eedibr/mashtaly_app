@@ -1,11 +1,10 @@
 import 'package:mashtaly_app/Models/onboarding_model.dart';
 import 'package:mashtaly_app/Auth/auth.dart';
-import 'package:mashtaly_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants/colors.dart';
-import '../constants/image_strings.dart';
+import '../../Constants/colors.dart';
+import '../../Constants/image_strings.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

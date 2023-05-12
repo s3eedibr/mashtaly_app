@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/screens/login_screen.dart';
-import 'package:mashtaly_app/screens/reg_screen.dart';
+
+import '../Screens/Authentication/login_screen.dart';
+import '../Screens/Authentication/reg_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);

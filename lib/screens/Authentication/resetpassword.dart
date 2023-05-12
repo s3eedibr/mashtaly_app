@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:mashtaly_app/screens/home_screen.dart';
-import 'package:mashtaly_app/screens/login_screen.dart';
+import 'package:mashtaly_app/Screens/home_screen.dart';
 
-import '../constants/colors.dart';
-import '../constants/image_strings.dart';
-import '../constants/text_strings.dart';
+import '../../Constants/colors.dart';
+import '../../Constants/image_strings.dart';
+import '../../Constants/text_strings.dart';
 import 'forgotpassword_screen.dart';
 import 'otp_screen.dart';
 
