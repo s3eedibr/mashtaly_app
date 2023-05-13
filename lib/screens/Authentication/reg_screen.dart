@@ -26,12 +26,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
   Future registration() async {
-    addUser();
     if (passwordConfirmed()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emilController.text.trim(),
-          password: _passwordController.text.trim());
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emilController.text.trim(),
+              password: _passwordController.text.trim())
+          .then((value) => addUser())
+          .then((value) => verifyEmail());
     }
+  }
+
+  void verifyEmail() async {
+    final user = FirebaseAuth.instance.currentUser!;
+    await user.sendEmailVerification();
   }
 
 // Reference the collection
