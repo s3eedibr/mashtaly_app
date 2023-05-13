@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:mashtaly_app/Constants/image_strings.dart';
-import 'package:mashtaly_app/Screens/Authentication/reg_screen.dart';
-import 'package:mashtaly_app/Screens/home_screen.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/text_strings.dart';

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../Constants/image_strings.dart';
 import '../Constants/text_strings.dart';
 

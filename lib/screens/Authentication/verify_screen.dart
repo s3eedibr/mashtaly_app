@@ -6,7 +6,6 @@ import 'package:mashtaly_app/Auth/auth.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/image_strings.dart';
-import 'forgotpassword_screen.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});

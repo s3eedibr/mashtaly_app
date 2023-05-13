@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Auth/auth.dart';
-import 'package:mashtaly_app/Screens/Authentication/login_screen.dart';
-import 'package:mashtaly_app/Screens/home_screen.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/image_strings.dart';
 import '../../Constants/text_strings.dart';
-import 'forgotpassword_screen.dart';
-import 'otp_screen.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});
