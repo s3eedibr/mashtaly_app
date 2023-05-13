@@ -17,9 +17,32 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
+  bool isRememberMe = false;
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  AppLifecycleState? _lastLifecycleState;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        _lastLifecycleState == AppLifecycleState.paused) {
+      if (isRememberMe == false) {
+        FirebaseAuth.instance.signOut();
+      }
+    } else if (state == AppLifecycleState.paused &&
+        _lastLifecycleState == AppLifecycleState.resumed) {
+      if (isRememberMe == false) {
+        FirebaseAuth.instance.signOut();
+      }
+    }
+    _lastLifecycleState = state;
+  }
 
   Future login() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -31,10 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emilController.dispose();
     _passwordController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
-  bool isRememberMe = false;
 
   @override
   Widget build(BuildContext context) {
