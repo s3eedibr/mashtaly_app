@@ -23,13 +23,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
   Future registration() async {
-    if (passwordConfirmed()) {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _emilController.text.trim(),
-              password: _passwordController.text.trim())
-          .then((value) => addUser())
-          .then((value) => verifyEmail());
+    try {
+      if (passwordConfirmed()) {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emilController.text.trim(),
+                password: _passwordController.text.trim())
+            .then((value) => addUser())
+            .then((value) => verifyEmail());
+      } else {
+        showSankBar(context, 'The password is not match.');
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showSankBar(context, 'The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showSankBar(context, 'The account already exists for that email.');
+      }
+    } catch (e) {
+      showSankBar(context, e.toString());
     }
   }
 
@@ -38,11 +50,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await user.sendEmailVerification();
   }
 
-// Reference the collection
+  void showSankBar(BuildContext context, String message,
+      {Color color = tThirdTextErrorColor}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        backgroundColor: color,
+      ),
+    );
+  }
+
   CollectionReference usersCollection =
       FirebaseFirestore.instance.collection("test");
 
-// Add a document with some data
   void addUser() async {
     try {
       await usersCollection.add({

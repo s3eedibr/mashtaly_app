@@ -16,44 +16,49 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
+class _LoginScreenState extends State<LoginScreen> {
   bool isRememberMe = false;
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  AppLifecycleState? _lastLifecycleState;
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed &&
-        _lastLifecycleState == AppLifecycleState.paused) {
-      if (isRememberMe == false) {
-        FirebaseAuth.instance.signOut();
-      }
-    } else if (state == AppLifecycleState.paused &&
-        _lastLifecycleState == AppLifecycleState.resumed) {
-      if (isRememberMe == false) {
-        FirebaseAuth.instance.signOut();
-      }
-    }
-    _lastLifecycleState = state;
-  }
 
   Future login() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emilController.text.trim(),
-        password: _passwordController.text.trim());
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emilController.text.trim(),
+          password: _passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showSankBar(context, 'No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        showSankBar(context, 'Wrong password provided for that user.');
+      }
+    } catch (e) {
+      showSankBar(context, e.toString());
+    }
+  }
+
+  void showSankBar(BuildContext context, String message,
+      {Color color = tThirdTextErrorColor}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        backgroundColor: color,
+      ),
+    );
   }
 
   @override
   void dispose() {
     _emilController.dispose();
     _passwordController.dispose();
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

@@ -119,7 +119,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.only(
+                            bottom: 20, left: 6, right: 6),
                         child: Text(
                           screens[index].text,
                           textAlign: TextAlign.center,
