@@ -23,58 +23,27 @@ class OTPScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 70),
                   child: Center(
                     child: Image(
-                      image: AssetImage(tResetPasswordImage2),
+                      image: const AssetImage(tResetPasswordImage2),
                       width: width - 25,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: Column(
                   children: [
                     Text(
                       "Enter OTP received on your email $email",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: tPrimaryTextColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 45),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     borderRadius: BorderRadius.circular(6),
-                    //   ),
-                    //   height: 48,
-                    //   width: 343,
-                    //   alignment: Alignment.center,
-                    //   child: TextField(
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.w600,
-                    //       fontSize: 16,
-                    //     ),
-                    //     keyboardType: TextInputType.emailAddress,
-                    //     decoration: InputDecoration(
-                    //       border: InputBorder.none,
-                    //       hintText: "Email",
-                    //       hintStyle: TextStyle(
-                    //         color: tSecondActionColor,
-                    //       ),
-                    //       icon: Padding(
-                    //         padding: const EdgeInsets.only(left: 15),
-                    //         child: Icon(
-                    //           Icons.email_outlined,
-                    //           color: tSecondActionColor,
-                    //           size: 28,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 45),
+                    const SizedBox(height: 25),
                     OtpTextField(
                       cursorColor: tPrimaryActionColor,
                       numberOfFields: 5,
@@ -82,8 +51,8 @@ class OTPScreen extends StatelessWidget {
                       showCursor: true,
                       fillColor: Colors.white,
                       filled: true,
-                      borderRadius: BorderRadius.all(Radius.circular(6)),
-                      textStyle: TextStyle(
+                      borderRadius: const BorderRadius.all(Radius.circular(6)),
+                      textStyle: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -93,19 +62,18 @@ class OTPScreen extends StatelessWidget {
                         print("OTP is => $code");
                       },
                     ),
-                    SizedBox(height: 5),
-
+                    const SizedBox(height: 5),
                     TextButton(
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ForgotPasswordScreen(),
+                            builder: (context) => const ForgotPasswordScreen(),
                           ),
                         );
                       },
-                      style: ButtonStyle(),
-                      child: Text.rich(
+                      style: const ButtonStyle(),
+                      child: const Text.rich(
                         TextSpan(
                           text: "Don't receive OTP?",
                           style: TextStyle(
@@ -141,7 +109,7 @@ class OTPScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6)),
                               fillColor: tPrimaryActionColor,
                               elevation: 0,
-                              child: Text(
+                              child: const Text(
                                 "Confirm",
                                 style: TextStyle(
                                   color: tThirdTextColor,
@@ -153,7 +121,8 @@ class OTPScreen extends StatelessWidget {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ResetPasswordScreen(),
+                                    builder: (context) =>
+                                        const ResetPasswordScreen(),
                                   ),
                                 );
                               },

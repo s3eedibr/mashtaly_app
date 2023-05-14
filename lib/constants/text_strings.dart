@@ -10,15 +10,6 @@ const String tOnBoardingSubTitle2 =
 const String tOnBoardingSubTitle3 =
     "You can publish articles about plants. You can also sell, buy or share plants with other people.";
 
-// -- Form Error
-final RegExp emailValidatorRegExp =
-    RegExp(r"^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-const String tEmailNullError = "Please Enter Your Email";
-const String tInvalidEmailError = "Please Enter Valid Email";
-const String tPassNullError = "Please Enter Your Password";
-const String tShortPassError = "Password Is Too Short";
-const String tMatchPassError = "Password Don't Match";
-
 // -- Reset Password Text Screen
 const String tEmailAcc =
     "Enter the email associated with your account to receive reset instructions";

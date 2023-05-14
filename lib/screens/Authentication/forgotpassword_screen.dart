@@ -25,17 +25,17 @@ class ForgotPasswordScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 70),
                   child: Center(
                     child: Image(
-                      image: AssetImage(tResetPasswordImage1),
+                      image: const AssetImage(tResetPasswordImage1),
                       width: width - 25,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       tEmailAcc,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -44,7 +44,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 45),
+                    const SizedBox(height: 45),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -56,19 +56,19 @@ class ForgotPasswordScreen extends StatelessWidget {
                       child: TextField(
                         onSubmitted: (value) => email = value,
                         cursorColor: tPrimaryActionColor,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: "Email",
                           hintStyle: TextStyle(
                             color: tSecondActionColor,
                           ),
                           icon: Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                            padding: EdgeInsets.only(left: 15),
                             child: Icon(
                               Icons.email_outlined,
                               color: tSecondActionColor,
@@ -87,7 +87,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OTPScreen(),
+                                  builder: (context) => const OTPScreen(),
                                 ),
                               );
                             },
@@ -98,7 +98,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                               ),
                               width: 343,
                               height: 50,
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Send Instructions",
                                   style: TextStyle(
@@ -110,15 +110,16 @@ class ForgotPasswordScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           GestureDetector(
                             onTap: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => Auth()),
+                                MaterialPageRoute(
+                                    builder: (context) => const Auth()),
                               );
                             },
-                            child: Text.rich(
+                            child: const Text.rich(
                               TextSpan(
                                 text: "Don't have an account?",
                                 style: TextStyle(

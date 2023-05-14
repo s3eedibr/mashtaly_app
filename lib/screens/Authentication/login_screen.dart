@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         content: Text(
           message,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -75,14 +75,14 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               Image(
-                image: AssetImage(tLoginImage1),
+                image: const AssetImage(tLoginImage1),
                 width: width,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "Welcome to Mashtaly",
                       style: TextStyle(
                         color: tPrimaryTextColor,
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -102,19 +102,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: TextField(
                         controller: _emilController,
                         cursorColor: tPrimaryActionColor,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: "Email",
                           hintStyle: TextStyle(
                             color: tSecondActionColor,
                           ),
                           icon: Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                            padding: EdgeInsets.only(left: 15),
                             child: Icon(
                               Icons.email_outlined,
                               color: tSecondActionColor,
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -138,18 +138,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextField(
                           controller: _passwordController,
                           cursorColor: tPrimaryActionColor,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: "Password",
                             hintStyle: TextStyle(color: tSecondActionColor),
                             icon: Padding(
-                              padding: const EdgeInsets.only(left: 15),
+                              padding: EdgeInsets.only(left: 15),
                               child: Icon(
                                 Icons.lock_outline_rounded,
                                 color: tSecondActionColor,
@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               Checkbox(
                                 activeColor: tPrimaryActionColor,
-                                side: BorderSide(
+                                side: const BorderSide(
                                   width: 1,
                                   color: tSecondActionColor,
                                 ),
@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
                                 },
                               ),
-                              Text(
+                              const Text(
                                 "Remember me",
                                 style: TextStyle(
                                   color: tSecondTextColor,
@@ -201,11 +201,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ForgotPasswordScreen(),
+                                builder: (context) =>
+                                    const ForgotPasswordScreen(),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             "Forgot Password?",
                             style: TextStyle(
                               color: tPrimaryActionColor,
@@ -229,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               width: 343,
                               height: 50,
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Login",
                                   style: TextStyle(
@@ -241,10 +242,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           GestureDetector(
                             onTap: widget.showRegScreen,
-                            child: Text.rich(
+                            child: const Text.rich(
                               TextSpan(
                                 text: "Don't have an account?",
                                 style: TextStyle(

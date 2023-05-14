@@ -22,17 +22,17 @@ class ResetPasswordScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 84),
                   child: Center(
                     child: Image(
-                      image: AssetImage(tResetPasswordImage3),
+                      image: const AssetImage(tResetPasswordImage3),
                       width: width - 25,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       tResetPass,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -41,7 +41,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 45),
+                    const SizedBox(height: 45),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -50,7 +50,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       height: 48,
                       width: 343,
                       alignment: Alignment.center,
-                      child: TextField(
+                      child: const TextField(
                         cursorColor: tPrimaryActionColor,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -65,7 +65,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             color: tSecondActionColor,
                           ),
                           icon: Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                            padding: EdgeInsets.only(left: 15),
                             child: Icon(
                               Icons.lock_outline_rounded,
                               color: tSecondActionColor,
@@ -75,7 +75,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -84,7 +84,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       height: 48,
                       width: 343,
                       alignment: Alignment.center,
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: double.infinity,
                         child: TextField(
                           cursorColor: tPrimaryActionColor,
@@ -99,7 +99,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             hintText: "Confirm Password",
                             hintStyle: TextStyle(color: tSecondActionColor),
                             icon: Padding(
-                              padding: const EdgeInsets.only(left: 15),
+                              padding: EdgeInsets.only(left: 15),
                               child: Icon(
                                 Icons.lock_outline_rounded,
                                 color: tSecondActionColor,
@@ -125,7 +125,7 @@ class ResetPasswordScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6)),
                               fillColor: tPrimaryActionColor,
                               elevation: 0,
-                              child: Text(
+                              child: const Text(
                                 "Reset Password",
                                 style: TextStyle(
                                   color: tThirdTextColor,
@@ -137,7 +137,7 @@ class ResetPasswordScreen extends StatelessWidget {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Auth(),
+                                    builder: (context) => const Auth(),
                                   ),
                                 );
                               },

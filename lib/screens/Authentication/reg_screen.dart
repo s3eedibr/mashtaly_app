@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +46,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void verifyEmail() async {
     final user = FirebaseAuth.instance.currentUser!;
+    await user.updateDisplayName(_nameController.text.trim());
     await user.sendEmailVerification();
   }
 
@@ -57,7 +57,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         content: Text(
           message,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -103,21 +103,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             children: [
               SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: const EdgeInsets.only(top: 70),
                   child: Center(
                     child: Image(
-                      image: AssetImage(tRegistrationImage1),
+                      image: const AssetImage(tRegistrationImage1),
                       width: width - 25,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: Form(
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         "Let's Join Our Community",
                         style: TextStyle(
                           color: tPrimaryTextColor,
@@ -125,7 +125,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           fontSize: 24,
                         ),
                       ),
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -137,19 +137,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: TextField(
                           controller: _nameController,
                           cursorColor: tPrimaryActionColor,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                           keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: "Name",
                             hintStyle: TextStyle(
                               color: tSecondActionColor,
                             ),
                             icon: Padding(
-                              padding: const EdgeInsets.only(left: 15),
+                              padding: EdgeInsets.only(left: 15),
                               child: Icon(
                                 Icons.person_2_outlined,
                                 color: tSecondActionColor,
@@ -159,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -171,19 +171,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: TextField(
                           controller: _emilController,
                           cursorColor: tPrimaryActionColor,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                           keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: "Email",
                             hintStyle: TextStyle(
                               color: tSecondActionColor,
                             ),
                             icon: Padding(
-                              padding: const EdgeInsets.only(left: 15),
+                              padding: EdgeInsets.only(left: 15),
                               child: Icon(
                                 Icons.email_outlined,
                                 color: tSecondActionColor,
@@ -193,7 +193,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -205,20 +205,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: TextField(
                           controller: _passwordController,
                           cursorColor: tPrimaryActionColor,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: "Password",
                             hintStyle: TextStyle(
                               color: tSecondActionColor,
                             ),
                             icon: Padding(
-                              padding: const EdgeInsets.only(left: 15),
+                              padding: EdgeInsets.only(left: 15),
                               child: Icon(
                                 Icons.lock_outline_rounded,
                                 color: tSecondActionColor,
@@ -228,7 +228,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -242,18 +242,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: TextField(
                             controller: _confirmpasswordController,
                             cursorColor: tPrimaryActionColor,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: "Confirm Password",
                               hintStyle: TextStyle(color: tSecondActionColor),
                               icon: Padding(
-                                padding: const EdgeInsets.only(left: 15),
+                                padding: EdgeInsets.only(left: 15),
                                 child: Icon(
                                   Icons.lock_outline_rounded,
                                   color: tSecondActionColor,
@@ -268,7 +268,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: height - 719),
+              SizedBox(height: height - 738),
               GestureDetector(
                   onTap: registration,
                   child: Container(
@@ -278,7 +278,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     width: 343,
                     height: 50,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "Register",
                         style: TextStyle(
@@ -289,10 +289,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                     ),
                   )),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               GestureDetector(
                 onTap: widget.showLoginScreen,
-                child: Text.rich(
+                child: const Text.rich(
                   TextSpan(
                     text: "Already have an account?",
                     style: TextStyle(

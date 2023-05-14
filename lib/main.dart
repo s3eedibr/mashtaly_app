@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 int? isViewed;
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.black));
+      const SystemUiOverlayStyle(statusBarColor: Colors.black));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
       title: 'Introduction screen',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Mulish', useMaterial3: true),
-      home: isViewed != 0 ? OnBoardingScreen() : Auth(),
+      home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
     );
   }
 }

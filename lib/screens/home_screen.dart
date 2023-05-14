@@ -22,16 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Hello, you're loged in " + user.email!,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                "Hello, Login by ${user.email!}",
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black),
               ),
               MaterialButton(
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
                 },
                 color: tPrimaryActionColor,
-                child: Text(
+                child: const Text(
                   "Log Out",
                   style: TextStyle(
                     color: tThirdTextColor,

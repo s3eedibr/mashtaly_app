@@ -67,14 +67,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Auth(),
+                    builder: (context) => const Auth(),
                   ),
                 );
               },
               child: Row(
                 children: [
                   currentIndex != 2
-                      ? Text(
+                      ? const Text(
                           "Skip",
                           style: TextStyle(
                             color: tPrimaryTextColor,
@@ -82,14 +82,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             fontSize: 16,
                           ),
                         )
-                      : Text(""),
+                      : const Text(""),
                   currentIndex != 2
-                      ? Icon(
+                      ? const Icon(
                           Icons.keyboard_arrow_right_rounded,
                           color: tPrimaryTextColor,
                           size: 24,
                         )
-                      : Text(""),
+                      : const Text(""),
                 ],
               ),
             ),
@@ -98,7 +98,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         body: PageView.builder(
           itemCount: screens.length,
           controller: _pageController,
-          physics: PageScrollPhysics(),
+          physics: const PageScrollPhysics(),
           onPageChanged: (int index) {
             setState(() {
               currentIndex = index;
@@ -119,12 +119,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 20, left: 6, right: 6),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
                           screens[index].text,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: tPrimaryTextColor,
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
@@ -132,11 +131,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 6, right: 6),
+                        padding: const EdgeInsets.only(left: 6, right: 6),
                         child: Text(
                           screens[index].desc,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: tPrimaryTextColor,
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
@@ -159,7 +158,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: 8.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 height: 8,
                                 width: currentIndex == index ? 25 : 8,
                                 decoration: BoxDecoration(
@@ -176,18 +176,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     ),
                     Container(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 8, right: 8),
+                        padding: const EdgeInsets.only(left: 8, right: 8),
                         child: TextButton(
                           onPressed: () async {
                             await _storeOnBoaringInfo();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Auth(),
+                                builder: (context) => const Auth(),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             "Don't show again",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -202,11 +202,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     InkWell(
                       onTap: () {
                         if (index == screens.length - 1) {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => Auth()));
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Auth()));
                         }
                         _pageController.nextPage(
-                          duration: Duration(microseconds: 300),
+                          duration: const Duration(microseconds: 300),
                           curve: Curves.bounceIn,
                         );
                       },
@@ -215,7 +217,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         children: [
                           Container(
                             height: 80,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.transparent,
                               boxShadow: [
                                 BoxShadow(
@@ -241,7 +243,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 currentIndex != 2
-                                    ? Text(
+                                    ? const Text(
                                         "Next",
                                         style: TextStyle(
                                           color: tThirdTextColor,
@@ -249,7 +251,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                           fontSize: 20,
                                         ),
                                       )
-                                    : Text(
+                                    : const Text(
                                         "Let's Get Started",
                                         style: TextStyle(
                                           color: tThirdTextColor,

@@ -20,13 +20,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
   Timer? timer;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       sendVerificationEmail();
       timer = Timer.periodic(
-        Duration(seconds: 3),
+        const Duration(seconds: 3),
         (_) => checkEmailVerified(),
       );
     }
@@ -71,17 +70,17 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   padding: const EdgeInsets.only(top: 70),
                   child: Center(
                     child: Image(
-                      image: AssetImage(tRegistrationImage2),
+                      image: const AssetImage(tRegistrationImage2),
                       width: width - 120,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "We sent you an email to verify your account",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -90,7 +89,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                         fontSize: 24,
                       ),
                     ),
-                    SizedBox(height: 45),
+                    const SizedBox(height: 45),
                     SizedBox(height: height - 565),
                     Container(
                       child: Column(
@@ -106,7 +105,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                   borderRadius: BorderRadius.circular(6)),
                               fillColor: tPrimaryActionColor,
                               elevation: 0,
-                              child: Text(
+                              child: const Text(
                                 "Let's Get Started",
                                 style: TextStyle(
                                   color: tThirdTextColor,
@@ -118,7 +117,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Auth(),
+                                    builder: (context) => const Auth(),
                                   ),
                                 );
                               },
