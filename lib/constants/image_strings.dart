@@ -24,3 +24,7 @@ const String tResetPasswordImage2 =
     "assets/images/resetpassword_images/resetpassword-2.png";
 const String tResetPasswordImage3 =
     "assets/images/resetpassword_images/resetpassword-3.png";
+
+// -- Logo
+
+const String tLogo = "assets/images/Logo.png";
