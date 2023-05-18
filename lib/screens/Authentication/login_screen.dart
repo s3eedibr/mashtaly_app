@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/image_strings.dart';
@@ -16,10 +17,12 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   bool isRememberMe = false;
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  GlobalKey<FormState> formKey = GlobalKey();
 
   Future login() async {
     try {
@@ -56,9 +59,51 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    checkRememberMe();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<void> checkRememberMe() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isRememberMe = prefs.getBool('isRememberMe') ?? false;
+    });
+  }
+
+  Future<void> logout() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.signOut();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused && !isRememberMe) {
+      logout();
+    } else if (state == AppLifecycleState.resumed && !isRememberMe) {
+      logout();
+    } else if (state == AppLifecycleState.inactive && !isRememberMe) {
+      logout();
+    } else if (state == AppLifecycleState.detached && !isRememberMe) {
+      logout();
+    }
+  }
+
+  Future<void> updateRememberMe(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isRememberMe', value);
+    setState(() {
+      isRememberMe = value;
+    });
+  }
+
+  @override
   void dispose() {
     _emilController.dispose();
     _passwordController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
 
@@ -80,78 +125,52 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
               Container(
-                child: Column(
-                  children: [
-                    const Text(
-                      "Welcome to Mashtaly",
-                      style: TextStyle(
-                        color: tPrimaryTextColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    const SizedBox(height: 25),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      height: 48,
-                      width: 343,
-                      alignment: Alignment.center,
-                      child: TextField(
-                        controller: _emilController,
-                        cursorColor: tPrimaryActionColor,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Email",
-                          hintStyle: TextStyle(
-                            color: tSecondActionColor,
-                          ),
-                          icon: Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Icon(
-                              Icons.email_outlined,
-                              color: tSecondActionColor,
-                              size: 28,
-                            ),
-                          ),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Welcome to Mashtaly",
+                        style: TextStyle(
+                          color: tPrimaryTextColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 15),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      height: 48,
-                      width: 343,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _passwordController,
+                      const SizedBox(height: 25),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        height: 48,
+                        width: 343,
+                        alignment: Alignment.center,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Enter Email";
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: _emilController,
                           cursorColor: tPrimaryActionColor,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Password",
-                            hintStyle: TextStyle(color: tSecondActionColor),
+                            hintText: "Email",
+                            hintStyle: TextStyle(
+                              color: tSecondActionColor,
+                            ),
                             icon: Padding(
                               padding: EdgeInsets.only(left: 15),
                               child: Icon(
-                                Icons.lock_outline_rounded,
+                                Icons.email_outlined,
                                 color: tSecondActionColor,
                                 size: 28,
                               ),
@@ -159,117 +178,150 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IntrinsicWidth(
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                activeColor: tPrimaryActionColor,
-                                side: const BorderSide(
-                                  width: 1,
+                      const SizedBox(height: 15),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        height: 48,
+                        width: 343,
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: TextField(
+                            controller: _passwordController,
+                            cursorColor: tPrimaryActionColor,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Password",
+                              hintStyle: TextStyle(color: tSecondActionColor),
+                              icon: Padding(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Icon(
+                                  Icons.lock_outline_rounded,
                                   color: tSecondActionColor,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                value: isRememberMe,
-                                onChanged: (bool? value) {
-                                  setState(
-                                    () {
-                                      isRememberMe = value!;
-                                    },
-                                  );
-                                },
-                              ),
-                              const Text(
-                                "Remember me",
-                                style: TextStyle(
-                                  color: tSecondTextColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
+                                  size: 28,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "Forgot Password?",
-                            style: TextStyle(
-                              color: tPrimaryActionColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: height - 739),
-                    Container(
-                      child: Column(
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          GestureDetector(
-                            onTap: login,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: tPrimaryActionColor,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              width: 343,
-                              height: 50,
-                              child: const Center(
-                                child: Text(
-                                  "Login",
+                          IntrinsicWidth(
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: tPrimaryActionColor,
+                                  side: const BorderSide(
+                                    width: 1,
+                                    color: tSecondActionColor,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  value: isRememberMe,
+                                  onChanged: (value) {
+                                    updateRememberMe(value ?? false);
+                                    print(isRememberMe);
+                                  },
+                                ),
+                                const Text(
+                                  "Remember me",
                                   style: TextStyle(
-                                    color: tThirdTextColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    color: tSecondTextColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 15),
                           GestureDetector(
-                            onTap: widget.showRegScreen,
-                            child: const Text.rich(
-                              TextSpan(
-                                text: "Don't have an account?",
-                                style: TextStyle(
-                                  color: tPrimaryTextColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordScreen(),
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: " Register now",
-                                    style: TextStyle(
-                                      color: tPrimaryActionColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
+                              );
+                            },
+                            child: const Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                color: tPrimaryActionColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
                               ),
                             ),
                           )
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(height: height - 739),
+                      Container(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: login,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: tPrimaryActionColor,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                width: 343,
+                                height: 50,
+                                child: const Center(
+                                  child: Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      color: tThirdTextColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            GestureDetector(
+                              onTap: widget.showRegScreen,
+                              child: const Text.rich(
+                                TextSpan(
+                                  text: "Don't have an account?",
+                                  style: TextStyle(
+                                    color: tPrimaryTextColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: " Register now",
+                                      style: TextStyle(
+                                        color: tPrimaryActionColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

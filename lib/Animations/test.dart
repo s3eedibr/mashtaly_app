@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             CircleAvatar(
               radius: 100,
-              backgroundColor: Colors.white,
+              backgroundColor: tBgColor,
               child: Image.asset(
                 tLogo,
               ),
