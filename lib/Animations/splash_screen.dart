@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../Auth/auth.dart';
 import '../Constants/colors.dart';
 import '../Constants/image_strings.dart';
 import '../Screens/OnboradingScreen/onboarding_screen.dart';
@@ -15,11 +14,6 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-// void change() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   isViewed = prefs.getInt('onBoard');
-// }
-
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -30,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return isViewed != 0 ? OnBoardingScreen() : const Auth();
+              return const OnBoardingScreen();
             },
           ),
         );

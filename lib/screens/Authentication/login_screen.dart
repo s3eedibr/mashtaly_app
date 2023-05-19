@@ -35,6 +35,9 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
           showSankBar(context, 'No user found for that email.');
         } else if (e.code == 'wrong-password') {
           showSankBar(context, 'Wrong password provided for that user.');
+        } else if (e.code == 'user-disabled') {
+          showSankBar(context,
+              'The user account has been disabled by an administrator.');
         }
       } catch (e) {
         showSankBar(context, e.toString());
