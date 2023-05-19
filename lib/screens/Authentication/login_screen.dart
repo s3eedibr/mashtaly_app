@@ -25,18 +25,20 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   GlobalKey<FormState> formKey = GlobalKey();
 
   Future login() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emilController.text.trim(),
-          password: _passwordController.text.trim());
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        showSankBar(context, 'No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        showSankBar(context, 'Wrong password provided for that user.');
+    if (formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _emilController.text.trim(),
+            password: _passwordController.text.trim());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          showSankBar(context, 'No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          showSankBar(context, 'Wrong password provided for that user.');
+        }
+      } catch (e) {
+        showSankBar(context, e.toString());
       }
-    } catch (e) {
-      showSankBar(context, e.toString());
     }
   }
 
@@ -72,32 +74,6 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> logout() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    await auth.signOut();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused && !isRememberMe) {
-      logout();
-    } else if (state == AppLifecycleState.resumed && !isRememberMe) {
-      logout();
-    } else if (state == AppLifecycleState.inactive && !isRememberMe) {
-      logout();
-    } else if (state == AppLifecycleState.detached && !isRememberMe) {
-      logout();
-    }
-  }
-
-  Future<void> updateRememberMe(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isRememberMe', value);
-    setState(() {
-      isRememberMe = value;
-    });
-  }
-
   @override
   void dispose() {
     _emilController.dispose();
@@ -114,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: tBgColor,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           reverse: false,
@@ -138,137 +115,127 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         ),
                       ),
                       const SizedBox(height: 25),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: 48,
-                        width: 343,
-                        alignment: Alignment.center,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
                         child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Enter Email";
+                              return "This field is required";
                             } else {
                               return null;
                             }
                           },
+                          keyboardType: TextInputType.emailAddress,
                           controller: _emilController,
                           cursorColor: tPrimaryActionColor,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
-                          keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Email",
-                            hintStyle: TextStyle(
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: Icon(
+                              Icons.email_outlined,
                               color: tSecondActionColor,
+                              size: 28,
                             ),
-                            icon: Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Icon(
-                                Icons.email_outlined,
-                                color: tSecondActionColor,
-                                size: 28,
+                            hintText: "Email",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
                               ),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: 48,
-                        width: 343,
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: TextField(
-                            controller: _passwordController,
-                            cursorColor: tPrimaryActionColor,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Password",
-                              hintStyle: TextStyle(color: tSecondActionColor),
-                              icon: Padding(
-                                padding: EdgeInsets.only(left: 15),
-                                child: Icon(
-                                  Icons.lock_outline_rounded,
-                                  color: tSecondActionColor,
-                                  size: 28,
-                                ),
-                              ),
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field is required";
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: _passwordController,
+                          cursorColor: tPrimaryActionColor,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          IntrinsicWidth(
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  activeColor: tPrimaryActionColor,
-                                  side: const BorderSide(
-                                    width: 1,
-                                    color: tSecondActionColor,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  value: isRememberMe,
-                                  onChanged: (value) {
-                                    updateRememberMe(value ?? false);
-                                    print(isRememberMe);
-                                  },
-                                ),
-                                const Text(
-                                  "Remember me",
-                                  style: TextStyle(
-                                    color: tSecondTextColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: Icon(
+                              Icons.lock_outline_rounded,
+                              color: tSecondActionColor,
+                              size: 28,
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(
+                            hintText: "Password",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
                                 color: tPrimaryActionColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
                               ),
                             ),
-                          )
-                        ],
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      SizedBox(height: height - 739),
+                      const SizedBox(height: 15),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            color: tPrimaryActionColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: height - 718),
                       Container(
                         child: Column(
                           children: [
@@ -316,7 +283,8 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                                   ],
                                 ),
                               ),
-                            )
+                            ),
+                            const SizedBox(height: 15),
                           ],
                         ),
                       ),

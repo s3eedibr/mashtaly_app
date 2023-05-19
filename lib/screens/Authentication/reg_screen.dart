@@ -21,26 +21,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
+
+  GlobalKey<FormState> formKey = GlobalKey();
+
   Future registration() async {
-    try {
-      if (passwordConfirmed()) {
-        await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _emilController.text.trim(),
-                password: _passwordController.text.trim())
-            .then((value) => addUser())
-            .then((value) => verifyEmail());
-      } else {
-        showSankBar(context, 'The password is not match.');
+    if (formKey.currentState!.validate()) {
+      try {
+        if (passwordConfirmed()) {
+          await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+                  email: _emilController.text.trim(),
+                  password: _passwordController.text.trim())
+              .then((value) => addUser())
+              .then((value) => verifyEmail());
+        } else {
+          showSankBar(context, 'The password is not match.');
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          showSankBar(context, 'The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          showSankBar(context, 'The account already exists for that email.');
+        }
+      } catch (e) {
+        showSankBar(context, e.toString());
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        showSankBar(context, 'The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        showSankBar(context, 'The account already exists for that email.');
-      }
-    } catch (e) {
-      showSankBar(context, e.toString());
     }
   }
 
@@ -98,6 +103,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: tBgColor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -115,6 +121,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(height: 20),
               Container(
                 child: Form(
+                  key: formKey,
                   child: Column(
                     children: [
                       const Text(
@@ -126,83 +133,116 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                       ),
                       const SizedBox(height: 25),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: 48,
-                        width: 343,
-                        alignment: Alignment.center,
-                        child: TextField(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field is required";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.name,
                           controller: _nameController,
                           cursorColor: tPrimaryActionColor,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
-                          keyboardType: TextInputType.name,
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Name",
-                            hintStyle: TextStyle(
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: Icon(
+                              Icons.person_2_outlined,
                               color: tSecondActionColor,
+                              size: 28,
                             ),
-                            icon: Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Icon(
-                                Icons.person_2_outlined,
-                                color: tSecondActionColor,
-                                size: 28,
+                            hintText: "Name",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
                               ),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: 48,
-                        width: 343,
-                        alignment: Alignment.center,
-                        child: TextField(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field is required";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.emailAddress,
                           controller: _emilController,
                           cursorColor: tPrimaryActionColor,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
-                          keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Email",
-                            hintStyle: TextStyle(
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: Icon(
+                              Icons.email_outlined,
                               color: tSecondActionColor,
+                              size: 28,
                             ),
-                            icon: Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Icon(
-                                Icons.email_outlined,
-                                color: tSecondActionColor,
-                                size: 28,
+                            hintText: "Email",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
                               ),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: 48,
-                        width: 343,
-                        alignment: Alignment.center,
-                        child: TextField(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field is required";
+                            } else {
+                              return null;
+                            }
+                          },
                           controller: _passwordController,
                           cursorColor: tPrimaryActionColor,
                           style: const TextStyle(
@@ -212,53 +252,83 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Password",
-                            hintStyle: TextStyle(
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: Icon(
+                              Icons.lock_outline_rounded,
                               color: tSecondActionColor,
+                              size: 28,
                             ),
-                            icon: Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Icon(
-                                Icons.lock_outline_rounded,
-                                color: tSecondActionColor,
-                                size: 28,
+                            hintText: "Password",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
                               ),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        height: 48,
-                        width: 343,
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: TextField(
-                            controller: _confirmpasswordController,
-                            cursorColor: tPrimaryActionColor,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field is required";
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: _confirmpasswordController,
+                          cursorColor: tPrimaryActionColor,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: Icon(
+                              Icons.lock_outline_rounded,
+                              color: tSecondActionColor,
+                              size: 28,
                             ),
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Confirm Password",
-                              hintStyle: TextStyle(color: tSecondActionColor),
-                              icon: Padding(
-                                padding: EdgeInsets.only(left: 15),
-                                child: Icon(
-                                  Icons.lock_outline_rounded,
-                                  color: tSecondActionColor,
-                                  size: 28,
-                                ),
+                            hintText: "Confirm Password",
+                            hintStyle: TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
                               ),
                             ),
                           ),
@@ -268,7 +338,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: height - 738),
+              SizedBox(height: height - 742),
               GestureDetector(
                   onTap: registration,
                   child: Container(
@@ -312,7 +382,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ],
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 15),
             ],
           ),
         ),

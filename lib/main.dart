@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mashtaly_app/firebase_options.dart';
-import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Animations/test.dart';
+import 'Auth/auth.dart';
+import 'Screens/OnboradingScreen/onboarding_screen.dart';
 
 int? isViewed;
 void main() async {
@@ -16,6 +16,8 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isViewed = prefs.getInt('onBoard');
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(App());
 }
@@ -29,7 +31,7 @@ class App extends StatelessWidget {
       title: 'Introduction screen',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Mulish', useMaterial3: true),
-      home: isViewed != 0 ? SplashScreen() : const Auth(),
+      home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
     );
   }
 }

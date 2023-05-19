@@ -94,7 +94,7 @@ class OTPScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: height - 710),
+                    SizedBox(height: height - 678),
                     Container(
                       child: Column(
                         children: [
