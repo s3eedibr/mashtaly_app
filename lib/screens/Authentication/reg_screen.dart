@@ -33,9 +33,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   email: _emilController.text.trim(),
                   password: _passwordController.text.trim())
               .then((value) => addUser())
-              .then((value) => verifyEmail())
-              .then((value) => showSankBar(
-                  context, 'Please check your email to verify your account.'));
+              .then((value) => verifyEmail());
         } else {
           showSankBar(context, 'The password is not match.');
         }
