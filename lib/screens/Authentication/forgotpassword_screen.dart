@@ -6,10 +6,18 @@ import '../../Constants/colors.dart';
 import '../../Constants/text_strings.dart';
 import 'otp_screen.dart';
 
-String? email = "";
-
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
+
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+String? email;
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final _emilController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -44,34 +52,53 @@ class ForgotPasswordScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 45),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    height: 48,
-                    width: 343,
-                    alignment: Alignment.center,
-                    child: TextField(
-                      onSubmitted: (value) => email = value,
-                      cursorColor: tPrimaryActionColor,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Email",
-                        hintStyle: TextStyle(
-                          color: tSecondActionColor,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                    child: Form(
+                      key: formKey,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "This field is required";
+                          } else {
+                            return null;
+                          }
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emilController,
+                        cursorColor: tPrimaryActionColor,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                        icon: Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Icon(
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 12),
+                          prefixIcon: Icon(
                             Icons.email_outlined,
                             color: tSecondActionColor,
                             size: 28,
+                          ),
+                          hintText: "Email",
+                          hintStyle: TextStyle(color: tSecondActionColor),
+                          filled: true,
+                          fillColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: tPrimaryActionColor,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: tPrimaryActionColor,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(6),
+                            ),
                           ),
                         ),
                       ),
@@ -82,12 +109,27 @@ class ForgotPasswordScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OTPScreen(),
-                            ),
-                          );
+                          email = _emilController.text.trim();
+                          if (_emilController.text.isEmpty) {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ForgotPasswordScreen(),
+                            //   ),
+                            // );
+                            showSankBar(context, 'Oops, OTP send failed');
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    OTPScreen(sendtoemail: email!),
+                              ),
+                            );
+                            showSankBar(
+                                context, 'OTP has been sent to your email',
+                                color: tPrimaryActionColor);
+                          }
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -111,7 +153,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       const SizedBox(height: 15),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const Auth()),
@@ -148,4 +190,22 @@ class ForgotPasswordScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void showSankBar(BuildContext context, String message,
+    {Color color = tThirdTextErrorColor}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+      backgroundColor: color,
+    ),
+  );
 }

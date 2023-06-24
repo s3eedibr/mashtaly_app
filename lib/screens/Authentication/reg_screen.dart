@@ -338,7 +338,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: height - 742),
+              SizedBox(height: height - 744),
               GestureDetector(
                   onTap: registration,
                   child: Container(

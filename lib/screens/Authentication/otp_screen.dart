@@ -1,14 +1,48 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:email_otp/email_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:mashtaly_app/Screens/Authentication/resetpassword.dart';
+
+import 'package:mashtaly_app/Auth/auth.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/image_strings.dart';
 import 'forgotpassword_screen.dart';
 
-class OTPScreen extends StatelessWidget {
-  const OTPScreen({super.key});
+class OTPScreen extends StatefulWidget {
+  OTPScreen({
+    Key? key,
+    required this.sendtoemail,
+  }) : super(key: key);
+  final String sendtoemail;
+  @override
+  State<OTPScreen> createState() => _OTPScreenState();
+}
 
+class _OTPScreenState extends State<OTPScreen> {
+  EmailOTP myauth = EmailOTP();
+  void sendOTP() async {
+    myauth.setConfig(
+      appEmail: "noreply@mashtaly-hu.firebaseapp.com",
+      appName: "Mashtaly",
+      userEmail: email,
+      otpLength: 5,
+      otpType: OTPType.digitsOnly,
+    );
+    if (await myauth.sendOTP() == true) {
+      showSankBar(context, 'OTP has been sent to your email');
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ForgotPasswordScreen(),
+        ),
+      );
+    }
+  }
+
+  String? veryOTP;
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -45,32 +79,27 @@ class OTPScreen extends StatelessWidget {
                     const SizedBox(height: 45),
                     const SizedBox(height: 25),
                     OtpTextField(
-                      cursorColor: tPrimaryActionColor,
-                      numberOfFields: 5,
-                      fieldWidth: 50,
-                      showCursor: true,
-                      fillColor: Colors.white,
-                      filled: true,
-                      borderRadius: const BorderRadius.all(Radius.circular(6)),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                      borderColor: Colors.white,
-                      focusedBorderColor: tPrimaryActionColor,
-                      onSubmit: (code) {
-                        print("OTP is => $code");
-                      },
-                    ),
+                        cursorColor: tPrimaryActionColor,
+                        numberOfFields: 5,
+                        fieldWidth: 50,
+                        showCursor: true,
+                        fillColor: Colors.white,
+                        filled: true,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(6)),
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                        borderColor: Colors.white,
+                        focusedBorderColor: tPrimaryActionColor,
+                        onSubmit: (code) {
+                          veryOTP = code;
+                        }),
                     const SizedBox(height: 5),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ForgotPasswordScreen(),
-                          ),
-                        );
+                        sendOTP();
                       },
                       style: const ButtonStyle(),
                       child: const Text.rich(
@@ -94,7 +123,7 @@ class OTPScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: height - 678),
+                    SizedBox(height: height - 720),
                     Container(
                       child: Column(
                         children: [
@@ -117,14 +146,23 @@ class OTPScreen extends StatelessWidget {
                                   fontSize: 18,
                                 ),
                               ),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ResetPasswordScreen(),
-                                  ),
-                                );
+                              onPressed: () async {
+                                if (await myauth.verifyOTP(otp: veryOTP) ==
+                                    true) {
+                                  showSankBar(context,
+                                      'Check your email to reset your password',
+                                      color: tPrimaryActionColor);
+                                  FirebaseAuth.instance
+                                      .sendPasswordResetEmail(email: email!);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Auth(),
+                                    ),
+                                  );
+                                } else {
+                                  showSankBar(context, 'Invalid OTP');
+                                }
                               },
                             ),
                           ),

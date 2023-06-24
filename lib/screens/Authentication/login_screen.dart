@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/image_strings.dart';
@@ -18,7 +17,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
-  bool isRememberMe = false;
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -66,15 +64,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    checkRememberMe();
     WidgetsBinding.instance.addObserver(this);
-  }
-
-  Future<void> checkRememberMe() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isRememberMe = prefs.getBool('isRememberMe') ?? false;
-    });
   }
 
   @override

@@ -114,7 +114,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const Auth(),
