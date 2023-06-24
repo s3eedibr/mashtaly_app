@@ -39,7 +39,8 @@ class _OTPScreenState extends State<OTPScreen> {
       otpType: OTPType.digitsOnly,
     );
     if (await myauth.sendOTP() == true) {
-      showSankBar(context, 'OTP has been sent to your email');
+      showSankBar(context, 'OTP has been sent to your email',
+          color: tPrimaryActionColor);
     } else {
       Navigator.pushReplacement(
         context,

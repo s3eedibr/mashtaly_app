@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       const SizedBox(height: 15),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
