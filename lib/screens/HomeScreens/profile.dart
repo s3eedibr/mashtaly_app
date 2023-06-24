@@ -1,18 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../Constants/colors.dart';
+import '../../Constants/colors.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final user = FirebaseAuth.instance.currentUser!;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,7 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 "Hello, Login by ${user.email!}",
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.black),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
               MaterialButton(
                 onPressed: () {
