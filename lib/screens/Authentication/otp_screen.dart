@@ -21,6 +21,14 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends State<OTPScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("Done Build ");
+    sendOTP();
+  }
+
   EmailOTP myauth = EmailOTP();
   void sendOTP() async {
     myauth.setConfig(
