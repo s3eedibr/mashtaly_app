@@ -19,6 +19,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emilController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
 
+  bool isEmail(String em) {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    RegExp regExp = new RegExp(p);
+
+    return regExp.hasMatch(em);
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -110,7 +119,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       GestureDetector(
                         onTap: () {
                           email = _emilController.text.trim();
-                          if (_emilController.text.isEmpty) {
+                          if (_emilController.text.isEmpty ||
+                              isEmail(email!) == false) {
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
