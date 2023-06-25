@@ -109,6 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Plant",
                                 style: TextStyle(
                                   fontSize: 12,
+                                  fontWeight: currentTap == 0
+                                      ? FontWeight.w700
+                                      : FontWeight.normal,
                                   color: currentTap == 0
                                       ? tPrimaryActionColor
                                       : tSecondActionColor,
@@ -143,6 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Community",
                                 style: TextStyle(
                                   fontSize: 12,
+                                  fontWeight: currentTap == 1
+                                      ? FontWeight.w700
+                                      : FontWeight.normal,
                                   color: currentTap == 1
                                       ? tPrimaryActionColor
                                       : tSecondActionColor,
@@ -182,6 +188,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Notifications",
                                 style: TextStyle(
                                   fontSize: 12,
+                                  fontWeight: currentTap == 2
+                                      ? FontWeight.w700
+                                      : FontWeight.normal,
                                   color: currentTap == 2
                                       ? tPrimaryActionColor
                                       : tSecondActionColor,
@@ -216,6 +225,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Profile",
                                 style: TextStyle(
                                   fontSize: 12,
+                                  fontWeight: currentTap == 3
+                                      ? FontWeight.w700
+                                      : FontWeight.normal,
                                   color: currentTap == 3
                                       ? tPrimaryActionColor
                                       : tSecondActionColor,

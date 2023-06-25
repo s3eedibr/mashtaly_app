@@ -23,9 +23,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text(
                 "Hello, Login by ${user.email!}",
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
                   color: Colors.black,
+                  fontSize: 20,
                 ),
+              ),
+              const SizedBox(
+                height: 15,
               ),
               MaterialButton(
                 onPressed: () {
@@ -37,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(
                     color: tThirdTextColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 13,
+                    fontSize: 15,
                   ),
                 ),
               ),
