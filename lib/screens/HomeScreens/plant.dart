@@ -18,7 +18,7 @@ class PlantScreen extends StatefulWidget {
 class _PlantScreenState extends State<PlantScreen> {
   Future<bool> _loadData() async {
     // Simulating an asynchronous task, e.g., loading data
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(milliseconds: 2500));
     return true;
   }
 
@@ -240,14 +240,14 @@ class _PlantScreenState extends State<PlantScreen> {
                         height: 80,
                         child: DatePicker(
                           DateTime.now(),
-                          width: 54,
+                          width: 45,
                           initialSelectedDate: DateTime.now(),
                           selectionColor: tPrimaryActionColor,
                           selectedTextColor: Colors.white,
                           dateTextStyle: const TextStyle(
                             fontSize: 20,
                           ),
-                          daysCount: 7,
+                          daysCount: 14,
                         ),
                       ),
                     ),
