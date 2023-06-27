@@ -4,6 +4,7 @@ const Color tBgColor = Color(0xFFFBFBFB);
 
 const Color tPrimaryTextColor = Color(0xFF0D1904);
 const Color tSecondTextColor = Color(0xFFBDC1BB);
+const Color tPrimaryPlusTextColor = Color(0xC30D1904);
 
 const Color tThirdTextColor = Colors.white;
 
