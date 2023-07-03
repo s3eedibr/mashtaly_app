@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mashtaly_app/Constants/colors.dart';
 import 'package:mashtaly_app/Screens/OnboradingScreen/onboarding_screen.dart';
 import 'package:mashtaly_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,15 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Introduction screen',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Mulish', useMaterial3: true),
+      theme: ThemeData(
+        fontFamily: 'Mulish',
+        useMaterial3: true,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: tPrimaryActionColor.withOpacity(.5),
+          cursorColor: tPrimaryActionColor.withOpacity(.6),
+          selectionHandleColor: tPrimaryActionColor.withOpacity(1),
+        ),
+      ),
       home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
     );
   }
