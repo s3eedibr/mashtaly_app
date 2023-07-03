@@ -115,39 +115,37 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   fit: BoxFit.fill,
                   alignment: Alignment.topCenter,
                 ),
-                Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Text(
-                          screens[index].text,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: tPrimaryTextColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20,
-                          ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        screens[index].text,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: tPrimaryTextColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6, right: 6),
-                        child: Text(
-                          screens[index].desc,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: tPrimaryTextColor,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                          ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6, right: 6),
+                      child: Text(
+                        screens[index].desc,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: tPrimaryTextColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 10,
                       child: ListView.builder(
                         itemCount: screens.length,
@@ -174,27 +172,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         },
                       ),
                     ),
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: TextButton(
-                          onPressed: () async {
-                            await _storeOnBoaringInfo();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Auth(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "Don't show again",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: tSecondActionColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: 12,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: TextButton(
+                        onPressed: () async {
+                          await _storeOnBoaringInfo();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Auth(),
                             ),
+                          );
+                        },
+                        child: const Text(
+                          "Don't show again",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: tSecondActionColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
                           ),
                         ),
                       ),

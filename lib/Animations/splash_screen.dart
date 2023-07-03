@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Column(
@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 tLogo,
               ),
             ),
-            Text(
+            const Text(
               "Mashtaly",
               style: TextStyle(
                 fontSize: 35,
@@ -57,8 +57,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: tPrimaryActionColor,
               ),
             ),
-            SizedBox(height: 50),
-            SpinKitThreeBounce(
+            const SizedBox(height: 50),
+            const SpinKitThreeBounce(
               color: tPrimaryActionColor,
               size: 30,
             )

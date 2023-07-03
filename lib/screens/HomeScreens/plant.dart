@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mashtaly_app/Animations/waiting_screen.dart';
 import 'package:mashtaly_app/Services/weather_service.dart';
@@ -32,7 +33,6 @@ class _PlantScreenState extends State<PlantScreen> {
   String humidity = '';
   String cloud = '';
   LocationPermission? permission;
-
   Timer? timer;
 
   @override
@@ -61,16 +61,12 @@ class _PlantScreenState extends State<PlantScreen> {
 
   void getWeatherData() async {
     if (latitude != null && longitude != null) {
-      print(
-          "********************************Get Location********************************");
       Map<String, dynamic>? weatherData = await weather.getWeather(
         latitude: latitude!,
         longitude: longitude!,
       );
       if (weatherData != null) {
         setState(() {
-          print(
-              "********************************Get WeatherData********************************");
           weatherText = weatherData['current']['condition']['text'];
           temperature = weatherData['current']['temp_c'].toString();
           String iconPath = weatherData['current']['condition']['icon'];
@@ -99,9 +95,7 @@ class _PlantScreenState extends State<PlantScreen> {
         future: _loadData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print(
-                "********************************Waiting Screen********************************");
-            return WaitingScreen();
+            return const WaitingScreen();
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -189,20 +183,20 @@ class _PlantScreenState extends State<PlantScreen> {
                                     height: 38,
                                     width: 38,
                                   )
-                                : Icon(Icons.cloud_off_sharp),
-                            SizedBox(
+                                : const Icon(Icons.cloud_off_sharp),
+                            const SizedBox(
                               width: 5,
                             ),
                             weatherText.isNotEmpty
                                 ? Text(
                                     weatherText,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )
-                                : Text(
+                                : const Text(
                                     "Weatherapi",
                                     style: TextStyle(
                                       color: Colors.black,
@@ -214,7 +208,7 @@ class _PlantScreenState extends State<PlantScreen> {
                         ),
                         Text(
                           '$temperature°c',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
@@ -290,12 +284,12 @@ class _PlantScreenState extends State<PlantScreen> {
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
                                         '$cloud%',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: tPrimaryTextColor,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
@@ -327,12 +321,12 @@ class _PlantScreenState extends State<PlantScreen> {
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
                                         '$wind Km/h',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: tPrimaryTextColor,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
@@ -357,7 +351,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Humidity",
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
@@ -365,13 +359,13 @@ class _PlantScreenState extends State<PlantScreen> {
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
                                         '$humidity%',
                                         textAlign: TextAlign.left,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: tPrimaryTextColor,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
@@ -386,6 +380,228 @@ class _PlantScreenState extends State<PlantScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Schedule",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              backgroundColor: Colors.white,
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  height: 225,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 16, bottom: 0, left: 17),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 130,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                  color: tPrimaryActionColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.16),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 7,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: IconButton(
+                                                  onPressed: () {},
+                                                  highlightColor: Colors.white
+                                                      .withOpacity(0.05),
+                                                  icon: Image.asset(
+                                                    'assets/images/icons/smart-farm.png',
+                                                    height: 65,
+                                                    width: 65,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              const Text(
+                                                'With Sensor',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )
+                                            ]),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 130,
+                                              width: 130,
+                                              decoration: BoxDecoration(
+                                                color: tPrimaryActionColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.16),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 7,
+                                                    offset: const Offset(0,
+                                                        3), // changes position of shadow
+                                                  ),
+                                                ],
+                                              ),
+                                              child: IconButton(
+                                                onPressed: () {},
+                                                highlightColor: Colors.white
+                                                    .withOpacity(0.05),
+                                                icon: Image.asset(
+                                                  'assets/images/icons/Untitled-3@3x.png',
+                                                  height: 65,
+                                                  width: 65,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            const Text(
+                                              'Without Sensor',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const Text(
+                                              'Mashtaly Data',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          style: const ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(Colors.white),
+                          ),
+                          child: const Row(
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: tPrimaryActionColor,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Add Plant",
+                                style: TextStyle(
+                                    color: tPrimaryActionColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          height: 220,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F1F1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 68.5,
+                          top: 15,
+                          right: 125,
+                          left: 125,
+                          child: Image.asset(
+                            'assets/images/stack_images/Group 2.png',
+                            height: 102,
+                            width: 88,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 125,
+                          right: 27,
+                          left: 230,
+                          child: Image.asset(
+                            'assets/images/stack_images/Group 390.png',
+                            height: 110,
+                            width: 80,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            top: 155,
+                            bottom: 13,
+                          ),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            "You don't have any plants yet\nAdd your plant now",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             );

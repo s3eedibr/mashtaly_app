@@ -18,14 +18,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentTap = 0;
   final List<Widget> screens = [
-    PlantScreen(),
-    CommunityScreen(),
-    CameraScanner(),
-    NotificationScreen(),
-    ProfileScreen(),
+    const PlantScreen(),
+    const CommunityScreen(),
+    const CameraScanner(),
+    const NotificationScreen(),
+    const ProfileScreen(),
   ];
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = PlantScreen();
+  Widget currentScreen = const PlantScreen();
   final user = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -33,15 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         body: PageStorage(
-          child: currentScreen,
           bucket: bucket,
+          child: currentScreen,
         ),
-        floatingActionButton: Container(
+        floatingActionButton: SizedBox(
             height: 64,
             width: 64,
             child: FloatingActionButton(
               backgroundColor: tPrimaryActionColor,
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               child: Image.asset(
                 "assets/images/icons/Path 7.png",
                 height: 26,
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: Container(
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Color(0x10000000),
@@ -72,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
             elevation: 0,
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            shape: CircularNotchedRectangle(),
+            shape: const CircularNotchedRectangle(),
             notchMargin: 12,
-            child: Container(
+            child: SizedBox(
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         minWidth: 40,
                         onPressed: () {
                           setState(() {
-                            currentScreen = PlantScreen();
+                            currentScreen = const PlantScreen();
                             currentTap = 0;
                           });
                         },
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         minWidth: 40,
                         onPressed: () {
                           setState(() {
-                            currentScreen = CommunityScreen();
+                            currentScreen = const CommunityScreen();
                             currentTap = 1;
                           });
                         },
@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         minWidth: 40,
                         onPressed: () {
                           setState(() {
-                            currentScreen = NotificationScreen();
+                            currentScreen = const NotificationScreen();
                             currentTap = 2;
                           });
                         },
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         minWidth: 40,
                         onPressed: () {
                           setState(() {
-                            currentScreen = ProfileScreen();
+                            currentScreen = const ProfileScreen();
                             currentTap = 3;
                           });
                         },
