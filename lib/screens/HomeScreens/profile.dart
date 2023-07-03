@@ -19,9 +19,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Hello, Login by ${user.email!}",
+                textAlign: TextAlign.center,
+                "Hello, Login by \n ${user.email!}",
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
