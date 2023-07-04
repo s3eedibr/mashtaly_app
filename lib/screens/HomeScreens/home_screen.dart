@@ -161,80 +161,80 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = const NotificationScreen();
-                            currentTap = 2;
-                          });
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              currentTap == 2
-                                  ? Image.asset(
-                                      "assets/images/icons/bell (1).png",
-                                      height: 28,
-                                      width: 28,
-                                    )
-                                  : Image.asset(
-                                      "assets/images/icons/bell.png",
-                                      height: 28,
-                                      width: 28,
-                                    ),
-                              const SizedBox(height: 7),
-                              Text(
-                                "Notifications",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: currentTap == 2
-                                      ? FontWeight.w700
-                                      : FontWeight.normal,
-                                  color: currentTap == 2
-                                      ? tPrimaryActionColor
-                                      : tSecondActionColor,
-                                ),
-                              )
-                            ]),
-                      ),
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = const ProfileScreen();
-                            currentTap = 3;
-                          });
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              currentTap == 3
-                                  ? Image.asset(
-                                      "assets/images/icons/Path 64.png",
-                                      height: 28,
-                                      width: 28,
-                                    )
-                                  : Image.asset(
-                                      "assets/images/icons/Path 6.png",
-                                      height: 28,
-                                      width: 28,
-                                    ),
-                              const SizedBox(height: 7),
-                              Text(
-                                "Profile",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: currentTap == 3
-                                      ? FontWeight.w700
-                                      : FontWeight.normal,
-                                  color: currentTap == 3
-                                      ? tPrimaryActionColor
-                                      : tSecondActionColor,
-                                ),
-                              )
-                            ]),
-                      ),
+                      // MaterialButton(
+                      //   minWidth: 40,
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       currentScreen = const NotificationScreen();
+                      //       currentTap = 2;
+                      //     });
+                      //   },
+                      //   child: Column(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         currentTap == 2
+                      //             ? Image.asset(
+                      //                 "assets/images/icons/bell (1).png",
+                      //                 height: 28,
+                      //                 width: 28,
+                      //               )
+                      //             : Image.asset(
+                      //                 "assets/images/icons/bell.png",
+                      //                 height: 28,
+                      //                 width: 28,
+                      //               ),
+                      //         const SizedBox(height: 7),
+                      //         Text(
+                      //           "Notifications",
+                      //           style: TextStyle(
+                      //             fontSize: 12,
+                      //             fontWeight: currentTap == 2
+                      //                 ? FontWeight.w700
+                      //                 : FontWeight.normal,
+                      //             color: currentTap == 2
+                      //                 ? tPrimaryActionColor
+                      //                 : tSecondActionColor,
+                      //           ),
+                      //         )
+                      //       ]),
+                      // ),
+                      // MaterialButton(
+                      //   minWidth: 40,
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       currentScreen = const ProfileScreen();
+                      //       currentTap = 3;
+                      //     });
+                      //   },
+                      //   child: Column(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         currentTap == 3
+                      //             ? Image.asset(
+                      //                 "assets/images/icons/Path 64.png",
+                      //                 height: 28,
+                      //                 width: 28,
+                      //               )
+                      //             : Image.asset(
+                      //                 "assets/images/icons/Path 6.png",
+                      //                 height: 28,
+                      //                 width: 28,
+                      //               ),
+                      //         const SizedBox(height: 7),
+                      //         Text(
+                      //           "Profile",
+                      //           style: TextStyle(
+                      //             fontSize: 12,
+                      //             fontWeight: currentTap == 3
+                      //                 ? FontWeight.w700
+                      //                 : FontWeight.normal,
+                      //             color: currentTap == 3
+                      //                 ? tPrimaryActionColor
+                      //                 : tSecondActionColor,
+                      //           ),
+                      //         )
+                      //       ]),
+                      // ),
                     ],
                   )
                 ],
