@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mashtaly_app/Animations/waiting_screen.dart';
+// import 'package:mashtaly_app/Animations/waiting_screen.dart';
 import 'package:mashtaly_app/Services/weather_service.dart';
 
 import '../../Constants/colors.dart';
@@ -96,7 +96,29 @@ class _PlantScreenState extends State<PlantScreen> {
           future: _loadData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const WaitingScreen();
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/plant_loading2.gif",
+                      height: 100,
+                      width: 100,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Loading...',
+                      style: TextStyle(
+                        color: tPrimaryTextColor,
+                        fontFamily: 'Mulish',
+                        decoration: TextDecoration.none,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
