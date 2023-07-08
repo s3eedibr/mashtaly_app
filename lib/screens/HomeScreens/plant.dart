@@ -214,7 +214,10 @@ class _PlantScreenState extends State<PlantScreen> {
                                               height: 38,
                                               width: 38,
                                             )
-                                          : const Icon(Icons.cloud_off_sharp),
+                                          : const Icon(
+                                              Icons.cloud_off_sharp,
+                                              color: Colors.transparent,
+                                            ),
                                       const SizedBox(
                                         width: 5,
                                       ),
@@ -228,7 +231,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                               ),
                                             )
                                           : const Text(
-                                              "Weatherapi",
+                                              "",
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
@@ -237,13 +240,21 @@ class _PlantScreenState extends State<PlantScreen> {
                                             ),
                                     ],
                                   ),
-                                  Text(
-                                    '$temperature°c',
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  temperature.isNotEmpty
+                                      ? Text(
+                                          '$temperature°c',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : Text(
+                                          '',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                 ],
                               ),
                             ),
@@ -334,7 +345,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                                       color: tPrimaryTextColor,
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w700),
                                                 ),
                                               ],
                                             ),
@@ -377,7 +388,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                                       color: tPrimaryTextColor,
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w700),
                                                 ),
                                               ],
                                             ),
@@ -422,7 +433,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                                       color: tPrimaryTextColor,
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w700),
                                                 ),
                                               ],
                                             ),
