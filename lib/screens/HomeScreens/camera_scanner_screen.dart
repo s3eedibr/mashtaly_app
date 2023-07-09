@@ -231,7 +231,7 @@ class _CameraScannerState extends State<CameraScanner> {
                             Colors.white, // Set the background color to white
                       ),
                       child: FutureBuilder(
-                        future: Future.delayed(Duration(seconds: 5)),
+                        future: Future.delayed(Duration(seconds: 7)),
                         builder: (BuildContext context,
                             AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.connectionState ==
@@ -265,134 +265,197 @@ class _CameraScannerState extends State<CameraScanner> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              icon: const Icon(
-                                Icons.check_rounded,
-                                color: tPrimaryActionColor,
-                                size: 56,
-                              ),
-                              title: const SizedBox(
-                                height: 55,
-                                child: Text(
-                                  "Scan Object Success",
-                                  style: TextStyle(
+                              icon: plantName.isNotEmpty
+                                  ? Icon(
+                                      Icons.check_rounded,
                                       color: tPrimaryActionColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Name:',
+                                      size: 56,
+                                    )
+                                  : Icon(
+                                      Icons.question_mark_rounded,
+                                      color: tThirdTextErrorColor,
+                                      size: 56,
+                                    ),
+                              title: plantName.isNotEmpty
+                                  ? SizedBox(
+                                      height: 35,
+                                      child: Text(
+                                        "Scan Object Success",
                                         style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          plantName,
-                                          style: const TextStyle(
+                                            color: tPrimaryActionColor,
                                             fontSize: 16,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: const Text.rich(
-                                      TextSpan(
-                                        text: "See more information about this",
+                                    )
+                                  : SizedBox(
+                                      height: 35,
+                                      child: Text(
+                                        "Scan Object Unsuccess",
                                         style: TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: " plant.",
-                                            style: TextStyle(
-                                              color: tThirdTextErrorColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ],
+                                            color: tThirdTextErrorColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                              content: plantName.isNotEmpty
+                                  ? Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Name: ',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                plantName,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: const Text.rich(
+                                            TextSpan(
+                                              text:
+                                                  "See more information about this",
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: " plant.",
+                                                  style: TextStyle(
+                                                    color: tThirdTextErrorColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : const Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'Please scan again',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                               actions: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 16, bottom: 0, left: 16),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        height: 45,
-                                        width: 120,
-                                        child: OutlinedButton(
-                                          child: const Text(
-                                            'No',
-                                            style: TextStyle(
-                                              color: tPrimaryActionColor,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                plantName.isNotEmpty
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 16, bottom: 0, left: 16),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              height: 45,
+                                              width: 120,
+                                              child: OutlinedButton(
+                                                child: const Text(
+                                                  'No',
+                                                  style: TextStyle(
+                                                    color: tPrimaryActionColor,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  side: const BorderSide(
+                                                    color: tPrimaryActionColor,
+                                                    width: 1,
+                                                  ),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            side: const BorderSide(
-                                              color: tPrimaryActionColor,
-                                              width: 1,
+                                            SizedBox(
+                                              height: 45,
+                                              width: 120,
+                                              child: ElevatedButton(
+                                                child: Text(
+                                                  "Yes",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      tPrimaryActionColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
                                             ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
+                                          ],
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 45,
-                                        width: 120,
-                                        child: ElevatedButton(
-                                          child: Text(
-                                            "Yes",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                      )
+                                    : Center(
+                                        child: SizedBox(
+                                          height: 45,
+                                          width: 120,
+                                          child: OutlinedButton(
+                                            child: const Text(
+                                              'Ok',
+                                              style: TextStyle(
+                                                color: tThirdTextErrorColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                tPrimaryActionColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                            style: ElevatedButton.styleFrom(
+                                              side: const BorderSide(
+                                                color: tThirdTextErrorColor,
+                                                width: 1,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
                                             ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
+                                      )
                               ],
                               actionsPadding: EdgeInsets.only(bottom: 15),
                             );
@@ -430,7 +493,9 @@ class _CameraScannerState extends State<CameraScanner> {
                           Colors.white, // Set the background color to white
                     ),
                     child: FutureBuilder(
-                      future: Future.delayed(Duration(seconds: 6)),
+                      future: Future.delayed(
+                        Duration(seconds: 7),
+                      ),
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
                         if (snapshot.connectionState ==
@@ -464,133 +529,194 @@ class _CameraScannerState extends State<CameraScanner> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            icon: const Icon(
-                              Icons.check_rounded,
-                              color: tPrimaryActionColor,
-                              size: 56,
-                            ),
-                            title: const SizedBox(
-                              height: 55,
-                              child: Text(
-                                "Scan Object Success",
-                                style: TextStyle(
+                            icon: plantName.isNotEmpty
+                                ? Icon(
+                                    Icons.check_rounded,
                                     color: tPrimaryActionColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Name:',
+                                    size: 56,
+                                  )
+                                : Icon(
+                                    Icons.question_mark_rounded,
+                                    color: tThirdTextErrorColor,
+                                    size: 56,
+                                  ),
+                            title: plantName.isNotEmpty
+                                ? SizedBox(
+                                    height: 35,
+                                    child: Text(
+                                      "Scan Object Success",
                                       style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        plantName,
-                                        style: const TextStyle(
+                                          color: tPrimaryActionColor,
                                           fontSize: 16,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Text.rich(
-                                    TextSpan(
-                                      text: "See more information about this",
+                                  )
+                                : SizedBox(
+                                    height: 35,
+                                    child: Text(
+                                      "Scan Object Unsuccess",
                                       style: TextStyle(
-                                        fontSize: 15,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: " plant.",
-                                          style: TextStyle(
-                                            color: tThirdTextErrorColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ],
+                                          color: tThirdTextErrorColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                            content: plantName.isNotEmpty
+                                ? Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Name: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              plantName,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: const Text.rich(
+                                          TextSpan(
+                                            text:
+                                                "See more information about this",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: " plant.",
+                                                style: TextStyle(
+                                                  color: tThirdTextErrorColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Please scan again',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                             actions: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 16, bottom: 0, left: 16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      height: 45,
-                                      width: 120,
-                                      child: OutlinedButton(
-                                        child: const Text(
-                                          'No',
-                                          style: TextStyle(
-                                            color: tPrimaryActionColor,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                              plantName.isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 16, bottom: 0, left: 16),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            height: 45,
+                                            width: 120,
+                                            child: OutlinedButton(
+                                              child: const Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: tPrimaryActionColor,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                side: const BorderSide(
+                                                  color: tPrimaryActionColor,
+                                                  width: 1,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          side: const BorderSide(
-                                            color: tPrimaryActionColor,
-                                            width: 1,
+                                          SizedBox(
+                                            height: 45,
+                                            width: 120,
+                                            child: ElevatedButton(
+                                              child: Text(
+                                                "Yes",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    tPrimaryActionColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
                                           ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
+                                        ],
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 45,
-                                      width: 120,
-                                      child: ElevatedButton(
-                                        child: Text(
-                                          "Yes",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                    )
+                                  : Center(
+                                      child: SizedBox(
+                                        height: 45,
+                                        width: 120,
+                                        child: OutlinedButton(
+                                          child: Text(
+                                            'Ok',
+                                            style: TextStyle(
+                                              color: tThirdTextErrorColor,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: tPrimaryActionColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                          style: ElevatedButton.styleFrom(
+                                            side: const BorderSide(
+                                              color: tThirdTextErrorColor,
+                                              width: 1,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
                                           ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                                    )
                             ],
                             actionsPadding: EdgeInsets.only(bottom: 15),
                           );
