@@ -2,7 +2,9 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mashtaly_app/Constants/colors.dart';
 
 import '../../Services/scan_plant_service.dart';
@@ -78,6 +80,41 @@ class _CameraScannerState extends State<CameraScanner> {
       }
     } catch (e) {
       print('Error capturing photo: $e');
+    } finally {
+      setState(() {
+        _isCapturing = false;
+        _isCameraAvailable = true;
+      });
+    }
+  }
+
+  Future<void> choosePhotoFromGallery() async {
+    final imagePicker = ImagePicker();
+    final image = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image == null) return;
+
+    final imageFile = File(image.path);
+    sendPhotoToApi(imageFile);
+  }
+
+  Future<void> sendPhotoToApi(File imageFile) async {
+    setState(() {
+      _isCapturing = true;
+      _isCameraAvailable = false;
+    });
+
+    try {
+      final response = await _scanPlantService.sendImageToApi(imageFile);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        plantName = responseData['bestMatch'];
+      } else {
+        print('API request failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending photo to API: $e');
     } finally {
       setState(() {
         _isCapturing = false;
@@ -172,204 +209,404 @@ class _CameraScannerState extends State<CameraScanner> {
           }
         },
       ),
-      floatingActionButton: SizedBox(
-        height: 50,
-        width: 343,
-        child: FloatingActionButton.extended(
-          backgroundColor: tPrimaryActionColor,
-          onPressed: () {
-            if (_isCapturing) {
-              return null;
-            } else {
-              takePhotoAndSendToApi();
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => Theme(
-                        data: ThemeData(
-                          dialogBackgroundColor:
-                              Colors.white, // Set the background color to white
-                        ),
-                        child: FutureBuilder(
-                            future: Future.delayed(Duration(seconds: 5)),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                // Show a loading indicator while waiting
-                                return Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/images/plant_loading2.gif",
-                                        height: 100,
-                                        width: 100,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      const Text(
-                                        'Loading...',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Mulish',
-                                          decoration: TextDecoration.none,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 50,
+            width: 280,
+            child: FloatingActionButton.extended(
+              heroTag: 'btn1',
+              backgroundColor: tPrimaryActionColor,
+              onPressed: () {
+                if (_isCapturing) {
+                  return null;
+                } else {
+                  takePhotoAndSendToApi();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => Theme(
+                      data: ThemeData(
+                        dialogBackgroundColor:
+                            Colors.white, // Set the background color to white
+                      ),
+                      child: FutureBuilder(
+                        future: Future.delayed(Duration(seconds: 5)),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // Show a loading indicator while waiting
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/plant_loading2.gif",
+                                    height: 100,
+                                    width: 100,
                                   ),
-                                );
-                              } else {
-                                return AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.check_rounded,
-                                    color: tPrimaryActionColor,
-                                    size: 56,
-                                  ),
-                                  title: const SizedBox(
-                                    height: 55,
-                                    child: Text(
-                                      "Scan Object Success",
-                                      style: TextStyle(
-                                          color: tPrimaryActionColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                                  const SizedBox(height: 16),
+                                  const Text(
+                                    'Loading...',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Mulish',
+                                      decoration: TextDecoration.none,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
+                                ],
+                              ),
+                            );
+                          } else {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              icon: const Icon(
+                                Icons.check_rounded,
+                                color: tPrimaryActionColor,
+                                size: 56,
+                              ),
+                              title: const SizedBox(
+                                height: 55,
+                                child: Text(
+                                  "Scan Object Success",
+                                  style: TextStyle(
+                                      color: tPrimaryActionColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Name:',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              plantName,
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                      const Text(
+                                        'Name:',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: const Text.rich(
-                                          TextSpan(
-                                            text:
-                                                "See more information about this",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                text: " plant.",
-                                                style: TextStyle(
-                                                  color: tThirdTextErrorColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ],
+                                      Expanded(
+                                        child: Text(
+                                          plantName,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  actions: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 16, bottom: 0, left: 16),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: const Text.rich(
+                                      TextSpan(
+                                        text: "See more information about this",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                        ),
                                         children: [
-                                          SizedBox(
-                                            height: 45,
-                                            width: 120,
-                                            child: OutlinedButton(
-                                              child: const Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: tPrimaryActionColor,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                side: const BorderSide(
-                                                  color: tPrimaryActionColor,
-                                                  width: 1,
-                                                ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 45,
-                                            width: 120,
-                                            child: ElevatedButton(
-                                              child: Text(
-                                                "Yes",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    tPrimaryActionColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
+                                          TextSpan(
+                                            text: " plant.",
+                                            style: TextStyle(
+                                              color: tThirdTextErrorColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
                                             ),
                                           ),
                                         ],
                                       ),
-                                    )
-                                  ],
-                                  actionsPadding: EdgeInsets.only(bottom: 15),
-                                );
-                              }
-                            }),
-                      ));
-            }
-          },
-          label: Text(
-            'Scan Plant',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 16, bottom: 0, left: 16),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        height: 45,
+                                        width: 120,
+                                        child: OutlinedButton(
+                                          child: const Text(
+                                            'No',
+                                            style: TextStyle(
+                                              color: tPrimaryActionColor,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            side: const BorderSide(
+                                              color: tPrimaryActionColor,
+                                              width: 1,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 45,
+                                        width: 120,
+                                        child: ElevatedButton(
+                                          child: Text(
+                                            "Yes",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                tPrimaryActionColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                              actionsPadding: EdgeInsets.only(bottom: 15),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
+              label: Text(
+                'Scan Plant',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
-        ),
+          const SizedBox(width: 10),
+          SizedBox(
+            height: 50,
+            width: 55,
+            child: FloatingActionButton.extended(
+              heroTag: 'btn2',
+              backgroundColor: tPrimaryActionColor,
+              onPressed: () {
+                choosePhotoFromGallery();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => Theme(
+                    data: ThemeData(
+                      dialogBackgroundColor:
+                          Colors.white, // Set the background color to white
+                    ),
+                    child: FutureBuilder(
+                      future: Future.delayed(Duration(seconds: 6)),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // Show a loading indicator while waiting
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/plant_loading2.gif",
+                                  height: 100,
+                                  width: 100,
+                                ),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'Loading...',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Mulish',
+                                    decoration: TextDecoration.none,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            icon: const Icon(
+                              Icons.check_rounded,
+                              color: tPrimaryActionColor,
+                              size: 56,
+                            ),
+                            title: const SizedBox(
+                              height: 55,
+                              child: Text(
+                                "Scan Object Success",
+                                style: TextStyle(
+                                    color: tPrimaryActionColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Name:',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        plantName,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: const Text.rich(
+                                    TextSpan(
+                                      text: "See more information about this",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: " plant.",
+                                          style: TextStyle(
+                                            color: tThirdTextErrorColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 16, bottom: 0, left: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      height: 45,
+                                      width: 120,
+                                      child: OutlinedButton(
+                                        child: const Text(
+                                          'No',
+                                          style: TextStyle(
+                                            color: tPrimaryActionColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          side: const BorderSide(
+                                            color: tPrimaryActionColor,
+                                            width: 1,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 45,
+                                      width: 120,
+                                      child: ElevatedButton(
+                                        child: Text(
+                                          "Yes",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: tPrimaryActionColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                            actionsPadding: EdgeInsets.only(bottom: 15),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                );
+              },
+              label: FaIcon(
+                FontAwesomeIcons.image,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
