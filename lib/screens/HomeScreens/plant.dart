@@ -339,14 +339,27 @@ class _PlantScreenState extends State<PlantScreen> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text(
-                                                  '$cloud%',
-                                                  style: const TextStyle(
-                                                      color: tPrimaryTextColor,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
+                                                cloud.isNotEmpty
+                                                    ? Text(
+                                                        '$cloud%',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                tPrimaryTextColor,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      )
+                                                    : Text(
+                                                        '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                tPrimaryTextColor,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
                                               ],
                                             ),
                                           )
@@ -382,14 +395,27 @@ class _PlantScreenState extends State<PlantScreen> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text(
-                                                  '$wind Km/h',
-                                                  style: const TextStyle(
-                                                      color: tPrimaryTextColor,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
+                                                wind.isNotEmpty
+                                                    ? Text(
+                                                        '$wind Km/h',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                tPrimaryTextColor,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      )
+                                                    : Text(
+                                                        '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                tPrimaryTextColor,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
                                               ],
                                             ),
                                           )
@@ -426,15 +452,29 @@ class _PlantScreenState extends State<PlantScreen> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text(
-                                                  '$humidity%',
-                                                  textAlign: TextAlign.left,
-                                                  style: const TextStyle(
-                                                      color: tPrimaryTextColor,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
+                                                humidity.isNotEmpty
+                                                    ? Text(
+                                                        '$humidity%',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: const TextStyle(
+                                                            color:
+                                                                tPrimaryTextColor,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      )
+                                                    : Text(
+                                                        '',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                tPrimaryTextColor,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
                                               ],
                                             ),
                                           )

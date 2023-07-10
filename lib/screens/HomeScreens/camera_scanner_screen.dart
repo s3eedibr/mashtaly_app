@@ -23,7 +23,7 @@ class _CameraScannerState extends State<CameraScanner> {
   bool _isCameraAvailable = true;
   final ScanPlantService _scanPlantService = ScanPlantService();
   String plantName = '';
-
+  String commonName = '';
   @override
   void initState() {
     super.initState();
@@ -74,7 +74,9 @@ class _CameraScannerState extends State<CameraScanner> {
       // Process the response
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        plantName = responseData['bestMatch'];
+        plantName = responseData['results'][0]['species']
+            ['scientificNameWithoutAuthor'];
+        commonName = responseData['results'][0]['species']['commonNames'][0];
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }
@@ -109,7 +111,9 @@ class _CameraScannerState extends State<CameraScanner> {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        plantName = responseData['bestMatch'];
+        plantName = responseData['results'][0]['species']
+            ['scientificNameWithoutAuthor'];
+        commonName = responseData['results'][0]['species']['commonNames'][0];
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }
@@ -314,6 +318,31 @@ class _CameraScannerState extends State<CameraScanner> {
                                             Expanded(
                                               child: Text(
                                                 plantName,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Common Name: ',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                commonName,
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   overflow:
@@ -578,6 +607,30 @@ class _CameraScannerState extends State<CameraScanner> {
                                           Expanded(
                                             child: Text(
                                               plantName,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Common Name: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              commonName,
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 overflow: TextOverflow.ellipsis,
