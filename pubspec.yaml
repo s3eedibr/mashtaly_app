@@ -76,6 +76,7 @@ flutter:
     - assets/images/resetpassword_images/
     - assets/images/stack_images/
     - assets/images/icons/
+    - assets/images/plants_info_images/
     - assets/images/
     - assets/fonts/  # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

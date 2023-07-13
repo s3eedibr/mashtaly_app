@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../Constants/colors.dart';
-
 class WaitingScreen extends StatelessWidget {
   const WaitingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tBgColor,
+      backgroundColor: Colors.transparent,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,7 +20,9 @@ class WaitingScreen extends StatelessWidget {
             const Text(
               'Loading...',
               style: TextStyle(
-                color: tPrimaryTextColor,
+                color: Colors.white,
+                fontFamily: 'Mulish',
+                decoration: TextDecoration.none,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
