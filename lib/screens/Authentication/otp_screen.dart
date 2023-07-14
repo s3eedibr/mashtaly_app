@@ -34,7 +34,7 @@ class _OTPScreenState extends State<OTPScreen> {
     myauth.setConfig(
       appEmail: "noreply@mashtaly-hu.firebaseapp.com",
       appName: "Mashtaly",
-      userEmail: email,
+      userEmail: widget.sendtoemail,
       otpLength: 5,
       otpType: OTPType.digitsOnly,
     );

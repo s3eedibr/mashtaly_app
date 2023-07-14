@@ -248,9 +248,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         )
-                                      : Text(
+                                      : const Text(
                                           '',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -350,9 +350,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                                                 FontWeight
                                                                     .w700),
                                                       )
-                                                    : Text(
+                                                    : const Text(
                                                         '',
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 tPrimaryTextColor,
                                                             fontSize: 15,
@@ -406,9 +406,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                                                 FontWeight
                                                                     .w700),
                                                       )
-                                                    : Text(
+                                                    : const Text(
                                                         '',
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 tPrimaryTextColor,
                                                             fontSize: 15,
@@ -465,9 +465,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                                                 FontWeight
                                                                     .w700),
                                                       )
-                                                    : Text(
+                                                    : const Text(
                                                         '',
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 tPrimaryTextColor,
                                                             fontSize: 15,

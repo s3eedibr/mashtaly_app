@@ -26,6 +26,7 @@ class _CameraScannerState extends State<CameraScanner> {
   final ScanPlantService _scanPlantService = ScanPlantService();
   String plantName = '';
   String commonName = '';
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +36,7 @@ class _CameraScannerState extends State<CameraScanner> {
   @override
   void dispose() {
     _cameraController.dispose();
+
     super.dispose();
   }
 
@@ -101,6 +103,7 @@ class _CameraScannerState extends State<CameraScanner> {
     final imageFile = File(image.path);
     sendPhotoToApi(imageFile);
 
+    // ignore: use_build_context_synchronously
     showDialog(
       context: context,
       builder: (BuildContext context) => Theme(
@@ -109,30 +112,30 @@ class _CameraScannerState extends State<CameraScanner> {
         ),
         child: FutureBuilder(
           future: Future.delayed(
-            Duration(seconds: 7),
+            const Duration(seconds: 7),
           ),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // Show a loading indicator while waiting
-              return WaitingScreen();
+              return const WaitingScreen();
             } else {
               return AlertDialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 icon: plantName.isNotEmpty
-                    ? Icon(
+                    ? const Icon(
                         Icons.check_rounded,
                         color: tPrimaryActionColor,
                         size: 56,
                       )
-                    : Icon(
+                    : const Icon(
                         Icons.question_mark_rounded,
                         color: tThirdTextErrorColor,
                         size: 56,
                       ),
                 title: plantName.isNotEmpty
-                    ? SizedBox(
+                    ? const SizedBox(
                         height: 35,
                         child: Text(
                           "Scan Object Success",
@@ -142,7 +145,7 @@ class _CameraScannerState extends State<CameraScanner> {
                               fontWeight: FontWeight.bold),
                         ),
                       )
-                    : SizedBox(
+                    : const SizedBox(
                         height: 35,
                         child: Text(
                           "Scan Object Unsuccess",
@@ -176,7 +179,7 @@ class _CameraScannerState extends State<CameraScanner> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -248,14 +251,6 @@ class _CameraScannerState extends State<CameraScanner> {
                                 height: 45,
                                 width: 120,
                                 child: OutlinedButton(
-                                  child: const Text(
-                                    'No',
-                                    style: TextStyle(
-                                      color: tPrimaryActionColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                                   style: ElevatedButton.styleFrom(
                                     side: const BorderSide(
                                       color: tPrimaryActionColor,
@@ -268,20 +263,20 @@ class _CameraScannerState extends State<CameraScanner> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
+                                  child: const Text(
+                                    'No',
+                                    style: TextStyle(
+                                      color: tPrimaryActionColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
                               SizedBox(
                                 height: 45,
                                 width: 120,
                                 child: ElevatedButton(
-                                  child: Text(
-                                    "Yes",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: tPrimaryActionColor,
                                     shape: RoundedRectangleBorder(
@@ -289,14 +284,24 @@ class _CameraScannerState extends State<CameraScanner> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.push(
+                                    Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PlantsInfoScreen(),
+                                        builder: (context) => PlantsInfoScreen(
+                                          plantName: plantName,
+                                          commonName: commonName,
+                                        ),
                                       ),
                                     );
                                   },
+                                  child: const Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -307,14 +312,6 @@ class _CameraScannerState extends State<CameraScanner> {
                             height: 45,
                             width: 120,
                             child: OutlinedButton(
-                              child: Text(
-                                'Ok',
-                                style: TextStyle(
-                                  color: tThirdTextErrorColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                               style: ElevatedButton.styleFrom(
                                 side: const BorderSide(
                                   color: tThirdTextErrorColor,
@@ -327,11 +324,19 @@ class _CameraScannerState extends State<CameraScanner> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
+                              child: const Text(
+                                'Ok',
+                                style: TextStyle(
+                                  color: tThirdTextErrorColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         )
                 ],
-                actionsPadding: EdgeInsets.only(bottom: 15),
+                actionsPadding: const EdgeInsets.only(bottom: 15),
               );
             }
           },
@@ -372,12 +377,12 @@ class _CameraScannerState extends State<CameraScanner> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
+        title: const Text(
           "Scan Object",
           style: TextStyle(
             fontSize: 20,
@@ -393,7 +398,7 @@ class _CameraScannerState extends State<CameraScanner> {
               return Center(
                 child: Text(
                   'Error: ${snapshot.error}',
-                  style: TextStyle(fontSize: 18.0),
+                  style: const TextStyle(fontSize: 18.0),
                 ),
               );
             } else {
@@ -427,7 +432,7 @@ class _CameraScannerState extends State<CameraScanner> {
             }
           } else {
             // Show a loading indicator while initializing the camera
-            return WaitingScreen();
+            return const WaitingScreen();
           }
         },
       ),
@@ -442,7 +447,7 @@ class _CameraScannerState extends State<CameraScanner> {
               backgroundColor: tPrimaryActionColor,
               onPressed: () {
                 if (_isCapturing) {
-                  return null;
+                  return;
                 } else {
                   takePhotoAndSendToApi();
                   showDialog(
@@ -453,31 +458,31 @@ class _CameraScannerState extends State<CameraScanner> {
                             Colors.white, // Set the background color to white
                       ),
                       child: FutureBuilder(
-                        future: Future.delayed(Duration(seconds: 7)),
+                        future: Future.delayed(const Duration(seconds: 7)),
                         builder: (BuildContext context,
                             AsyncSnapshot<dynamic> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             // Show a loading indicator while waiting
-                            return WaitingScreen();
+                            return const WaitingScreen();
                           } else {
                             return AlertDialog(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               icon: plantName.isNotEmpty
-                                  ? Icon(
+                                  ? const Icon(
                                       Icons.check_rounded,
                                       color: tPrimaryActionColor,
                                       size: 56,
                                     )
-                                  : Icon(
+                                  : const Icon(
                                       Icons.question_mark_rounded,
                                       color: tThirdTextErrorColor,
                                       size: 56,
                                     ),
                               title: plantName.isNotEmpty
-                                  ? SizedBox(
+                                  ? const SizedBox(
                                       height: 35,
                                       child: Text(
                                         "Scan Object Success",
@@ -487,7 +492,7 @@ class _CameraScannerState extends State<CameraScanner> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                     )
-                                  : SizedBox(
+                                  : const SizedBox(
                                       height: 35,
                                       child: Text(
                                         "Scan Object Unsuccess",
@@ -523,7 +528,7 @@ class _CameraScannerState extends State<CameraScanner> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
                                         Row(
@@ -599,14 +604,6 @@ class _CameraScannerState extends State<CameraScanner> {
                                               height: 45,
                                               width: 120,
                                               child: OutlinedButton(
-                                                child: const Text(
-                                                  'No',
-                                                  style: TextStyle(
-                                                    color: tPrimaryActionColor,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
                                                 style: ElevatedButton.styleFrom(
                                                   side: const BorderSide(
                                                     color: tPrimaryActionColor,
@@ -621,20 +618,20 @@ class _CameraScannerState extends State<CameraScanner> {
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
+                                                child: const Text(
+                                                  'No',
+                                                  style: TextStyle(
+                                                    color: tPrimaryActionColor,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
                                               height: 45,
                                               width: 120,
                                               child: ElevatedButton(
-                                                child: Text(
-                                                  "Yes",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
                                                       tPrimaryActionColor,
@@ -645,14 +642,25 @@ class _CameraScannerState extends State<CameraScanner> {
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  Navigator.push(
+                                                  Navigator.pushReplacement(
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const PlantsInfoScreen(),
+                                                          PlantsInfoScreen(
+                                                        plantName: plantName,
+                                                        commonName: commonName,
+                                                      ),
                                                     ),
                                                   );
                                                 },
+                                                child: const Text(
+                                                  "Yes",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -663,14 +671,6 @@ class _CameraScannerState extends State<CameraScanner> {
                                           height: 45,
                                           width: 120,
                                           child: OutlinedButton(
-                                            child: const Text(
-                                              'Ok',
-                                              style: TextStyle(
-                                                color: tThirdTextErrorColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
                                             style: ElevatedButton.styleFrom(
                                               side: const BorderSide(
                                                 color: tThirdTextErrorColor,
@@ -684,11 +684,19 @@ class _CameraScannerState extends State<CameraScanner> {
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
+                                            child: const Text(
+                                              'Ok',
+                                              style: TextStyle(
+                                                color: tThirdTextErrorColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       )
                               ],
-                              actionsPadding: EdgeInsets.only(bottom: 15),
+                              actionsPadding: const EdgeInsets.only(bottom: 15),
                             );
                           }
                         },
@@ -697,7 +705,7 @@ class _CameraScannerState extends State<CameraScanner> {
                   );
                 }
               },
-              label: Text(
+              label: const Text(
                 'Scan Plant',
                 style: TextStyle(
                   color: Colors.white,
@@ -717,7 +725,7 @@ class _CameraScannerState extends State<CameraScanner> {
               onPressed: () {
                 choosePhotoFromGallery();
               },
-              label: FaIcon(
+              label: const FaIcon(
                 FontAwesomeIcons.image,
                 color: Colors.white,
               ),
