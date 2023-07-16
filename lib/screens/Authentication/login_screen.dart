@@ -226,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         ),
                       ),
                     ),
-                    SizedBox(height: height - 718),
+                    SizedBox(height: height - 721),
                     Column(
                       children: [
                         GestureDetector(

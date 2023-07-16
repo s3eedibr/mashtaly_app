@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -132,7 +133,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           fontSize: 24,
                         ),
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(
+                        height: 25,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 35),
                         child: TextFormField(

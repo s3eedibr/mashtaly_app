@@ -9,6 +9,8 @@ import 'package:mashtaly_app/Services/weather_service.dart';
 import '../../Constants/colors.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
+import 'notification.dart';
+
 class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
 
@@ -53,6 +55,9 @@ class _PlantScreenState extends State<PlantScreen> {
       desiredAccuracy: LocationAccuracy.high,
     );
     setState(() {
+      if (!mounted) {
+        return;
+      }
       latitude = position.latitude;
       longitude = position.longitude;
     });
@@ -60,12 +65,12 @@ class _PlantScreenState extends State<PlantScreen> {
   }
 
   void getWeatherData() async {
-    if (latitude != null && longitude != null) {
+    if (mounted && latitude != null && longitude != null) {
       Map<String, dynamic>? weatherData = await weather.getWeather(
         latitude: latitude!,
         longitude: longitude!,
       );
-      if (weatherData != null) {
+      if (weatherData != null && mounted) {
         setState(() {
           weatherText = weatherData['current']['condition']['text'];
           temperature = weatherData['current']['temp_c'].toString();
@@ -174,7 +179,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NotificationScreen(),
+                                        ),
+                                      );
+                                    },
                                     icon: newNotification == false
                                         ? Image.asset(
                                             "assets/images/icons/Path 2.png",
@@ -242,7 +255,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                   ),
                                   temperature.isNotEmpty
                                       ? Text(
-                                          '$temperature°c',
+                                          '$temperature°C',
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
