@@ -35,80 +35,85 @@ class _HomeScreenState extends State<HomeScreen> {
         final shouldPop = await showDialog<bool>(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+            return Theme(
+              data: ThemeData(
+                dialogBackgroundColor: Colors.white,
               ),
-              backgroundColor: Colors.white,
-              titlePadding: const EdgeInsets.only(
-                right: 16,
-                bottom: 15,
-                left: 16,
-                top: 15,
-              ),
-              title: const Text(
-                'Do you want to go back?',
-                style: TextStyle(
-                  fontSize: 16,
+              child: AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              actionsAlignment: MainAxisAlignment.spaceBetween,
-              actionsPadding: const EdgeInsets.only(
-                right: 16,
-                bottom: 15,
-                left: 16,
-              ),
-              actions: [
-                SizedBox(
-                  height: 45,
-                  width: 120,
-                  child: OutlinedButton(
-                    style: ElevatedButton.styleFrom(
-                      side: const BorderSide(
-                        color: tPrimaryActionColor,
-                        width: 1,
+                backgroundColor: Colors.white,
+                titlePadding: const EdgeInsets.only(
+                  right: 16,
+                  bottom: 15,
+                  left: 16,
+                  top: 15,
+                ),
+                title: const Text(
+                  'Do you want to go back?',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                actionsAlignment: MainAxisAlignment.spaceBetween,
+                actionsPadding: const EdgeInsets.only(
+                  right: 16,
+                  bottom: 15,
+                  left: 16,
+                ),
+                actions: [
+                  SizedBox(
+                    height: 45,
+                    width: 120,
+                    child: OutlinedButton(
+                      style: ElevatedButton.styleFrom(
+                        side: const BorderSide(
+                          color: tPrimaryActionColor,
+                          width: 1,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    },
-                    child: const Text(
-                      'No',
-                      style: TextStyle(
-                        color: tPrimaryActionColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: const Text(
+                        'No',
+                        style: TextStyle(
+                          color: tPrimaryActionColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 45,
-                  width: 120,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: tPrimaryActionColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  SizedBox(
+                    height: 45,
+                    width: 120,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: tPrimaryActionColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    child: const Text(
-                      "Yes",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: const Text(
+                        "Yes",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );

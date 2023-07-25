@@ -382,7 +382,11 @@ class _CameraScannerState extends State<CameraScanner> {
               Icons.arrow_back_ios_new_rounded,
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                  (Route<dynamic> route) => false);
             },
           ),
           title: const Text(
@@ -448,6 +452,7 @@ class _CameraScannerState extends State<CameraScanner> {
               child: FloatingActionButton.extended(
                 heroTag: 'btn1',
                 backgroundColor: tPrimaryActionColor,
+                elevation: 0,
                 onPressed: () {
                   if (_isCapturing) {
                     return;
@@ -740,6 +745,7 @@ class _CameraScannerState extends State<CameraScanner> {
               child: FloatingActionButton.extended(
                 heroTag: 'btn2',
                 backgroundColor: tPrimaryActionColor,
+                elevation: 0,
                 onPressed: () {
                   choosePhotoFromGallery();
                 },

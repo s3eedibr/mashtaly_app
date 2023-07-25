@@ -79,159 +79,500 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
   Widget build(BuildContext context) {
     // final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-            ),
-            onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => CameraScanner(),
-              ),
-            ),
+    bool added = false;
+    return Scaffold(
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
           ),
-          title: const Text(
-            "Plants Information",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
+          onPressed: () => Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const CameraScanner(),
             ),
           ),
         ),
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
+        title: const Text(
+          "Plants Information",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Switch(
+              value: added,
+              onChanged: (bool value) {
+                setState(() {
+                  added = value;
+                  print(added);
+                });
+              },
+              activeTrackColor: const Color(0xff9BEC79),
+              activeColor: const Color(0xff66B821),
+              inactiveTrackColor: const Color(0xFFFF3324),
+              inactiveThumbColor: tBgColor,
+              trackOutlineColor:
+                  const MaterialStatePropertyAll<Color?>(Colors.transparent),
+            ),
+          ),
+        ],
+      ),
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        children: [
+          Column(
+            children: [
+              const SizedBox(
+                height: 10,
               ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: photoUrls.isNotEmpty && _isValidUrl(photoUrls[0])
-                        ? Image.network(
-                            photoUrls[0],
-                            height: 250,
-                            width: width,
-                            fit: BoxFit.fitWidth,
-                          )
-                        : Container(
-                            // Placeholder image when the photoUrls list is empty or URL is invalid
-                            height: 250,
-                            width: width,
-                            color: Colors
-                                .grey, // You can customize this placeholder color
-                          ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 75,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: photoUrls.length,
-                      itemBuilder: (context, index) {
-                        if (_isValidUrl(photoUrls[index])) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                photoUrls[index],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          );
-                        } else {
-                          // Return an empty container or a placeholder image
-                          return Container(
-                            width: 100,
-                            color:
-                                Colors.grey, // Customize this color as needed
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                widget.plantName ?? "",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: FaIcon(
-                                FontAwesomeIcons.ellipsisVertical,
-                                color: tSecondTextColor,
-                                size: 22,
-                              ),
-                            ),
-                          ],
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: photoUrls.isNotEmpty && _isValidUrl(photoUrls[0])
+                      ? Image.network(
+                          photoUrls[0],
+                          height: 250,
+                          width: width,
+                          fit: BoxFit.fitWidth,
+                        )
+                      : Container(
+                          // Placeholder image when the photoUrls list is empty or URL is invalid
+                          height: 250,
+                          width: width,
+                          color: Colors
+                              .grey, // You can customize this placeholder color
                         ),
-                        Text(
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: SizedBox(
+                  height: 75,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: photoUrls.length,
+                    itemBuilder: (context, index) {
+                      if (_isValidUrl(photoUrls[index])) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              photoUrls[index],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Return an empty container or a placeholder image
+                        return Container(
+                          width: 100,
+                          color: Colors.grey, // Customize this color as needed
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.plantName ?? "",
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const FaIcon(
+                              FontAwesomeIcons.ellipsisVertical,
+                              color: tSecondTextColor,
+                              size: 22,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
                           widget.commonName ?? "",
                           textAlign: TextAlign.justify,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: tSecondTextColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(
-                          height: 20,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        para,
+                        textAlign: TextAlign.justify,
+                        style: const TextStyle(
+                          height: 1.8,
+                          fontSize: 17,
                         ),
-                        Text(
-                          para,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontSize: 17,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          added == false
+                              ? const Text(
+                                  "Recommendation",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : const Text(
+                                  "Daily Schedule",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                          added == false
+                              ? MaterialButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Compare",
+                                    style: TextStyle(
+                                        color: tPrimaryActionColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : MaterialButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Edit",
+                                    style: TextStyle(
+                                        color: tPrimaryActionColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/icons/Group 195.png',
+                                height: 45,
+                                width: 45,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Watering every",
+                                      style: TextStyle(
+                                          color: tPrimaryPlusTextColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Hour',
+                                      style: TextStyle(
+                                          color: tPrimaryTextColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
+                          Image.asset(
+                            'assets/images/icons/Line 7.png',
+                            height: 35,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Water",
+                                  style: TextStyle(
+                                      color: tPrimaryPlusTextColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '200ml',
+                                  style: TextStyle(
+                                      color: tPrimaryTextColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/icons/Group 237.png',
+                                  height: 45,
+                                  width: 45,
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                const Text(
+                                  '16°C',
+                                  style: TextStyle(
+                                      color: tPrimaryTextColor,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 95,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/icons/Group 204.png',
+                                  height: 45,
+                                  width: 45,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Cloud",
+                                        style: TextStyle(
+                                            color: tPrimaryPlusTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '',
+                                        style: TextStyle(
+                                            color: tPrimaryTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/icons/Group 203.png',
+                                  height: 45,
+                                  width: 45,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Wind",
+                                        style: TextStyle(
+                                            color: tPrimaryPlusTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Km/h',
+                                        style: TextStyle(
+                                            color: tPrimaryTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/icons/Group 199.png',
+                                  height: 45,
+                                  width: 45,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Humidity",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            color: tPrimaryPlusTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '%',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            color: tPrimaryTextColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 35,
-                        )
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 55,
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+          height: 50,
+          width: 380,
+          child: added == false
+              ? FloatingActionButton(
+                  backgroundColor: tPrimaryActionColor,
+                  elevation: 0,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12.0),
                     ),
                   ),
-                  SizedBox(
-                    height: 25,
+                  onPressed: () {},
+                  child: const Center(
+                      child: Text(
+                    "Add to My Plants",
+                    style: TextStyle(
+                      color: tThirdTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  )),
+                )
+              : FloatingActionButton(
+                  backgroundColor: tThirdTextErrorColor,
+                  elevation: 0,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12.0),
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                  onPressed: () {},
+                  child: const Center(
+                      child: Text(
+                    "Edit My Plants",
+                    style: TextStyle(
+                      color: tThirdTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  )),
+                )),
     );
   }
 }

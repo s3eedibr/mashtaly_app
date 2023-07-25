@@ -106,7 +106,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               color: tPrimaryActionColor,
                             ),
                             borderRadius: BorderRadius.all(
-                              Radius.circular(6),
+                              Radius.circular(12),
                             ),
                           ),
                         ),
@@ -144,7 +144,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: tPrimaryActionColor,
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           width: 343,
                           height: 50,

@@ -42,6 +42,7 @@ dependencies:
   gallery_saver: ^2.3.2
   image_picker: ^1.0.0
   firebase_storage: ^11.2.5
+  app_settings: ^5.0.0
 
 flutter_icons:
   android: "launcher_icon"

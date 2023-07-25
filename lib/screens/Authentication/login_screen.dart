@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                               color: tPrimaryActionColor,
                             ),
                             borderRadius: BorderRadius.all(
-                              Radius.circular(6),
+                              Radius.circular(12),
                             ),
                           ),
                         ),
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                               color: tPrimaryActionColor,
                             ),
                             borderRadius: BorderRadius.all(
-                              Radius.circular(6),
+                              Radius.circular(12),
                             ),
                           ),
                         ),
@@ -234,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                           child: Container(
                             decoration: BoxDecoration(
                               color: tPrimaryActionColor,
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             width: 343,
                             height: 50,

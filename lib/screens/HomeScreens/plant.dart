@@ -21,7 +21,7 @@ class PlantScreen extends StatefulWidget {
 class _PlantScreenState extends State<PlantScreen> {
   Future<bool> _loadData() async {
     // Simulating an asynchronous task, e.g., loading data
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 4500));
     return true;
   }
 
@@ -161,7 +161,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide.none,
                                         borderRadius:
-                                            BorderRadius.circular(20)),
+                                            BorderRadius.circular(12)),
                                   ),
                                 ),
                               ),
@@ -184,7 +184,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              NotificationScreen(),
+                                              const NotificationScreen(),
                                         ),
                                       );
                                     },
@@ -253,21 +253,38 @@ class _PlantScreenState extends State<PlantScreen> {
                                             ),
                                     ],
                                   ),
-                                  temperature.isNotEmpty
-                                      ? Text(
-                                          '$temperature°C',
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : const Text(
-                                          '',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                  Row(
+                                    children: [
+                                      temperature.isNotEmpty
+                                          ? Image.asset(
+                                              'assets/images/icons/Group 237.png',
+                                              height: 35,
+                                              width: 35,
+                                            )
+                                          : const Icon(
+                                              Icons.cloud_off_sharp,
+                                              color: Colors.transparent,
+                                            ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      temperature.isNotEmpty
+                                          ? Text(
+                                              '$temperature°C',
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          : const Text(
+                                              '',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -526,7 +543,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius.circular(12),
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -555,7 +572,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                                               tPrimaryActionColor,
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(6),
+                                                                  .circular(12),
                                                           boxShadow: [
                                                             BoxShadow(
                                                               color: Colors
@@ -616,7 +633,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                                               tPrimaryActionColor,
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(6),
+                                                                  .circular(12),
                                                           boxShadow: [
                                                             BoxShadow(
                                                               color: Colors
@@ -675,7 +692,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     color: Colors.white,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: const Row(
                                       children: [
@@ -714,7 +731,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     height: 250,
                                     decoration: BoxDecoration(
                                       color: const Color(0xFFF1F1F1),
-                                      borderRadius: BorderRadius.circular(6),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
                                   Positioned(

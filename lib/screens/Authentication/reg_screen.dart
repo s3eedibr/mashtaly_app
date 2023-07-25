@@ -179,7 +179,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 color: tPrimaryActionColor,
                               ),
                               borderRadius: BorderRadius.all(
-                                Radius.circular(6),
+                                Radius.circular(12),
                               ),
                             ),
                           ),
@@ -229,7 +229,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 color: tPrimaryActionColor,
                               ),
                               borderRadius: BorderRadius.all(
-                                Radius.circular(6),
+                                Radius.circular(12),
                               ),
                             ),
                           ),
@@ -280,7 +280,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 color: tPrimaryActionColor,
                               ),
                               borderRadius: BorderRadius.all(
-                                Radius.circular(6),
+                                Radius.circular(12),
                               ),
                             ),
                           ),
@@ -331,7 +331,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 color: tPrimaryActionColor,
                               ),
                               borderRadius: BorderRadius.all(
-                                Radius.circular(6),
+                                Radius.circular(12),
                               ),
                             ),
                           ),
@@ -347,7 +347,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: tPrimaryActionColor,
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     width: 343,
                     height: 50,

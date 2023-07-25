@@ -34,6 +34,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Mulish',
         useMaterial3: true,
+        dialogBackgroundColor: Colors.white,
         textSelectionTheme: TextSelectionThemeData(
           selectionColor: tPrimaryActionColor.withOpacity(.5),
           cursorColor: tPrimaryActionColor.withOpacity(.6),

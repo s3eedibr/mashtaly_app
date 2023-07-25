@@ -95,7 +95,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         fillColor: Colors.white,
                         filled: true,
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(6)),
+                            const BorderRadius.all(Radius.circular(12)),
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -138,13 +138,13 @@ class _OTPScreenState extends State<OTPScreen> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             width: 343,
                             height: 50,
                             child: RawMaterialButton(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6)),
+                                  borderRadius: BorderRadius.circular(12)),
                               fillColor: tPrimaryActionColor,
                               elevation: 0,
                               child: const Text(

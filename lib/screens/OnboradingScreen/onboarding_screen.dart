@@ -118,7 +118,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 20,
+                      ),
                       child: Text(
                         screens[index].text,
                         textAlign: TextAlign.center,
@@ -130,7 +134,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 6, right: 6),
+                      padding: const EdgeInsets.only(left: 16, right: 16),
                       child: Text(
                         screens[index].desc,
                         textAlign: TextAlign.center,
@@ -173,7 +177,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      padding: const EdgeInsets.only(left: 16, right: 16),
                       child: TextButton(
                         onPressed: () async {
                           await _storeOnBoaringInfo();
@@ -211,51 +215,56 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Container(
-                            height: 80,
-                            decoration: const BoxDecoration(
-                              color: Colors.transparent,
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 12,
-                                    offset: Offset(0, 3),
-                                    color: Color(0x33000000)),
-                                BoxShadow(
-                                    offset: Offset(-10, 0),
-                                    color: Colors.white),
-                                BoxShadow(
-                                    offset: Offset(10, 0), color: Colors.white),
-                              ],
+                          // Container(
+                          //   height: 80,
+                          //   decoration: const BoxDecoration(
+                          //     color: Colors.transparent,
+                          //     boxShadow: [
+                          //       BoxShadow(
+                          //           blurRadius: 12,
+                          //           offset: Offset(0, 3),
+                          //           color: Color(0x33000000)),
+                          //       BoxShadow(
+                          //           offset: Offset(-10, 0),
+                          //           color: Colors.white),
+                          //       BoxShadow(
+                          //           offset: Offset(10, 0), color: Colors.white),
+                          //     ],
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 15,
                             ),
-                          ),
-                          Container(
-                            height: 50,
-                            width: 380,
-                            decoration: BoxDecoration(
-                                color: tPrimaryActionColor,
-                                borderRadius: BorderRadius.circular(6)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                currentIndex != 2
-                                    ? const Text(
-                                        "Next",
-                                        style: TextStyle(
-                                          color: tThirdTextColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
+                            child: Container(
+                              height: 50,
+                              width: 380,
+                              decoration: BoxDecoration(
+                                  color: tPrimaryActionColor,
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  currentIndex != 2
+                                      ? const Text(
+                                          "Next",
+                                          style: TextStyle(
+                                            color: tThirdTextColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "Let's Get Started",
+                                          style: TextStyle(
+                                            color: tThirdTextColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
                                         ),
-                                      )
-                                    : const Text(
-                                        "Let's Get Started",
-                                        style: TextStyle(
-                                          color: tThirdTextColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                              ],
+                                ],
+                              ),
                             ),
                           )
                         ],

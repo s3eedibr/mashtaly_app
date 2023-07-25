@@ -1,84 +1,17 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:app_settings/app_settings.dart';
 import 'package:mashtaly_app/Auth/auth.dart';
-
 import '../../Constants/colors.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final user = FirebaseAuth.instance.currentUser!;
-  final ImagePicker _picker = ImagePicker();
-
-  File? _selectedImage;
-
-  Future<void> pickImage() async {
-    final pickedImage = await _picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 512,
-      maxHeight: 512,
-      imageQuality: 75,
-    );
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-    }
-  }
-
-  Future<String> uploadImageToFirebase() async {
-    if (_selectedImage == null) {
-      return 'assets/images/icons/default_profile.jpg';
-    }
-
-    // Create a unique filename for the image
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
-    // Reference to Firebase Storage
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('Profile_images/$fileName');
-
-    // Upload the file to Firebase Storage
-    UploadTask uploadTask = storageReference.putFile(_selectedImage!);
-
-    // Await the upload completion and get the download URL
-    TaskSnapshot taskSnapshot = await uploadTask;
-    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-
-    // Return the download URL
-    return downloadUrl;
-  }
-
-  void _handleUploadButton() async {
-    await pickImage();
-    String downloadUrl = await uploadImageToFirebase();
-    print('Download URL: $downloadUrl');
-  }
-
-  Future<String?> fetchProfilePictureUrl(String userId) async {
-    try {
-      // Reference to the profile picture in Firebase Storage
-      Reference storageReference =
-          FirebaseStorage.instance.ref().child('Profile_images/$userId.jpg');
-
-      // Get the download URL of the profile picture
-      String downloadUrl = await storageReference.getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print('Error fetching profile picture URL: $e');
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -97,26 +30,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 190,
               width: double.infinity,
               child: GestureDetector(
-                onTap: () {
-                  pickImage();
-                },
+                onTap: () {},
                 child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Container(
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25),
+                      child: SizedBox(
                         height: 110,
                         width: 110,
                         child: CircleAvatar(
                           backgroundColor: tPrimaryActionColor,
                           child: CircleAvatar(
                             radius: 54,
-                            backgroundImage: _selectedImage != null
-                                ? FileImage(File(_selectedImage!.path))
-                                    as ImageProvider<Object>
-                                : AssetImage(
-                                    'assets/images/icons/default_profile.jpg'),
+                            backgroundImage: AssetImage(
+                                'assets/images/icons/default_profile.jpg'),
                           ),
                         ),
                       ),
@@ -124,10 +52,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Positioned(
                       left: 230,
                       top: 95,
-                      child: Container(
+                      child: SizedBox(
                         height: 35,
                         width: 35,
-                        child: CircleAvatar(
+                        child: const CircleAvatar(
                           backgroundColor: tPrimaryActionColor,
                           child: CircleAvatar(
                             backgroundColor: tBgColor,
@@ -140,8 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 145),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 145),
                       child: Text(
                         'Saeed Ibrahim',
                         style: TextStyle(
@@ -154,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 26,
             ),
             Padding(
@@ -173,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Image.asset(
@@ -181,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 38,
                             width: 38,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           const Text(
@@ -194,9 +122,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      AppSettings.openAppSettings(
+                        type: AppSettingsType.notification,
+                      );
+                    },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   GestureDetector(
@@ -208,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Image.asset(
@@ -216,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 38,
                             width: 38,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           const Text(
@@ -229,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     onTap: () {},
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   GestureDetector(
@@ -241,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Image.asset(
@@ -249,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 38,
                             width: 38,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           const Text(
@@ -262,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     onTap: () {},
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   GestureDetector(
@@ -274,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Image.asset(
@@ -282,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 38,
                             width: 38,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           const Text(
@@ -297,91 +229,96 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          return Theme(
+                            data: ThemeData(
+                              dialogBackgroundColor: Colors.white,
                             ),
-                            backgroundColor: Colors.white,
-                            titlePadding: const EdgeInsets.only(
-                              right: 16,
-                              bottom: 15,
-                              left: 16,
-                              top: 15,
-                            ),
-                            title: const Text(
-                              'Are You Sure to Logout?',
-                              style: TextStyle(
-                                fontSize: 16,
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            ),
-                            actionsAlignment: MainAxisAlignment.spaceBetween,
-                            actionsPadding: const EdgeInsets.only(
-                              right: 16,
-                              bottom: 15,
-                              left: 16,
-                            ),
-                            actions: [
-                              SizedBox(
-                                height: 45,
-                                width: 120,
-                                child: OutlinedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    side: const BorderSide(
-                                      color: tPrimaryActionColor,
-                                      width: 1,
+                              backgroundColor: Colors.white,
+                              titlePadding: const EdgeInsets.only(
+                                right: 16,
+                                bottom: 15,
+                                left: 16,
+                                top: 15,
+                              ),
+                              title: const Text(
+                                'Are You Sure to Logout?',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              actionsAlignment: MainAxisAlignment.spaceBetween,
+                              actionsPadding: const EdgeInsets.only(
+                                right: 16,
+                                bottom: 15,
+                                left: 16,
+                              ),
+                              actions: [
+                                SizedBox(
+                                  height: 45,
+                                  width: 120,
+                                  child: OutlinedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      side: const BorderSide(
+                                        color: tPrimaryActionColor,
+                                        width: 1,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                      color: tPrimaryActionColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: tPrimaryActionColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 45,
-                                width: 120,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: tPrimaryActionColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                SizedBox(
+                                  height: 45,
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: tPrimaryActionColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                          builder: (context) => Auth(),
-                                        ),
-                                        (Route<dynamic> route) => false);
-                                    FirebaseAuth.instance.signOut();
-                                  },
-                                  child: const Text(
-                                    "Confirm",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                    onPressed: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                            builder: (context) => const Auth(),
+                                          ),
+                                          (Route<dynamic> route) => false);
+                                      FirebaseAuth.instance.signOut();
+                                    },
+                                    child: const Text(
+                                      "Confirm",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         },
                       );
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                 ],
