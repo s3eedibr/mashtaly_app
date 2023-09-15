@@ -543,7 +543,11 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                       Radius.circular(12.0),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      added = true;
+                    });
+                  },
                   child: const Center(
                       child: Text(
                     "Add to My Plants",
