@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/camera_scanner_screen.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/community.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/notification.dart';
-import 'package:mashtaly_app/Screens/HomeScreens/plant.dart';
+import 'package:mashtaly_app/Screens/Plant%20Screen/plant.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/profile.dart';
 
 import '../../Constants/colors.dart';
@@ -121,6 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: SafeArea(
         child: Scaffold(
+          // resizeToAvoidBottomInset: false,
+          extendBody: true,
           body: PageStorage(
             bucket: bucket,
             child: currentScreen,

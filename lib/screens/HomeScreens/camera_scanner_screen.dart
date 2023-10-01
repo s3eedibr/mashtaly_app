@@ -7,7 +7,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mashtaly_app/Constants/colors.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/home_screen.dart';
-import 'package:mashtaly_app/Screens/PlantScreens/plants_info_screen.dart';
+import 'package:mashtaly_app/Screens/Plant%20Information%20Screen/plants_info_screen.dart';
 
 import '../../Animations/waiting_screen.dart';
 import '../../Services/scan_plant_service.dart';

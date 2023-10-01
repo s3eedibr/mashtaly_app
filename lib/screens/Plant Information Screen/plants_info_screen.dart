@@ -532,51 +532,53 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SizedBox(
-          height: 50,
-          width: 380,
-          child: added == false
-              ? FloatingActionButton(
-                  backgroundColor: tPrimaryActionColor,
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12.0),
-                    ),
+        height: 50,
+        width: 380,
+        child: added == false
+            ? FloatingActionButton(
+                backgroundColor: tPrimaryActionColor,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12.0),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      added = true;
-                    });
-                  },
-                  child: const Center(
-                      child: Text(
-                    "Add to My Plants",
-                    style: TextStyle(
-                      color: tThirdTextColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  )),
-                )
-              : FloatingActionButton(
-                  backgroundColor: tThirdTextErrorColor,
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12.0),
-                    ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    added = true;
+                  });
+                },
+                child: const Center(
+                    child: Text(
+                  "Add to My Plants",
+                  style: TextStyle(
+                    color: tThirdTextColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                  onPressed: () {},
-                  child: const Center(
-                      child: Text(
+                )),
+              )
+            : FloatingActionButton(
+                backgroundColor: tThirdTextErrorColor,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12.0),
+                  ),
+                ),
+                onPressed: () {},
+                child: const Center(
+                  child: Text(
                     "Edit My Plants",
                     style: TextStyle(
                       color: tThirdTextColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
-                  )),
-                )),
+                  ),
+                ),
+              ),
+      ),
     );
   }
 }
