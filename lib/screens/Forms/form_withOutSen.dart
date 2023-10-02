@@ -1,4 +1,3 @@
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,14 +6,14 @@ import 'package:mashtaly_app/Screens/Forms/Utils.dart';
 import '../../Constants/colors.dart';
 import '../HomeScreens/home_screen.dart';
 
-class AddPlantFormWithSen extends StatefulWidget {
-  const AddPlantFormWithSen({super.key});
+class AddPlantFormWithOutSen extends StatefulWidget {
+  const AddPlantFormWithOutSen({super.key});
 
   @override
-  State<AddPlantFormWithSen> createState() => _AddPlantFormWithSenState();
+  State<AddPlantFormWithOutSen> createState() => _AddPlantFormWithOutSenState();
 }
 
-class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
+class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
   int selectedWeek = -1; // Initialize with -1, indicating no button selected.
 
   void selectWeek(int weekNumber) {
@@ -48,7 +47,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
             ),
           ),
           title: const Text(
-            "Add Plant / With Sensor",
+            "Add Plant",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -65,96 +64,6 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      const Text(
-                        "Sensor Name",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Color(0x7C0D1904),
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            height: 40,
-                            width: 300,
-                            child: TextFormField(
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "This field is required";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              keyboardType: TextInputType.text,
-                              cursorColor: tPrimaryActionColor,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 15,
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(6),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              AppSettings.openAppSettings(
-                                type: AppSettingsType.wifi,
-                              );
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    color: tPrimaryActionColor,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                ),
-                                Image.asset(
-                                  'assets/images/icons/settings.png',
-                                  height: 25,
-                                  width: 25,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../Constants/colors.dart';
 import '../../Provider/weather_provider.dart';
+import '../Forms/form_withOutSen.dart';
 import '../Forms/form_withSen.dart';
 
 class PlantScreen extends StatelessWidget {
@@ -512,7 +513,7 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const AddPlantForm(),
+                                                          const AddPlantFormWithSen(),
                                                     ),
                                                   );
                                                 },
@@ -564,7 +565,15 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                                                 ],
                                               ),
                                               child: IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const AddPlantFormWithOutSen(),
+                                                    ),
+                                                  );
+                                                },
                                                 highlightColor: Colors.white
                                                     .withOpacity(0.05),
                                                 icon: Image.asset(
