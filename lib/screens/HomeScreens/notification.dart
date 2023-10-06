@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Models/notification_card.dart';
-import 'package:mashtaly_app/Screens/HomeScreens/home_screen.dart';
 
 import '../../Constants/colors.dart';
 
@@ -21,17 +20,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-            ),
-            onPressed: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-            ),
-          ),
           title: const Text(
             "Notifications",
             style: TextStyle(

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 Future<String> fetchPlantInformation(
     String plantName, String commonName) async {
   final apiUrl =
-      'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&titles=$plantName&explaintext=false&exsentences=3';
+      'https://en.wikipedia.org/w/api.php?action=query&format=json&titles=$plantName&prop=extracts&exintro=True&explaintext=True';
   final response = await http.get(Uri.parse(apiUrl));
 
   if (response.statusCode == 200) {
@@ -18,7 +18,6 @@ Future<String> fetchPlantInformation(
     if (pageExtract == null || pageExtract.isEmpty) {
       return fetchPlantInformationCommonName(plantName, commonName);
     }
-
     return pageExtract;
   } else {
     throw Exception('Failed to fetch plant information');
@@ -28,7 +27,7 @@ Future<String> fetchPlantInformation(
 Future<String> fetchPlantInformationCommonName(
     String plantName, String commonName) async {
   final apiUrl =
-      'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&titles=$commonName&explaintext=false&exsentences=3';
+      'https://en.wikipedia.org/w/api.php?action=query&format=json&titles=$commonName&prop=extracts&exintro=True&explaintext=True';
   final response = await http.get(Uri.parse(apiUrl));
 
   if (response.statusCode == 200) {
@@ -42,7 +41,6 @@ Future<String> fetchPlantInformationCommonName(
     if (pageExtract == null || pageExtract.isEmpty) {
       return 'No information found for $plantName. Here is information for $commonName instead.';
     }
-
     return pageExtract;
   } else {
     throw Exception('Failed to fetch plant information');

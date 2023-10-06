@@ -25,6 +25,7 @@ class PlantsInfoScreen extends StatefulWidget {
 class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
   String para = '';
   List<String> photoUrls = []; // Move the list declaration here
+  bool switchValue = false;
 
   @override
   void initState() {
@@ -57,7 +58,7 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
           photoUrls = photoDataList
               .map((photoData) => photoData['urls']['regular'].toString())
               .toList()
-              .take(11) // Take the first 11 URLs only
+              .take(6) // Take the first 6 URLs only
               .toList();
         });
       } else {
@@ -79,7 +80,6 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
   Widget build(BuildContext context) {
     // final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    bool added = false;
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -108,11 +108,11 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
               right: 16,
             ),
             child: Switch(
-              value: added,
-              onChanged: (bool value) {
+              value: switchValue,
+              onChanged: (newValue) {
                 setState(() {
-                  added = value;
-                  print(added);
+                  switchValue = newValue;
+                  print(switchValue);
                 });
               },
               activeTrackColor: const Color(0xff9BEC79),
@@ -260,7 +260,7 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          added == false
+                          switchValue == false
                               ? const Text(
                                   "Recommendation",
                                   style: TextStyle(
@@ -275,7 +275,7 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                          added == false
+                          switchValue == false
                               ? MaterialButton(
                                   onPressed: () {},
                                   child: const Text(
@@ -534,7 +534,7 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
       floatingActionButton: SizedBox(
         height: 50,
         width: 380,
-        child: added == false
+        child: switchValue == false
             ? FloatingActionButton(
                 backgroundColor: tPrimaryActionColor,
                 elevation: 0,
@@ -545,7 +545,7 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                 ),
                 onPressed: () {
                   setState(() {
-                    added = true;
+                    switchValue = true;
                   });
                 },
                 child: const Center(
@@ -569,7 +569,7 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                 onPressed: () {},
                 child: const Center(
                   child: Text(
-                    "Edit My Plants",
+                    "Edit My Plant",
                     style: TextStyle(
                       color: tThirdTextColor,
                       fontWeight: FontWeight.bold,
