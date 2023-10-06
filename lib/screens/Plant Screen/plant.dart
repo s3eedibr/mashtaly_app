@@ -96,32 +96,41 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
           children: [
             Container(
               color: Colors.white,
-              height: 69,
+              height: 56,
               child: Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(right: 8, bottom: 0, left: 16),
-                      child: TextField(
-                        cursorColor: tPrimaryActionColor,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          height: 1.5,
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: tSearchBarColor,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 8),
-                          prefixIcon: const Icon(
-                            Icons.search_rounded,
-                            color: tSearchIconColor,
-                            size: 27,
+                      padding: const EdgeInsets.only(
+                        right: 8,
+                        left: 16,
+                        top: 2,
+                      ),
+                      child: SizedBox(
+                        height: 40,
+                        width: 375,
+                        child: TextField(
+                          cursorColor: tPrimaryActionColor,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
                           ),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(12)),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: tSearchBarColor,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 15,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.search_rounded,
+                              color: tSearchIconColor,
+                              size: 27,
+                            ),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
                         ),
                       ),
                     ),

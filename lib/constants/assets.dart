@@ -121,6 +121,11 @@ class Assets {
   /// assets/images/icons/Path 7.png
   static const String assetsImagesIconsPath7 = "assets/images/icons/Path 7.png";
 
+  /// Assets for assetsImagesIconsPath 754561
+  /// assets/images/icons/Path 754561.png
+  static const String assetsImagesIconsPath754561 =
+      "assets/images/icons/Path 754561.png";
+
   /// Assets for assetsImagesIconsPath 8
   /// assets/images/icons/Path 8.png
   static const String assetsImagesIconsPath8 = "assets/images/icons/Path 8.png";
@@ -144,6 +149,11 @@ class Assets {
   /// assets/images/icons/plantnet1.png
   static const String assetsImagesIconsPlantnet1 =
       "assets/images/icons/plantnet1.png";
+
+  /// Assets for assetsImagesIconsSettings
+  /// assets/images/icons/settings.png
+  static const String assetsImagesIconsSettings =
+      "assets/images/icons/settings.png";
 
   /// Assets for assetsImagesIconsSmartFarm
   /// assets/images/icons/smart-farm.png
@@ -236,6 +246,11 @@ class Assets {
   static const String
       assetsImagesPlantsInfoImages3d74853a74cef709e1750aa4f7083c55dee7f616 =
       "assets/images/plants_info_images/3d74853a74cef709e1750aa4f7083c55dee7f616.jpg";
+
+  /// Assets for assetsImagesPlantsInfoImagesMask Group 17
+  /// assets/images/plants_info_images/Mask Group 17.png
+  static const String assetsImagesPlantsInfoImagesMaskGroup17 =
+      "assets/images/plants_info_images/Mask Group 17.png";
 
   /// Assets for assetsImagesRegistrationImages2
   /// assets/images/registration_images/2.png

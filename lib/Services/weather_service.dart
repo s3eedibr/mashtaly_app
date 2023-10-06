@@ -29,7 +29,7 @@ class WeatherService {
       return null;
     }
 
-    String apiKey = "0a971b7c5266468ab32110003232003";
+    String apiKey = "0a971b7c5266468ab3211000323200";
     String apiUrl =
         "http://api.weatherapi.com/v1/current.json?key=$apiKey&q=$latitude,$longitude&aqi=no";
 

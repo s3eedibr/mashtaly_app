@@ -13,6 +13,8 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  bool isSearching = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,35 +22,65 @@ class _NotificationScreenState extends State<NotificationScreen> {
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
           backgroundColor: Colors.white,
-          title: const Text(
-            "Notifications",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: isSearching
+              ? SizedBox(
+                  height: 40,
+                  child: TextField(
+                    cursorColor: tPrimaryActionColor,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      height: 1.5,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      fillColor: tSearchBarColor,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 15,
+                      ),
+                    ),
+                    onSubmitted: (value) {
+                      // Handle search here
+                    },
+                  ),
+                )
+              : Text(
+                  "Notifications",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           actions: [
-            GestureDetector(
-              onTap: () {},
-              child: Icon(
-                Icons.search_rounded,
-                color: tSearchIconColor,
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isSearching = !isSearching;
+                });
+              },
+              icon: Icon(
+                isSearching ? Icons.close : Icons.search_rounded,
+                color: tSearchIconColor, // Change the color as needed
                 size: 27,
               ),
             ),
             SizedBox(
-              width: 25,
+              width: 5,
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Icon(
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
                 Icons.filter_list_rounded,
-                color: tSearchIconColor,
+                color: tSearchIconColor, // Change the color as needed
                 size: 27,
               ),
             ),
             SizedBox(
-              width: 20,
+              width: 5,
             ),
           ],
         ),
