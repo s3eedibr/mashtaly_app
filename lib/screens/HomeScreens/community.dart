@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Constants/colors.dart';
 import '../../Models/articles_card.dart';
+import '../../Models/articles_card2.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -11,6 +12,8 @@ class CommunityScreen extends StatefulWidget {
 }
 
 class _CommunityScreenState extends State<CommunityScreen> {
+  bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,44 +27,43 @@ class _CommunityScreenState extends State<CommunityScreen> {
               height: 56,
               child: Row(
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 8,
-                        left: 16,
-                        top: 2,
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        width: 375,
-                        child: TextField(
-                          cursorColor: tPrimaryActionColor,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 8,
+                      left: 16,
+                      top: 2,
+                    ),
+                    child: SizedBox(
+                      height: 40,
+                      width: 336,
+                      child: TextField(
+                        cursorColor: tPrimaryActionColor,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: tSearchBarColor,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 15,
                           ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: tSearchBarColor,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 15,
-                            ),
-                            prefixIcon: const Icon(
-                              Icons.search_rounded,
-                              color: tSearchIconColor,
-                              size: 27,
-                            ),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(12)),
+                          prefixIcon: const Icon(
+                            Icons.search_rounded,
+                            color: tSearchIconColor,
+                            size: 27,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 3),
+                    padding: const EdgeInsets.only(right: 1),
                     child: Row(
                       children: [
                         IconButton(
@@ -78,33 +80,154 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
                   left: 16,
                   right: 16,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   children: [
-                    const Text(
-                      'New Articles',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'New Articles',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                          // Wrap the ListView.builder with a Container
+                          height: 250, // Set a fixed height or adjust as needed
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (BuildContext context, index) {
+                              return const articlesCard();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 3),
+                      child: Text(
+                        'Articles',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                    Expanded(
+                    SizedBox(
+                      // Wrap the ListView.builder with a Container
+                      height: 250, // Set a fixed height or adjust as needed
                       child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 3,
+                        scrollDirection: Axis.vertical,
+                        itemCount: 5,
                         itemBuilder: (BuildContext context, index) {
-                          return const articlesCard();
+                          if (index == 4) {
+                            // Render the "See More" button as the last item
+                            return GestureDetector(
+                              onTap: () {
+                                // Handle the "See More" button click
+                              },
+                              child: const Center(
+                                child: Text(
+                                  'See More',
+                                  style: TextStyle(
+                                      color: tPrimaryActionColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return const articlesCard2();
+                          }
                         },
                       ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'New plants for sale',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                          // Wrap the ListView.builder with a Container
+                          height: 250, // Set a fixed height or adjust as needed
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (BuildContext context, index) {
+                              return const articlesCard();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 3),
+                      child: Text(
+                        'Plants for sale',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      // Wrap the ListView.builder with a Container
+                      height: 250, // Set a fixed height or adjust as needed
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: 5,
+                        itemBuilder: (BuildContext context, index) {
+                          if (index == 4) {
+                            // Render the "See More" button as the last item
+                            return GestureDetector(
+                              onTap: () {
+                                // Handle the "See More" button click
+                              },
+                              child: const Center(
+                                child: Text(
+                                  'See More',
+                                  style: TextStyle(
+                                      color: tPrimaryActionColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return const articlesCard2();
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 50,
                     ),
                   ],
                 ),

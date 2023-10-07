@@ -19,7 +19,7 @@ class articlesCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(
-          height: 15,
+          height: 5,
         ),
         Padding(
           padding: const EdgeInsets.only(
