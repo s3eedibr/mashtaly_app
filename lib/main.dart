@@ -19,6 +19,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  print(
+      'Platform brightness: ${WidgetsBinding.instance.platformDispatcher.platformBrightness}');
+
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const App());
 }
@@ -28,6 +31,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = MediaQuery.of(context).platformBrightness;
+    print('App brightness is $brightness');
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.black,
+      statusBarIconBrightness:
+          brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
     return MaterialApp(
       title: 'Introduction screen',
       debugShowCheckedModeBanner: false,

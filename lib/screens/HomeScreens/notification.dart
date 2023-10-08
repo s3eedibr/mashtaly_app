@@ -17,78 +17,76 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          title: isSearching
-              ? SizedBox(
-                  height: 40,
-                  child: TextField(
-                    cursorColor: tPrimaryActionColor,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(12)),
-                      filled: true,
-                      fillColor: tSearchBarColor,
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 15,
-                      ),
-                    ),
-                    onSubmitted: (value) {
-                      // Handle search here
-                    },
+    return Scaffold(
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        title: isSearching
+            ? SizedBox(
+                height: 40,
+                child: TextField(
+                  cursorColor: tPrimaryActionColor,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    height: 1.5,
                   ),
-                )
-              : Text(
-                  "Notifications",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12)),
+                    filled: true,
+                    fillColor: tSearchBarColor,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 15,
+                    ),
                   ),
+                  onSubmitted: (value) {
+                    // Handle search here
+                  },
                 ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  isSearching = !isSearching;
-                });
-              },
-              icon: Icon(
-                isSearching ? Icons.close : Icons.search_rounded,
-                color: tSearchIconColor, // Change the color as needed
-                size: 27,
+              )
+            : Text(
+                "Notifications",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isSearching = !isSearching;
+              });
+            },
+            icon: Icon(
+              isSearching ? Icons.close : Icons.search_rounded,
+              color: tSearchIconColor, // Change the color as needed
+              size: 27,
             ),
-            SizedBox(
-              width: 5,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.filter_list_rounded,
+              color: tSearchIconColor, // Change the color as needed
+              size: 27,
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.filter_list_rounded,
-                color: tSearchIconColor, // Change the color as needed
-                size: 27,
-              ),
-            ),
-            SizedBox(
-              width: 5,
-            ),
-          ],
-        ),
-        body: ListView.builder(
-          itemBuilder: (BuildContext context, index) {
-            return notificationCard();
-          },
-        ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemBuilder: (BuildContext context, index) {
+          return notificationCard();
+        },
       ),
     );
   }
