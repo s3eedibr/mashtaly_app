@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../Constants/colors.dart';
 import '../../Models/articles_card.dart';
@@ -13,6 +14,11 @@ class CommunityScreen extends StatefulWidget {
 
 class _CommunityScreenState extends State<CommunityScreen> {
   bool isExpanded = false;
+  void toggleExpansion() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,6 +237,80 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: Stack(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                toggleExpansion();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: tPrimaryActionColor,
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(19.0),
+              ),
+              child: Icon(
+                isExpanded ? FontAwesomeIcons.xmark : FontAwesomeIcons.plus,
+                size: 26.0,
+                color: Colors.white,
+              ),
+            ),
+            Visibility(
+              visible: isExpanded,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 1,
+                  ),
+                  Positioned(
+                    right: -16,
+                    bottom: 7,
+                    child: GestureDetector(
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        decoration: const BoxDecoration(
+                          color: tPrimaryActionColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(55),
+                          ),
+                        ),
+                        child: const Icon(
+                          FontAwesomeIcons.newspaper,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 9,
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        decoration: const BoxDecoration(
+                          color: tPrimaryActionColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(55),
+                          ),
+                        ),
+                        child: const Icon(
+                          FontAwesomeIcons.dollarSign,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
