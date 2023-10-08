@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Screens/HomeScreens/camera_scanner_screen.dart';
+import 'package:mashtaly_app/Screens/Camera%20Screen/camera_scanner_screen.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/community.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/notification.dart';
 import 'package:mashtaly_app/Screens/Plant%20Screen/plant.dart';

@@ -31,10 +31,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: double.infinity,
               child: GestureDetector(
                 onTap: () {},
-                child: Stack(
+                child: const Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 25),
                       child: SizedBox(
                         height: 110,
@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: SizedBox(
                         height: 35,
                         width: 35,
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           backgroundColor: tPrimaryActionColor,
                           child: CircleAvatar(
                             backgroundColor: tBgColor,
@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 145),
                       child: Text(
                         'Saeed Ibrahim',
@@ -245,7 +245,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 top: 15,
                               ),
                               title: const Text(
-                                'Are You Sure to Logout?',
+                                'Are you sure to logout?',
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),

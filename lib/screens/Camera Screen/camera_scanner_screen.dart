@@ -46,7 +46,7 @@ class _CameraScannerState extends State<CameraScanner> {
 
     _cameraController = CameraController(
       camera,
-      ResolutionPreset.high,
+      ResolutionPreset.medium,
       enableAudio: false,
     );
 
@@ -96,7 +96,10 @@ class _CameraScannerState extends State<CameraScanner> {
 
   Future<void> choosePhotoFromGallery() async {
     final imagePicker = ImagePicker();
-    final image = await imagePicker.pickImage(source: ImageSource.gallery);
+    final image = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 25,
+    );
 
     if (image == null) return;
 
