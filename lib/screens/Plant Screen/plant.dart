@@ -3,6 +3,7 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/notification.dart';
+import 'package:mashtaly_app/Screens/Plant%20Screen/wateringschedule.dart';
 import 'package:provider/provider.dart';
 
 import '../../Constants/colors.dart';
@@ -31,6 +32,22 @@ class PlantScreenContent extends StatefulWidget {
 }
 
 class _PlantScreenContentState extends State<PlantScreenContent> {
+  DateTime selectedDate = DateTime.now();
+
+  void onDateSelected(DateTime date) {
+    setState(() {
+      selectedDate = date;
+      print(selectedDate);
+    });
+    // Open the WateringSchedule() screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const WateringSchedule(),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -284,13 +301,14 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                         child: DatePicker(
                           DateTime.now(),
                           width: 45,
-                          initialSelectedDate: DateTime.now(),
+                          initialSelectedDate: selectedDate,
                           selectionColor: tPrimaryActionColor,
                           selectedTextColor: Colors.white,
                           dateTextStyle: const TextStyle(
                             fontSize: 20,
                           ),
                           daysCount: 14,
+                          onDateChange: onDateSelected,
                         ),
                       ),
                     ),
