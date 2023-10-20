@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/createPost.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/createSellplant.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/mash_community.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/mash_community2.dart';
 
 import '../../Constants/colors.dart';
 import '../../Models/articles_card.dart';
@@ -12,7 +16,6 @@ class CommunityScreen extends StatefulWidget {
   State<CommunityScreen> createState() => _CommunityScreenState();
 }
 
-//zaid
 class _CommunityScreenState extends State<CommunityScreen> {
   bool isExpanded = false;
   void toggleExpansion() {
@@ -117,7 +120,17 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             scrollDirection: Axis.horizontal,
                             itemCount: 4,
                             itemBuilder: (BuildContext context, index) {
-                              return const articlesCard();
+                              return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Community2(),
+                                      ),
+                                    );
+                                  },
+                                  child: const articlesCard());
                             },
                           ),
                         ),
@@ -147,7 +160,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             // Render the "See More" button as the last item
                             return GestureDetector(
                               onTap: () {
-                                // Handle the "See More" button click
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Community2(),
+                                  ),
+                                );
                               },
                               child: const Center(
                                 child: Text(
@@ -185,7 +203,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             scrollDirection: Axis.horizontal,
                             itemCount: 4,
                             itemBuilder: (BuildContext context, index) {
-                              return const articlesCard();
+                              return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const Community(),
+                                      ),
+                                    );
+                                  },
+                                  child: const articlesCard());
                             },
                           ),
                         ),
@@ -215,7 +242,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             // Render the "See More" button as the last item
                             return GestureDetector(
                               onTap: () {
-                                // Handle the "See More" button click
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Community(),
+                                  ),
+                                );
                               },
                               child: const Center(
                                 child: Text(
@@ -243,7 +275,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: Stack(
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          verticalDirection: VerticalDirection.up,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -260,60 +295,61 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 color: Colors.white,
               ),
             ),
-            Visibility(
-              visible: isExpanded,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: <Widget>[
-                  const SizedBox(
-                    height: 1,
-                  ),
-                  Positioned(
-                    right: -16,
-                    bottom: 7,
-                    child: GestureDetector(
-                      child: Container(
-                        height: 55,
-                        width: 55,
-                        decoration: const BoxDecoration(
-                          color: tPrimaryActionColor,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(55),
-                          ),
-                        ),
-                        child: const Icon(
-                          FontAwesomeIcons.newspaper,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: GestureDetector(
-                      child: Container(
-                        height: 55,
-                        width: 55,
-                        decoration: const BoxDecoration(
-                          color: tPrimaryActionColor,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(55),
-                          ),
-                        ),
-                        child: const Icon(
-                          FontAwesomeIcons.dollarSign,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 5,
             ),
+            if (isExpanded)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreatePost(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize:
+                      const Size(55, 55), // Adjust this for proper size
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(55.0),
+                  ),
+                  backgroundColor: tPrimaryActionColor,
+                  padding: const EdgeInsets.all(10), // Adjust padding as needed
+                ),
+                child: const Icon(
+                  FontAwesomeIcons.newspaper,
+                  color: Colors.white,
+                ),
+              ),
+            const SizedBox(
+              height: 5,
+            ),
+            if (isExpanded)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreateSellplant(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize:
+                      const Size(55, 55), // Adjust this for proper size
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(55.0),
+                  ),
+                  backgroundColor: tPrimaryActionColor,
+                  padding: const EdgeInsets.all(10), // Adjust padding as needed
+                ),
+                child: const Icon(
+                  FontAwesomeIcons.dollarSign,
+                  color: Colors.white,
+                ),
+              ),
           ],
         ),
       ),
