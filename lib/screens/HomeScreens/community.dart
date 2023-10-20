@@ -12,6 +12,7 @@ class CommunityScreen extends StatefulWidget {
   State<CommunityScreen> createState() => _CommunityScreenState();
 }
 
+//zaid
 class _CommunityScreenState extends State<CommunityScreen> {
   bool isExpanded = false;
   void toggleExpansion() {
