@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Screens/Camera%20Screen/camera_scanner_screen.dart';
-import 'package:mashtaly_app/Screens/HomeScreens/community.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/community.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/notification.dart';
 import 'package:mashtaly_app/Screens/Plant%20Screen/plant.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/profile.dart';
@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+//
 class _HomeScreenState extends State<HomeScreen> {
   int currentTap = 0;
   final List<Widget> screens = [
