@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Screens/Community%20Screen/createPost.dart';
 import 'package:mashtaly_app/Screens/Community%20Screen/createSellplant.dart';
-import 'package:mashtaly_app/Screens/Community%20Screen/mash_community.dart';
-import 'package:mashtaly_app/Screens/Community%20Screen/mash_community2.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/postDetails.dart';
+import 'package:mashtaly_app/Screens/Community%20Screen/sellDetails.dart';
 
 import '../../Constants/colors.dart';
 import '../../Models/articles_card.dart';
@@ -126,7 +126,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const Community2(),
+                                            const PostDetails(),
                                       ),
                                     );
                                   },
@@ -163,7 +163,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Community2(),
+                                    builder: (context) => const PostDetails(),
                                   ),
                                 );
                               },
@@ -208,7 +208,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => const Community(),
+                                        builder: (context) =>
+                                            const SellDetails(),
                                       ),
                                     );
                                   },
@@ -245,7 +246,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Community(),
+                                    builder: (context) => const SellDetails(),
                                   ),
                                 );
                               },
