@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Constants/assets.dart';
+import '../../Constants/assets.dart';
 
 import '../../Constants/colors.dart';
 

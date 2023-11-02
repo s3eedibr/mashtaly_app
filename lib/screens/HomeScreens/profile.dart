@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
-import 'package:mashtaly_app/Auth/auth.dart';
+import '../../Auth/auth.dart';
 import '../../Constants/colors.dart';
 
 class ProfileScreen extends StatefulWidget {

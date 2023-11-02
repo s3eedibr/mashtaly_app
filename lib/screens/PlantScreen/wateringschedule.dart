@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Screens/Plant%20Screen/wateringtime.dart';
+import 'wateringtime.dart';
 
 class WateringSchedule extends StatefulWidget {
   const WateringSchedule({super.key});

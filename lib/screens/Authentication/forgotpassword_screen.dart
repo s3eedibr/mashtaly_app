@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Auth/auth.dart';
-import 'package:mashtaly_app/Constants/image_strings.dart';
+import '../../Auth/auth.dart';
+import '../../Constants/image_strings.dart';
 
 import '../../Constants/colors.dart';
 import '../../Constants/text_strings.dart';

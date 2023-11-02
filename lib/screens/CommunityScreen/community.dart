@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mashtaly_app/Screens/Community%20Screen/createPost.dart';
-import 'package:mashtaly_app/Screens/Community%20Screen/createSellplant.dart';
-import 'package:mashtaly_app/Screens/Community%20Screen/postDetails.dart';
-import 'package:mashtaly_app/Screens/Community%20Screen/sellDetails.dart';
+import 'package:mashtaly_app/Screens/CommunityScreen/createPost.dart';
+import 'package:mashtaly_app/Screens/CommunityScreen/createSellplant.dart';
+import 'package:mashtaly_app/Screens/CommunityScreen/postDetails.dart';
+import 'package:mashtaly_app/Screens/CommunityScreen/sellDetails.dart';
 
 import '../../Constants/colors.dart';
 import '../../Models/articles_card.dart';
