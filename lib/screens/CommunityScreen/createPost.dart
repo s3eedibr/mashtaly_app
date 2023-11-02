@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mashtaly_app/Constants/colors.dart';
+import '../../Constants/colors.dart';
 
-class CreateSellplant extends StatefulWidget {
-  const CreateSellplant({super.key});
+class CreatePost extends StatefulWidget {
+  const CreatePost({super.key});
 
   @override
-  State<CreateSellplant> createState() => _CreatePostState();
+  State<CreatePost> createState() => _CreatePostState();
 }
 
-class _CreatePostState extends State<CreateSellplant> {
+class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +28,7 @@ class _CreatePostState extends State<CreateSellplant> {
           ),
         ),
         title: const Text(
-          "Create a Sell",
+          "Create Article",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

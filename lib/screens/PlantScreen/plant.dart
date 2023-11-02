@@ -3,7 +3,7 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Screens/HomeScreens/notification.dart';
-import 'package:mashtaly_app/Screens/Plant%20Screen/wateringschedule.dart';
+import 'package:mashtaly_app/Screens/PlantScreen/wateringschedule.dart';
 import 'package:provider/provider.dart';
 
 import '../../Constants/colors.dart';

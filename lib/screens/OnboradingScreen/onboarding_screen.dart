@@ -1,5 +1,5 @@
-import 'package:mashtaly_app/Models/onboarding_model.dart';
-import 'package:mashtaly_app/Auth/auth.dart';
+import '../../Models/onboarding_model.dart';
+import '../../Auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

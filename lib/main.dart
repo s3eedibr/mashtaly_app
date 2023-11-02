@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mashtaly_app/Constants/colors.dart';
-import 'package:mashtaly_app/Screens/OnboradingScreen/onboarding_screen.dart';
-import 'package:mashtaly_app/firebase_options.dart';
+import 'Constants/colors.dart';
+import 'Screens/OnboradingScreen/onboarding_screen.dart';
+import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Auth/auth.dart';

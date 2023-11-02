@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mashtaly_app/Screens/Camera%20Screen/camera_scanner_screen.dart';
+import 'package:mashtaly_app/Screens/CameraScreen/camera_scanner_screen.dart';
 import 'package:mashtaly_app/Services/wikipedia_service.dart';
 import 'package:http/http.dart' as http;
 
