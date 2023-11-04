@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/notification_card.dart';
 
-
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 

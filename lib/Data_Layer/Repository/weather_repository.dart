@@ -1,8 +1,8 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:mashtaly_app/Data_Layer/Model/weather/current.dart';
 
 import '../../Constants/text_strings.dart';
 import '../Api/weather_api.dart';
-import '../Model/weather/weather.dart';
 
 class WeatherRepository {
   final WeatherApi apiClient = WeatherApi(
@@ -15,7 +15,7 @@ class WeatherRepository {
     apiClient;
   }
 
-  Future<Weather?> fetchWeatherData(
+  Future<Current?> fetchWeatherData(
       {required double latitude, required double longitude}) async {
     bool? serviceEnabled;
     LocationPermission? permission;
@@ -48,7 +48,7 @@ class WeatherRepository {
       final weatherData = await apiClient.fetchWeatherData(latitude, longitude);
 
       // Parse the weather data and return the result
-      return Weather.fromJson(weatherData);
+      return Current.fromJson(weatherData as Map<String, dynamic>);
     } catch (e) {
       print('Error: $e');
       return null;
