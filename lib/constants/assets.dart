@@ -311,4 +311,6 @@ class Assets {
   /// assets/images/stack_images/Subtraction 5.png
   static const String assetsImagesStackImagesSubtraction5 =
       "assets/images/stack_images/Subtraction 5.png";
+
+  static const String Ellipsis2s151px = "assets/images/Ellipsis-2s-151px.gif";
 }

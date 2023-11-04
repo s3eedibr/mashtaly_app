@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class WeatherService {
   Future<Map<String, dynamic>?> getWeather(

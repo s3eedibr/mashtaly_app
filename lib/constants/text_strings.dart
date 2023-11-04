@@ -1,4 +1,4 @@
-// -- OnBoarding Text
+// -- OnBoarding Texts
 const String tOnBoardingTitle1 = "Watering Without Worry";
 const String tOnBoardingTitle2 = "Get Information About Your Plants";
 const String tOnBoardingTitle3 = "Post Your Articles & Share Your Plants";
@@ -10,8 +10,22 @@ const String tOnBoardingSubTitle2 =
 const String tOnBoardingSubTitle3 =
     "You can publish articles about plants. You can also sell, buy or share plants with other people.";
 
-// -- Reset Password Text Screen
+// -- Reset Password Texts Screen
 const String tEmailAcc =
     "Enter the email associated with your account to receive reset instructions";
 const String tResetPass =
     "Enter your new password must be different from previous";
+
+// -- API's Url
+const String tWeatherApi = "http://api.weatherapi.com/v1/current.json";
+const String tWeatherApiKey = "0a971b7c5266468ab32110003232003";
+
+// -- AppRouter Text
+const String homeScreen = "/";
+// const String CameraScreen = "/";
+// const String HomeScreen = "/";
+// const String HomeScreen = "/";
+// const String HomeScreen = "/";
+// const String HomeScreen = "/";
+// const String HomeScreen = "/";
+// const String HomeScreen = "/";

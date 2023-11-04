@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '607471003986',
     projectId: 'mashtaly-hu',
     storageBucket: 'mashtaly-hu.appspot.com',
-    iosClientId: '607471003986-ia3cai305q2oajapotuf14pj1ahj4cbc.apps.googleusercontent.com',
+    iosClientId:
+        '607471003986-ia3cai305q2oajapotuf14pj1ahj4cbc.apps.googleusercontent.com',
     iosBundleId: 'com.example.mashtalyApp',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '607471003986',
     projectId: 'mashtaly-hu',
     storageBucket: 'mashtaly-hu.appspot.com',
-    iosClientId: '607471003986-ia3cai305q2oajapotuf14pj1ahj4cbc.apps.googleusercontent.com',
+    iosClientId:
+        '607471003986-ia3cai305q2oajapotuf14pj1ahj4cbc.apps.googleusercontent.com',
     iosBundleId: 'com.example.mashtalyApp',
   );
 }
