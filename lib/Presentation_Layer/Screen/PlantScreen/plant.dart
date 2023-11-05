@@ -9,7 +9,7 @@ import '../../../Provider/weather_provider.dart';
 import '../Forms/form_withOutSen.dart';
 import '../Forms/form_withSen.dart';
 import '../HomeScreens/notification.dart';
-import 'wateringschedule.dart';
+// import 'wateringschedule.dart';
 
 class PlantScreen extends StatelessWidget {
   const PlantScreen({super.key});
@@ -24,6 +24,7 @@ class PlantScreen extends StatelessWidget {
   }
 }
 
+// 7:52
 class PlantScreenContent extends StatefulWidget {
   const PlantScreenContent({super.key});
 
@@ -40,12 +41,13 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
       print(selectedDate);
     });
     // Open the WateringSchedule() screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const WateringSchedule(),
-      ),
-    );
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => const WateringSchedule(),
+    //   ),
+    // );
   }
 
   @override

@@ -1,14 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
-import 'Business_Layer/cubit/weather_cubit.dart';
 import 'Constants/colors.dart';
-import 'Data_Layer/Repository/weather_repository.dart';
 import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
 
 void main() async {
@@ -17,20 +14,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int? isViewed = prefs.getInt('onBoard');
+  int? isViewed =
+      prefs.getInt('onBoard'); // Check if onboarding has been viewed.
 
-  // Create an instance of WeatherRepository and pass it to WeatherCubit
-  final WeatherRepository weatherRepository = WeatherRepository();
-  final WeatherCubit weatherCubit = WeatherCubit(weatherRepository);
-
-  runApp(
-    BlocProvider(
-      create: (context) => weatherCubit,
-      child: SplashScreenApp(
-        isViewed: isViewed,
-      ),
-    ),
-  );
+  // Run the app by displaying the splash screen.
+  runApp(SplashScreenApp(
+    isViewed: isViewed,
+  ));
 }
 
 class SplashScreenApp extends StatelessWidget {
