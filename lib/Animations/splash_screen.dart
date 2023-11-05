@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import '../Constants/assets.dart';
 
 import '../Constants/colors.dart';
-import '../Constants/image_strings.dart';
-import '../Screens/OnboradingScreen/onboarding_screen.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-int? isViewed;
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Function onSplashFinished;
+
+  const SplashScreen({Key? key, required this.onSplashFinished})
+      : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -18,16 +17,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5)).then(
+    // Delay for 10 seconds before triggering the onSplashFinished callback.
+    Future.delayed(const Duration(seconds: 10)).then(
       (value) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const OnBoardingScreen();
-            },
-          ),
-        );
+        // Call the callback function to notify that the splash screen is finished.
+        widget.onSplashFinished();
       },
     );
   }
@@ -35,36 +29,34 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
+      backgroundColor: tBgColor,
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 100,
-              backgroundColor: tBgColor,
-              child: Image.asset(
-                tLogo,
-              ),
+            Image.asset(
+              Assets.assetsImagesLogo,
+              height: 200,
+              width: 200,
             ),
             const Text(
               "Mashtaly",
               style: TextStyle(
                 fontSize: 35,
+                fontFamily: 'Mulish',
                 fontWeight: FontWeight.bold,
                 color: tPrimaryActionColor,
               ),
             ),
-            const SizedBox(height: 50),
-            const SpinKitThreeBounce(
-              color: tPrimaryActionColor,
-              size: 30,
+            Image.asset(
+              Assets.Ellipsis2s151px,
+              height: 85,
+              width: 85,
             )
           ],
         ),
       ),
-    ));
+    );
   }
 }

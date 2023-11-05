@@ -1,38 +1,57 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mashtaly_app/Constants/colors.dart';
-import 'package:mashtaly_app/Screens/OnboradingScreen/onboarding_screen.dart';
-import 'package:mashtaly_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
+import 'Constants/colors.dart';
+import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
 
-int? isViewed;
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.black));
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  isViewed = prefs.getInt('onBoard');
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  int? isViewed =
+      prefs.getInt('onBoard'); // Check if onboarding has been viewed.
 
-  print(
-      'Platform brightness: ${WidgetsBinding.instance.platformDispatcher.platformBrightness}');
-
-  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const App());
+  // Run the app by displaying the splash screen.
+  runApp(SplashScreenApp(
+    isViewed: isViewed,
+  ));
 }
 
-class App extends StatelessWidget {
-  const App({super.key});
+class SplashScreenApp extends StatelessWidget {
+  final int? isViewed;
+
+  const SplashScreenApp({super.key, required this.isViewed});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Introduction screen',
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(
+        onSplashFinished: () {
+          runApp(App(
+            isViewed: isViewed,
+          ));
+        },
+      ),
+    );
+  }
+}
+
+class App extends StatelessWidget {
+  final int? isViewed;
+
+  const App({super.key, required this.isViewed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Mulish',
@@ -44,6 +63,8 @@ class App extends StatelessWidget {
           selectionHandleColor: tPrimaryActionColor.withOpacity(1),
         ),
       ),
+
+      // Show OnBoardingScreen if it hasn't been viewed, otherwise show Auth
       home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
     );
   }
