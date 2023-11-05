@@ -1,13 +1,15 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../Model/weather/current.dart';
+
 class WeatherApi {
   final String apiKey;
   final String baseUrl;
 
   WeatherApi({required this.apiKey, required this.baseUrl});
 
-  Future<Map<String, dynamic>> fetchWeatherData(
+  Future<List<Current>> fetchWeatherData(
       double latitude, double longitude) async {
     try {
       // Construct the API URL with the provided latitude and longitude.
@@ -18,7 +20,8 @@ class WeatherApi {
 
       if (response.statusCode == 200) {
         // If the response status code is 200 (OK), parse and return the weather data.
-        return jsonDecode(response.body) as Map<String, dynamic>;
+        final List result = jsonDecode(response.body)['current'];
+        return result.map((e) => Current.fromJson(e)).toList();
       } else {
         // If the response status code is not 200, throw an exception.
         throw Exception('Failed to fetch weather data');

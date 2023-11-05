@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../Presentation_Layer/Screen/Authentication/login_screen.dart';
 import '../Presentation_Layer/Screen/Authentication/reg_screen.dart';
 
-
-
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
 

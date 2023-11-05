@@ -7,7 +7,6 @@ import 'notification.dart';
 import '../PlantScreen/plant.dart';
 import 'profile.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

@@ -11,7 +11,7 @@ class WeatherCubit extends Cubit<WeatherState> {
   final WeatherRepository weatherRepository;
   WeatherCubit(this.weatherRepository) : super(WeatherInitial());
 
-  void fetchWeatherData() async {
+  Future<List<Weather>> fetchWeatherData() async {
     try {
       // Retrieve the device's current location (latitude and longitude).
       Position position = await Geolocator.getCurrentPosition(
@@ -27,10 +27,13 @@ class WeatherCubit extends Cubit<WeatherState> {
           latitude: latitude, longitude: longitude);
 
       // Emit the WeatherLoaded state with the fetched weather data.
-      emit(WeatherLoaded(weather as List<Weather>));
+      return weather as List<Weather>;
     } catch (e) {
       // Emit the WeatherError state with an error message in case of an error.
       emit(WeatherError('Failed to fetch weather data: $e'));
+
+      // If an error occurs, return an empty list or handle the error as needed.
+      return <Weather>[];
     }
   }
 }

@@ -11,7 +11,6 @@ import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.black));
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();

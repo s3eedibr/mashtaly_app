@@ -73,7 +73,7 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
       child: Scaffold(
         backgroundColor: tBgColor,
         body: FutureBuilder<bool>(
-          // Replace with your existing code
+// Replace with your existing code
           future: _loadData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
