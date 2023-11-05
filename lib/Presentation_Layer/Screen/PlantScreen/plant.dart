@@ -24,7 +24,6 @@ class PlantScreen extends StatelessWidget {
   }
 }
 
-// 7:52
 class PlantScreenContent extends StatefulWidget {
   const PlantScreenContent({super.key});
 
