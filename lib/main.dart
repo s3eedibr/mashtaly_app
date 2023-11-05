@@ -7,7 +7,6 @@ import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
 import 'Constants/colors.dart';
 import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
-import 'app_router.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -22,16 +21,13 @@ void main() async {
   // Run the app by displaying the splash screen.
   runApp(SplashScreenApp(
     isViewed: isViewed,
-    appRouter: AppRouter(),
   ));
 }
 
 class SplashScreenApp extends StatelessWidget {
   final int? isViewed;
-  final AppRouter appRouter;
 
-  const SplashScreenApp(
-      {super.key, required this.isViewed, required this.appRouter});
+  const SplashScreenApp({super.key, required this.isViewed});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +37,6 @@ class SplashScreenApp extends StatelessWidget {
         onSplashFinished: () {
           runApp(App(
             isViewed: isViewed,
-            appRouter: appRouter,
           ));
         },
       ),
@@ -51,9 +46,8 @@ class SplashScreenApp extends StatelessWidget {
 
 class App extends StatelessWidget {
   final int? isViewed;
-  final AppRouter appRouter;
 
-  const App({super.key, required this.isViewed, required this.appRouter});
+  const App({super.key, required this.isViewed});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +63,6 @@ class App extends StatelessWidget {
           selectionHandleColor: tPrimaryActionColor.withOpacity(1),
         ),
       ),
-      onGenerateRoute: appRouter.generateRoute,
 
       // Show OnBoardingScreen if it hasn't been viewed, otherwise show Auth
       home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
