@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
@@ -12,7 +17,78 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}
+
 class _ProfileScreenState extends State<ProfileScreen> {
+  late String currentUserUid;
+  late DocumentSnapshot userDoc;
+  late String userName = '';
+  late String profilePic = '';
+
+  @override
+  void initState() {
+    super.initState();
+    currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    try {
+      userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .get();
+      setState(() {
+        userName = userDoc['name'];
+        profilePic = userDoc['profile_pic'];
+      });
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+  final storageRef = FirebaseStorage.instance.ref().child('Profile_Pic');
+
+  final picker = ImagePicker();
+
+  Future<void> pickImageAndUpload() async {
+    try {
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+      );
+      if (pickedFile != null) {
+        try {
+          await storageRef
+              .child('$currentUserUid/Profile_Pic/$currentUserUid')
+              .putFile(File(pickedFile.path));
+          final imageUrl = await storageRef
+              .child('$currentUserUid/Profile_Pic/$currentUserUid')
+              .getDownloadURL();
+          // Move the setState() call outside of the try/catch block
+          setState(() {});
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(currentUserUid)
+              .update({
+            'profile_pic': imageUrl,
+          });
+        } catch (e) {
+          print('Error uploading image: $e');
+        }
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,12 +107,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 190,
               width: double.infinity,
               child: GestureDetector(
-                onTap: () {},
-                child: const Stack(
+                onTap: () {
+                  pickImageAndUpload();
+                  setState(() {});
+                },
+                child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 25),
+                      padding: const EdgeInsets.only(top: 25),
                       child: SizedBox(
                         height: 110,
                         width: 110,
@@ -44,13 +123,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor: tPrimaryActionColor,
                           child: CircleAvatar(
                             radius: 54,
-                            backgroundImage: AssetImage(
-                                'assets/images/icons/default_profile.jpg'),
+                            backgroundColor: Colors.white,
+                            child: ClipOval(
+                              child: Image.network(
+                                profilePic,
+                                width: 108,
+                                height: 108,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  } else {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
+                                errorBuilder: (BuildContext context,
+                                    Object error, StackTrace? stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/icons/default_profile.jpg',
+                                    width: 108,
+                                    height: 108,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
+                    const Positioned(
                       left: 230,
                       top: 95,
                       child: SizedBox(
@@ -70,10 +176,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 145),
+                      padding: const EdgeInsets.only(top: 145),
                       child: Text(
-                        'Saeed Ibrahim',
-                        style: TextStyle(
+                        userName.toCapitalized(),
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -124,9 +230,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     onTap: () {
-                      AppSettings.openAppSettings(
-                        type: AppSettingsType.notification,
-                      );
+                      try {
+                        AppSettings.openAppSettings(
+                          type: AppSettingsType.notification,
+                        );
+                      } catch (e) {
+                        print('Error opening app settings: $e');
+                      }
                     },
                   ),
                   const SizedBox(
@@ -160,7 +270,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      try {
+                        // Your settings code goes here
+                      } catch (e) {
+                        print('Error in settings: $e');
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 16,
@@ -193,7 +309,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      try {
+                        // Your help code goes here
+                      } catch (e) {
+                        print('Error in help: $e');
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 16,
@@ -227,96 +349,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Theme(
-                            data: ThemeData(
-                              dialogBackgroundColor: Colors.white,
-                            ),
-                            child: AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                      try {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Theme(
+                              data: ThemeData(
+                                dialogBackgroundColor: Colors.white,
                               ),
-                              backgroundColor: Colors.white,
-                              titlePadding: const EdgeInsets.only(
-                                right: 16,
-                                bottom: 15,
-                                left: 16,
-                                top: 15,
-                              ),
-                              title: const Text(
-                                'Are you sure to logout?',
-                                style: TextStyle(
-                                  fontSize: 16,
+                              child: AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                              ),
-                              actionsAlignment: MainAxisAlignment.spaceBetween,
-                              actionsPadding: const EdgeInsets.only(
-                                right: 16,
-                                bottom: 15,
-                                left: 16,
-                              ),
-                              actions: [
-                                SizedBox(
-                                  height: 45,
-                                  width: 120,
-                                  child: OutlinedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      side: const BorderSide(
-                                        color: tPrimaryActionColor,
-                                        width: 1,
+                                backgroundColor: Colors.white,
+                                titlePadding: const EdgeInsets.only(
+                                  right: 16,
+                                  bottom: 15,
+                                  left: 16,
+                                  top: 15,
+                                ),
+                                title: const Text(
+                                  'Are you sure to logout?',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                actionsAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                actionsPadding: const EdgeInsets.only(
+                                  right: 16,
+                                  bottom: 15,
+                                  left: 16,
+                                ),
+                                actions: [
+                                  SizedBox(
+                                    height: 45,
+                                    width: 120,
+                                    child: OutlinedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        side: const BorderSide(
+                                          color: tPrimaryActionColor,
+                                          width: 1,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Cancel',
-                                      style: TextStyle(
-                                        color: tPrimaryActionColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          color: tPrimaryActionColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 45,
-                                  width: 120,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: tPrimaryActionColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                  SizedBox(
+                                    height: 45,
+                                    width: 120,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: tPrimaryActionColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pushAndRemoveUntil(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
                                           MaterialPageRoute(
                                             builder: (context) => const Auth(),
                                           ),
-                                          (Route<dynamic> route) => false);
-                                      FirebaseAuth.instance.signOut();
-                                    },
-                                    child: const Text(
-                                      "Confirm",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                          (Route<dynamic> route) => false,
+                                        );
+                                        FirebaseAuth.instance.signOut();
+                                      },
+                                      child: const Text(
+                                        "Confirm",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      } catch (e) {
+                        print('Error in logout: $e');
+                      }
                     },
                   ),
                   const SizedBox(

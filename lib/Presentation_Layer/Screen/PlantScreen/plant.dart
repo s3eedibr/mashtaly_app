@@ -52,7 +52,7 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
   @override
   void initState() {
     super.initState();
-    // Access the WeatherProvider instance using Provider.of and call the necessary methods
+// Access the WeatherProvider instance using Provider.of and call the necessary methods
     final weatherProvider =
         Provider.of<WeatherProvider>(context, listen: false);
     weatherProvider.getLocationAndFetchWeather();
@@ -72,7 +72,7 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
       child: Scaffold(
         backgroundColor: tBgColor,
         body: FutureBuilder<bool>(
-// Replace with your existing code
+          // Replace with your existing code
           future: _loadData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

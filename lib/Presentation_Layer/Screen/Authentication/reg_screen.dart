@@ -18,44 +18,67 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  // Controllers for user input
   final _nameController = TextEditingController();
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
 
+  // Form key for validation
   GlobalKey<FormState> formKey = GlobalKey();
 
+  /// Handles user registration
   Future registration() async {
+    // Validate the form first
     if (formKey.currentState!.validate()) {
       try {
+        // Check if passwords match
         if (passwordConfirmed()) {
+          // Create a new user using Firebase Auth
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
                   email: _emilController.text.trim(),
                   password: _passwordController.text.trim())
+              // Add the user to Firestore
               .then((value) => addUser())
+              // Verify the user's email address
               .then((value) => verifyEmail());
         } else {
+          // Show error message if passwords don't match
           showSankBar(context, 'The password is not match.');
         }
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          showSankBar(context, 'The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          showSankBar(context, 'The account already exists for that email.');
+        // Handle Firebase Auth exceptions
+        switch (e.code) {
+          case 'weak-password':
+            showSankBar(context, 'The password provided is too weak.');
+            break;
+          case 'email-already-in-use':
+            showSankBar(context, 'The account already exists for that email.');
+            break;
+          default:
+            showSankBar(context, e.toString());
         }
       } catch (e) {
+        // Handle general errors
         showSankBar(context, e.toString());
       }
     }
   }
 
+  /// Verifies the user's email address
   void verifyEmail() async {
+    // Get the current user
     final user = FirebaseAuth.instance.currentUser!;
+
+    // Update the user's display name
     await user.updateDisplayName(_nameController.text.trim());
+
+    // Send email verification link
     await user.sendEmailVerification();
   }
 
+  /// Displays a snackbar with the given message
   void showSankBar(BuildContext context, String message,
       {Color color = tThirdTextErrorColor}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -74,14 +97,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection("test");
+  /// Accesses the users collection in Firestore
+  final usersCollection = FirebaseFirestore.instance.collection('users');
 
-  void addUser() async {
+  /// Adds the new user to Firestore
+  Future<void> addUser() async {
+    // Get the current user
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    // Check if there is a current user
+    if (currentUser == null) {
+      print('Error: No currently signed-in user');
+      return;
+    }
+
     try {
-      await usersCollection.add({
+      // Add the user's email and name to the database
+      await usersCollection.doc(currentUser.uid).set({
+        "id": currentUser.uid,
         "email": _emilController.text.trim(),
         "name": _nameController.text.trim(),
+        "profile_pic": null,
       });
       print('User added successfully');
     } catch (e) {
@@ -89,13 +125,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
+  /// Checks if the passwords match
   bool passwordConfirmed() {
-    if (_passwordController.text.trim() ==
-        _confirmpasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
-    }
+    return _passwordController.text.trim() ==
+        _confirmpasswordController.text.trim();
   }
 
   @override
