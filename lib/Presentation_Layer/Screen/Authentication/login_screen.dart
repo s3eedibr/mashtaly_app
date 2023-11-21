@@ -6,7 +6,8 @@ import '../../../Constants/colors.dart';
 import 'forgotpassword_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  final VoidCallback showRegScreen;
+  final VoidCallback
+      showRegScreen; // Callback function to show the registration screen
   const LoginScreen({
     Key? key,
     required this.showRegScreen,
@@ -17,32 +18,52 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
+  // Declare controllers for email and password input fields
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // Variable to control password visibility
+  bool _showPassword = false;
+
+  // Form key to validate user input
   GlobalKey<FormState> formKey = GlobalKey();
 
+  // Function to handle user login
   Future login() async {
+    // Check if form is valid
     if (formKey.currentState!.validate()) {
       try {
+        // Sign in user using Firebase Authentication
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _emilController.text.trim(),
             password: _passwordController.text.trim());
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          showSankBar(context, 'No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          showSankBar(context, 'Wrong password provided for that user.');
-        } else if (e.code == 'user-disabled') {
-          showSankBar(context,
-              'The user account has been disabled by an administrator.');
+        // Handle Firebase Authentication errors
+        switch (e.code) {
+          case 'user-not-found':
+            showSankBar(context, 'No user found for that email.');
+            break;
+          case 'wrong-password':
+            showSankBar(context, 'Wrong password provided for that user.');
+            break;
+          case 'user-disabled':
+            showSankBar(context,
+                'The user account has been disabled by an administrator.');
+            break;
+          case 'invalid-email':
+            showSankBar(context, 'The email address is badly formatted.');
+            break;
+          default:
+            showSankBar(context, e.toString());
         }
       } catch (e) {
+        // Handle generic errors
         showSankBar(context, e.toString());
       }
     }
   }
 
+  // Function to display a Snackbar message
   void showSankBar(BuildContext context, String message,
       {Color color = tThirdTextErrorColor}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -64,15 +85,15 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance
+        .addObserver(this); // Add state observer for lifecycle changes
   }
 
   @override
   void dispose() {
-    _emilController.dispose();
+    _emilController.dispose(); // Dispose controllers to avoid memory leaks
     _passwordController.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-
+    WidgetsBinding.instance.removeObserver(this); // Remove state observer
     super.dispose();
   }
 
@@ -159,49 +180,72 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                     const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "This field is required";
-                          } else {
-                            return null;
-                          }
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
                         },
-                        controller: _passwordController,
-                        cursorColor: tPrimaryActionColor,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 12),
-                          prefixIcon: Icon(
-                            Icons.lock_outline_rounded,
-                            color: tSecondActionColor,
-                            size: 28,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field is required";
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: _passwordController,
+                          cursorColor: tPrimaryActionColor,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
-                          hintText: "Password",
-                          hintStyle: TextStyle(color: tSecondActionColor),
-                          filled: true,
-                          fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: tPrimaryActionColor,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: !_showPassword,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 12),
+                            prefixIcon: const Icon(
+                              Icons.lock_outline_rounded,
+                              color: tSecondActionColor,
+                              size: 28,
                             ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white,
+                            hintText: "Password",
+                            hintStyle:
+                                const TextStyle(color: tSecondActionColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
                             ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: tPrimaryActionColor,
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: tPrimaryActionColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _showPassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: tSecondActionColor,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _showPassword = !_showPassword;
+                                });
+                              },
                             ),
                           ),
                         ),

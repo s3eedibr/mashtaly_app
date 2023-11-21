@@ -1,16 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../Constants/colors.dart';
 
 class CreateSellplant extends StatefulWidget {
-  const CreateSellplant({super.key});
+  const CreateSellplant({Key? key}) : super(key: key);
 
   @override
   State<CreateSellplant> createState() => _CreatePostState();
 }
 
 class _CreatePostState extends State<CreateSellplant> {
+  final List<XFile> _selectedImages = [];
+
+  pickImage(ImageSource source) async {
+    final imagePicker = ImagePicker();
+    XFile? file = await imagePicker.pickImage(
+      source: source,
+      imageQuality: 25,
+    );
+    if (file != null) {
+      setState(() {
+        _selectedImages.add(file);
+      });
+    } else {
+      print("no image selected");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,19 +71,74 @@ class _CreatePostState extends State<CreateSellplant> {
               children: [
                 Expanded(
                   child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SimpleDialog(
+                            title: const Text("Select Image from"),
+                            children: [
+                              SimpleDialogOption(
+                                padding: const EdgeInsets.all(6),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.of(context).pop();
+                                        await pickImage(ImageSource.camera);
+                                      },
+                                      child: const Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.camera_alt_rounded),
+                                          Text("Camera"),
+                                        ],
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.of(context).pop();
+                                        await pickImage(ImageSource.gallery);
+                                      },
+                                      child: const Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.image),
+                                          Text("Gallery"),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     child: Container(
                       height: 200,
+                      clipBehavior: Clip.antiAlias,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(
-                          Radius.circular(12),
+                          Radius.circular(6),
                         ),
                       ),
-                      child: const Icon(
-                        FontAwesomeIcons.plus,
-                        color: tSearchIconColor,
-                        size: 55,
-                      ),
+                      child: _selectedImages.isNotEmpty
+                          ? Image.file(
+                              File(_selectedImages[0].path),
+                              fit: BoxFit.cover,
+                            )
+                          : const Icon(
+                              FontAwesomeIcons.plus,
+                              color: tSearchIconColor,
+                              size: 55,
+                            ),
                     ),
                   ),
                 )
@@ -72,13 +147,297 @@ class _CreatePostState extends State<CreateSellplant> {
             const SizedBox(
               height: 10,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AddImage(),
-                AddImage(),
-                AddImage(),
-                AddImage(),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          title: const Text("Select Image from"),
+                          children: [
+                            SimpleDialogOption(
+                              padding: const EdgeInsets.all(6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.camera);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.camera_alt_rounded),
+                                        Text("Camera"),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.gallery);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.image),
+                                        Text("Gallery"),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 95,
+                    width: 85,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                    ),
+                    child: _selectedImages.length > 1
+                        ? Image.file(
+                            File(_selectedImages[1].path),
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(
+                            FontAwesomeIcons.plus,
+                            color: tSearchIconColor,
+                            size: 25,
+                          ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          title: const Text("Select Image from"),
+                          children: [
+                            SimpleDialogOption(
+                              padding: const EdgeInsets.all(6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.camera);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.camera_alt_rounded),
+                                        Text("Camera"),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.gallery);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.image),
+                                        Text("Gallery"),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 95,
+                    width: 85,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                    ),
+                    child: _selectedImages.length > 2
+                        ? Image.file(
+                            File(_selectedImages[2].path),
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(
+                            FontAwesomeIcons.plus,
+                            color: tSearchIconColor,
+                            size: 25,
+                          ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          title: const Text("Select Image from"),
+                          children: [
+                            SimpleDialogOption(
+                              padding: const EdgeInsets.all(6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.camera);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.camera_alt_rounded),
+                                        Text("Camera"),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.gallery);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.image),
+                                        Text("Gallery"),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 95,
+                    width: 85,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                    ),
+                    child: _selectedImages.length > 3
+                        ? Image.file(
+                            File(_selectedImages[3].path),
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(
+                            FontAwesomeIcons.plus,
+                            color: tSearchIconColor,
+                            size: 25,
+                          ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          title: const Text("Select Image from"),
+                          children: [
+                            SimpleDialogOption(
+                              padding: const EdgeInsets.all(6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.camera);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.camera_alt_rounded),
+                                        Text("Camera"),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).pop();
+                                      await pickImage(ImageSource.gallery);
+                                    },
+                                    child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(Icons.image),
+                                        Text("Gallery"),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 95,
+                    width: 85,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                    ),
+                    child: _selectedImages.length > 4
+                        ? Image.file(
+                            File(_selectedImages[4].path),
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(
+                            FontAwesomeIcons.plus,
+                            color: tSearchIconColor,
+                            size: 25,
+                          ),
+                  ),
+                ),
               ],
             ),
             const SizedBox(
@@ -86,16 +445,18 @@ class _CreatePostState extends State<CreateSellplant> {
             ),
             const CustomField(
               titleField: 'Title',
-              heightField: 40,
+              heightField: 65,
               maxLine: 1,
+              maxLength: 20,
             ),
             const CustomField(
               titleField: 'Content',
               heightField: 180,
               maxLine: 50,
+              maxLength: 2000,
             ),
             const SizedBox(
-              height: 25,
+              height: 75,
             ),
           ],
         ),
@@ -135,11 +496,14 @@ class CustomField extends StatelessWidget {
     required this.titleField,
     required this.heightField,
     required this.maxLine,
+    required this.maxLength,
   }) : super(key: key);
 
   final String titleField;
   final double heightField;
   final int maxLine;
+  final int maxLength;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -167,6 +531,7 @@ class CustomField extends StatelessWidget {
               }
             },
             maxLines: maxLine,
+            maxLength: maxLength,
             cursorColor: tPrimaryActionColor,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
@@ -198,33 +563,6 @@ class CustomField extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class AddImage extends StatelessWidget {
-  const AddImage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        height: 95,
-        width: 85,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(6),
-          ),
-        ),
-        child: const Icon(
-          FontAwesomeIcons.plus,
-          color: tSearchIconColor,
-          size: 25,
-        ),
-      ),
     );
   }
 }
