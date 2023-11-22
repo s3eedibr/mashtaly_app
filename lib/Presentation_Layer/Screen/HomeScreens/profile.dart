@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
@@ -41,6 +42,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> getUserData() async {
     try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        // Handle no internet connection
+        print('No internet connection');
+        return;
+      }
+
       userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(currentUserUid)
@@ -60,6 +68,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> pickImageAndUpload() async {
     try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        // Handle no internet connection
+        print('No internet connection');
+        return;
+      }
+
       final pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 50,
@@ -67,12 +82,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (pickedFile != null) {
         try {
           await storageRef
-              .child('$currentUserUid/Profile_Pic/$currentUserUid')
+              .child('$currentUserUid/$currentUserUid')
               .putFile(File(pickedFile.path));
           final imageUrl = await storageRef
-              .child('$currentUserUid/Profile_Pic/$currentUserUid')
+              .child('$currentUserUid/$currentUserUid')
               .getDownloadURL();
-          // Move the setState() call outside of the try/catch block
           setState(() {});
           await FirebaseFirestore.instance
               .collection('users')
@@ -106,68 +120,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               height: 190,
               width: double.infinity,
-              child: GestureDetector(
-                onTap: () {
-                  pickImageAndUpload();
-                  setState(() {});
-                },
-                child: Stack(
-                  alignment: AlignmentDirectional.topCenter,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: SizedBox(
-                        height: 110,
-                        width: 110,
+              child: Stack(
+                alignment: AlignmentDirectional.topCenter,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 25),
+                    child: SizedBox(
+                      height: 110,
+                      width: 110,
+                      child: CircleAvatar(
+                        backgroundColor: tPrimaryActionColor,
                         child: CircleAvatar(
-                          backgroundColor: tPrimaryActionColor,
-                          child: CircleAvatar(
-                            radius: 54,
-                            backgroundColor: Colors.white,
-                            child: ClipOval(
-                              child: Image.network(
-                                profilePic,
-                                width: 108,
-                                height: 108,
-                                fit: BoxFit.cover,
-                                loadingBuilder: (BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent? loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child;
-                                  } else {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                },
-                                errorBuilder: (BuildContext context,
-                                    Object error, StackTrace? stackTrace) {
-                                  return Image.asset(
-                                    'assets/images/icons/default_profile.jpg',
-                                    width: 108,
-                                    height: 108,
-                                    fit: BoxFit.cover,
+                          radius: 54,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            child: Image.network(
+                              profilePic,
+                              width: 108,
+                              height: 108,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
                                   );
-                                },
-                              ),
+                                }
+                              },
+                              errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stackTrace) {
+                                return Image.asset(
+                                  'assets/images/icons/default_profile.jpg',
+                                  width: 108,
+                                  height: 108,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const Positioned(
-                      left: 230,
-                      top: 95,
-                      child: SizedBox(
-                        height: 35,
-                        width: 35,
+                  ),
+                  Positioned(
+                    left: 230,
+                    top: 95,
+                    child: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: CircleAvatar(
+                        backgroundColor: tPrimaryActionColor,
                         child: CircleAvatar(
-                          backgroundColor: tPrimaryActionColor,
-                          child: CircleAvatar(
-                            backgroundColor: tBgColor,
-                            radius: 16.5,
-                            child: Icon(
+                          backgroundColor: tBgColor,
+                          radius: 16.5,
+                          child: GestureDetector(
+                            onTap: () {
+                              pickImageAndUpload();
+                            },
+                            child: const Icon(
                               Icons.mode_edit_rounded,
                               color: tPrimaryActionColor,
                             ),
@@ -175,18 +188,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 145),
-                      child: Text(
-                        userName.toCapitalized(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 145),
+                    child: Text(
+                      userName.isEmpty
+                          ? "Mashtaly user"
+                          : userName.toCapitalized(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
