@@ -119,7 +119,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         "name": _nameController.text.trim(),
         "profile_pic": null,
       });
-      print('User added successfully');
+      showSankBar(context, 'User added successfully',
+          color: tPrimaryActionColor);
     } catch (e) {
       print('Error adding user: $e');
     }

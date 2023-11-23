@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
@@ -14,6 +15,8 @@ void main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.black));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
+  Connectivity().checkConnectivity();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int? isViewed =
       prefs.getInt('onBoard'); // Check if onboarding has been viewed.
@@ -22,7 +25,6 @@ void main() async {
   runApp(SplashScreenApp(
     isViewed: isViewed,
   ));
-  Connectivity().checkConnectivity();
 }
 
 class SplashScreenApp extends StatelessWidget {

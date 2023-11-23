@@ -1,10 +1,16 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../Constants/colors.dart';
+import '../Authentication/forgotpassword_screen.dart';
 
 class CreateSellplant extends StatefulWidget {
   const CreateSellplant({Key? key}) : super(key: key);
@@ -14,7 +20,141 @@ class CreateSellplant extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreateSellplant> {
+  final _titleController = TextEditingController();
+  final _contentController = TextEditingController();
   final List<XFile> _selectedImages = [];
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  Future<List<String>> uploadImages(List<XFile> selectedImages) async {
+    List<String> imageUrls = [];
+
+    for (int i = 0; i < selectedImages.length; i++) {
+      var image = selectedImages[i];
+
+      try {
+        final currentUser = _auth.currentUser;
+
+        if (currentUser == null) {
+          print('Error: No currently signed-in user');
+          return [];
+        }
+
+        String imagePath =
+            'SellPlant_Pic/${currentUser.uid}/sellplant_image_${i + 1}';
+        UploadTask uploadTask =
+            _storage.ref().child(imagePath).putFile(File(image.path));
+        TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+        imageUrls.add(imageUrl);
+      } catch (e) {
+        print('Error uploading image $i: $e');
+      }
+    }
+
+    return imageUrls;
+  }
+
+  int generateUniqueRandom5DigitsNumber() {
+    // Get the current DateTime
+    DateTime now = DateTime.now();
+
+    // Extract individual components (year, month, day, hour, minute, second)
+    int year = now.year;
+    int month = now.month;
+    int day = now.day;
+    int hour = now.hour;
+    int minute = now.minute;
+    int second = now.second;
+
+    // Combine the components to create a unique seed for the random number generator
+    int seed = year * 100000000 +
+        month * 1000000 +
+        day * 10000 +
+        hour * 100 +
+        minute * 10 +
+        second;
+
+    // Use the seed to generate a random number between 10000 and 99999
+    Random random = Random(seed);
+    int uniqueRandomNumber = random.nextInt(90000) + 10000;
+
+    return uniqueRandomNumber;
+  }
+
+  Future<void> addPostToFirestore(List<String> imageUrls) async {
+    try {
+      final currentUser = _auth.currentUser;
+
+      if (currentUser == null) {
+        print('Error: No currently signed-in user');
+        return;
+      }
+      await _firestore
+          .collection('sellplant')
+          .doc(currentUser.uid)
+          .collection('SellPlant')
+          .add({
+        "id": '${currentUser.uid}${generateUniqueRandom5DigitsNumber()}',
+        "title": _titleController.text.trim(),
+        "content": _contentController.text.trim(),
+        "post_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
+        "post_pic2": imageUrls.length > 1 ? imageUrls[1] : null,
+        "post_pic3": imageUrls.length > 2 ? imageUrls[2] : null,
+        "post_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
+        "post_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
+        "posted": false,
+        "date":
+            '${DateTime.now().month}/${DateTime.now().day}/${DateTime.now().year}',
+      });
+      showSankBar(context, 'Post submitted! Admin review in progress.',
+          color: tPrimaryActionColor);
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error adding post: $e');
+    }
+  }
+
+  Future<void> uploadImagesAndAddPost() async {
+    try {
+      bool isConnected = await checkConnectivity();
+
+      if (!isConnected) {
+        print('No internet connection.');
+        showSankBar(context, 'No internet connection.');
+        return;
+      }
+      if (_selectedImages.length < 3) {
+        print('Error: Please choose at least 3 pictures.');
+        showSankBar(context, 'Please choose at least 3 pictures.');
+        return;
+      }
+      if (_titleController.text.isEmpty) {
+        print('Error: Please enter title for post.');
+        showSankBar(context, 'Please enter title.');
+        return;
+      }
+
+      if (_contentController.text.isEmpty) {
+        print('Error: Please enter content for post.');
+        showSankBar(context, 'Please enter content.');
+        return;
+      }
+      List<String> imageUrls = await uploadImages(_selectedImages);
+
+      await addPostToFirestore(imageUrls);
+    } catch (e) {
+      print('Error uploading images and adding post: $e');
+    }
+  }
+
+  Future<bool> checkConnectivity() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult != ConnectivityResult.none;
+  }
 
   pickImage(ImageSource source) async {
     final imagePicker = ImagePicker();
@@ -49,7 +189,7 @@ class _CreatePostState extends State<CreateSellplant> {
           ),
         ),
         title: const Text(
-          "Create a Sell",
+          "Create a sell",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -299,47 +439,52 @@ class _CreatePostState extends State<CreateSellplant> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
+                        return Theme(
+                          data: ThemeData(
+                            dialogBackgroundColor: Colors.white,
+                          ),
+                          child: SimpleDialog(
+                            title: const Text("Select Image from"),
+                            children: [
+                              SimpleDialogOption(
+                                padding: const EdgeInsets.all(6),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.of(context).pop();
+                                        await pickImage(ImageSource.camera);
+                                      },
+                                      child: const Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.camera_alt_rounded),
+                                          Text("Camera"),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.of(context).pop();
+                                        await pickImage(ImageSource.gallery);
+                                      },
+                                      child: const Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon(Icons.image),
+                                          Text("Gallery"),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       },
                     );
@@ -443,17 +588,19 @@ class _CreatePostState extends State<CreateSellplant> {
             const SizedBox(
               height: 15,
             ),
-            const CustomField(
+            CustomField(
               titleField: 'Title',
               heightField: 65,
               maxLine: 1,
               maxLength: 20,
+              controller: _titleController,
             ),
-            const CustomField(
+            CustomField(
               titleField: 'Content',
               heightField: 180,
               maxLine: 50,
               maxLength: 2000,
+              controller: _contentController,
             ),
             const SizedBox(
               height: 75,
@@ -473,7 +620,9 @@ class _CreatePostState extends State<CreateSellplant> {
               Radius.circular(12.0),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            uploadImagesAndAddPost();
+          },
           child: const Center(
             child: Text(
               "Publish",
@@ -497,13 +646,14 @@ class CustomField extends StatelessWidget {
     required this.heightField,
     required this.maxLine,
     required this.maxLength,
+    required this.controller,
   }) : super(key: key);
 
   final String titleField;
   final double heightField;
   final int maxLine;
   final int maxLength;
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -533,6 +683,7 @@ class CustomField extends StatelessWidget {
             maxLines: maxLine,
             maxLength: maxLength,
             cursorColor: tPrimaryActionColor,
+            controller: controller,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
