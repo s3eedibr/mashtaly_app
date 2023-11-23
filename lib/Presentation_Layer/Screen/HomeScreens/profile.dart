@@ -81,12 +81,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
       if (pickedFile != null) {
         try {
-          await storageRef
+          UploadTask uploadTask = storageRef
               .child('$currentUserUid/$currentUserUid')
               .putFile(File(pickedFile.path));
-          final imageUrl = await storageRef
-              .child('$currentUserUid/$currentUserUid')
-              .getDownloadURL();
+          TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+          String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
           setState(() {});
           await FirebaseFirestore.instance
               .collection('users')
@@ -94,6 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .update({
             'profile_pic': imageUrl,
           });
+          getUserData();
         } catch (e) {
           print('Error uploading image: $e');
         }
