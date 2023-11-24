@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:flutter/material.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../Services/weather_service.dart';
 
@@ -16,12 +16,12 @@ class WeatherProvider with ChangeNotifier {
   String wind = '';
   String humidity = '';
   String cloud = '';
-  LocationPermission? permission;
   Timer? timer;
+  LocationPermission? permission;
 
-  // Get the user's location and fetch weather data.
   Future<void> getLocationAndFetchWeather() async {
     permission = await Geolocator.requestPermission();
+
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
@@ -32,7 +32,6 @@ class WeatherProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Retrieve weather data based on location.
   void getWeatherData() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult != ConnectivityResult.none) {
@@ -53,17 +52,15 @@ class WeatherProvider with ChangeNotifier {
         notifyListeners();
       }
     } else {
-      // Handle no internet connection here
       print('No internet connection');
     }
   }
 
-  // Start a timer to periodically fetch weather data.
   void startTimer() {
     timer = Timer.periodic(const Duration(minutes: 30), (Timer t) {
       getWeatherData();
     });
-    getWeatherData(); // Fetch data immediately when the app starts
+    getWeatherData();
   }
 
   @override

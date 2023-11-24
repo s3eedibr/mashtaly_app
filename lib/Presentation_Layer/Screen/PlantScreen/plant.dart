@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, library_private_types_in_public_api
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,23 +8,21 @@ import '../../../Provider/weather_provider.dart';
 import '../Forms/form_withOutSen.dart';
 import '../Forms/form_withSen.dart';
 import '../HomeScreens/notification.dart';
-// import 'wateringschedule.dart';
 
 class PlantScreen extends StatelessWidget {
-  const PlantScreen({super.key});
+  const PlantScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) =>
-          WeatherProvider(), // Create an instance of WeatherProvider
+      create: (context) => WeatherProvider(),
       child: const PlantScreenContent(),
     );
   }
 }
 
 class PlantScreenContent extends StatefulWidget {
-  const PlantScreenContent({super.key});
+  const PlantScreenContent({Key? key});
 
   @override
   _PlantScreenContentState createState() => _PlantScreenContentState();
@@ -39,27 +36,17 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
       selectedDate = date;
       print(selectedDate);
     });
-    // Open the WateringSchedule() screen
-
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => const WateringSchedule(),
-    //   ),
-    // );
   }
 
   @override
   void initState() {
     super.initState();
-// Access the WeatherProvider instance using Provider.of and call the necessary methods
     final weatherProvider =
         Provider.of<WeatherProvider>(context, listen: false);
     weatherProvider.getLocationAndFetchWeather();
   }
 
   Future<bool> _loadData() async {
-    // Simulating an asynchronous task, e.g., loading data
     await Future.delayed(const Duration(milliseconds: 4500));
     return true;
   }
@@ -72,7 +59,6 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
       child: Scaffold(
         backgroundColor: tBgColor,
         body: FutureBuilder<bool>(
-          // Replace with your existing code
           future: _loadData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,10 +66,8 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              // Render your regular UI once the data is loaded
               return buildMainUI(
-                newNotification:
-                    false, // You can replace this with weather-related data
+                newNotification: false,
                 icon: weatherProvider.icon,
                 weatherText: weatherProvider.weatherText,
                 temperature: weatherProvider.temperature,

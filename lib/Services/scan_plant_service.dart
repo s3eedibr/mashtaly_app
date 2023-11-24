@@ -20,12 +20,15 @@ class ScanPlantService {
         await http.MultipartFile.fromPath('images', imageFile.path),
       );
 
-      final response = await client.send(request);
+      final response =
+          await client.send(request).timeout(const Duration(seconds: 30));
+
+      // Check the status code
+      print('Response status code: ${response.statusCode}');
+
       return http.Response.fromStream(response);
     } catch (e) {
       throw Exception('Error sending image to API: $e');
-    } finally {
-      client.close();
     }
   }
 }

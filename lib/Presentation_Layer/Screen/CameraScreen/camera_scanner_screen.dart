@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../Animations/waiting_screen.dart';
 import '../../../Constants/colors.dart';
 import '../../../Services/scan_plant_service.dart';
-import '../HomeScreens/home_screen.dart';
 import '../PlantInformationScreen/plants_info_screen.dart';
 
 class CameraScanner extends StatefulWidget {
@@ -384,11 +383,7 @@ class _CameraScannerState extends State<CameraScanner> {
               Icons.arrow_back_ios_new_rounded,
             ),
             onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                  (Route<dynamic> route) => false);
+              Navigator.of(context).pop();
             },
           ),
           title: const Text(

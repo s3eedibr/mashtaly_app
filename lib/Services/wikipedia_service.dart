@@ -29,16 +29,25 @@ Future<String> _fetchPlantInformation(
 
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
-    final pages = data['query']['pages'];
-    final pageId = pages.keys.first;
-    final pageData = pages[pageId];
-    final pageExtract = pageData['extract'];
 
-    // If the plant name is not found, use the common name instead
-    if (pageExtract == null || pageExtract.isEmpty) {
-      return fetchPlantInformationCommonName(plantName, commonName);
+    // Check if 'query' and 'pages' keys exist in the response
+    if (data.containsKey('query') &&
+        data['query'] != null &&
+        data['query'].containsKey('pages')) {
+      final pages = data['query']['pages'];
+      final pageId = pages.keys.first;
+      final pageData = pages[pageId];
+      final pageExtract = pageData['extract'];
+
+      // If the plant name is not found, use the common name instead
+      if (pageExtract == null || pageExtract.isEmpty) {
+        return fetchPlantInformationCommonName(plantName, commonName);
+      }
+      return pageExtract;
+    } else {
+      // Handle the case where the expected keys are not present in the response
+      return 'Invalid response format';
     }
-    return pageExtract;
   } else {
     throw Exception('Failed to fetch plant information');
   }

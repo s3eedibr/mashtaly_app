@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../Constants/colors.dart';
 import '../CameraScreen/camera_scanner_screen.dart';
 import '../CommunityScreen/community.dart';
@@ -14,18 +14,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-//
 class _HomeScreenState extends State<HomeScreen> {
   int currentTap = 0;
   final List<Widget> screens = [
     const PlantScreen(),
     const CommunityScreen(),
-    const CameraScanner(),
     const NotificationScreen(),
     const ProfileScreen(),
   ];
-  final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = const PlantScreen();
   final user = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -122,30 +118,31 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Scaffold(
           // resizeToAvoidBottomInset: false,
-          body: PageStorage(
-            bucket: bucket,
-            child: currentScreen,
+          body: IndexedStack(
+            index: currentTap,
+            children: screens,
           ),
           floatingActionButton: SizedBox(
-              height: 64,
-              width: 64,
-              child: FloatingActionButton(
-                backgroundColor: tPrimaryActionColor,
-                shape: const CircleBorder(),
-                child: Image.asset(
-                  "assets/images/icons/Path 7.png",
-                  height: 26,
-                  width: 26,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CameraScanner(),
-                    ),
-                  );
-                },
-              )),
+            height: 64,
+            width: 64,
+            child: FloatingActionButton(
+              backgroundColor: tPrimaryActionColor,
+              shape: const CircleBorder(),
+              child: Image.asset(
+                "assets/images/icons/Path 7.png",
+                height: 26,
+                width: 26,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CameraScanner(),
+                  ),
+                );
+              },
+            ),
+          ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: Container(
@@ -169,172 +166,61 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 60,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MaterialButton(
-                          minWidth: 40,
-                          onPressed: () {
-                            setState(() {
-                              currentScreen = const PlantScreen();
-                              currentTap = 0;
-                            });
-                          },
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                currentTap == 0
-                                    ? Image.asset(
-                                        "assets/images/icons/Path 8.png",
-                                        height: 28,
-                                        width: 28,
-                                      )
-                                    : Image.asset(
-                                        "assets/images/icons/Path 84.png",
-                                        height: 28,
-                                        width: 28,
-                                      ),
-                                const SizedBox(height: 7),
-                                Text(
-                                  "Plant",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: currentTap == 0
-                                        ? FontWeight.w700
-                                        : FontWeight.normal,
-                                    color: currentTap == 0
-                                        ? tPrimaryActionColor
-                                        : tSecondActionColor,
-                                  ),
-                                )
-                              ]),
-                        ),
-                        MaterialButton(
-                          minWidth: 40,
-                          onPressed: () {
-                            setState(() {
-                              currentScreen = const CommunityScreen();
-                              currentTap = 1;
-                            });
-                          },
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                currentTap == 1
-                                    ? Image.asset(
-                                        "assets/images/icons/communities1.png",
-                                        height: 32,
-                                        width: 32,
-                                      )
-                                    : Image.asset(
-                                        "assets/images/icons/communities.png",
-                                        height: 32,
-                                        width: 32,
-                                      ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "Community",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: currentTap == 1
-                                        ? FontWeight.w700
-                                        : FontWeight.normal,
-                                    color: currentTap == 1
-                                        ? tPrimaryActionColor
-                                        : tSecondActionColor,
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MaterialButton(
-                          minWidth: 40,
-                          onPressed: () {
-                            setState(() {
-                              currentScreen = const NotificationScreen();
-                              currentTap = 2;
-                            });
-                          },
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                currentTap == 2
-                                    ? Image.asset(
-                                        "assets/images/icons/bell (1).png",
-                                        height: 28,
-                                        width: 28,
-                                      )
-                                    : Image.asset(
-                                        "assets/images/icons/bell.png",
-                                        height: 28,
-                                        width: 28,
-                                      ),
-                                const SizedBox(height: 7),
-                                Text(
-                                  "Notifications",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: currentTap == 2
-                                        ? FontWeight.w700
-                                        : FontWeight.normal,
-                                    color: currentTap == 2
-                                        ? tPrimaryActionColor
-                                        : tSecondActionColor,
-                                  ),
-                                )
-                              ]),
-                        ),
-                        MaterialButton(
-                          minWidth: 40,
-                          onPressed: () {
-                            setState(() {
-                              currentScreen = const ProfileScreen();
-                              currentTap = 3;
-                            });
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              currentTap == 3
-                                  ? Image.asset(
-                                      "assets/images/icons/Path 64.png",
-                                      height: 28,
-                                      width: 28,
-                                    )
-                                  : Image.asset(
-                                      "assets/images/icons/Path 6.png",
-                                      height: 28,
-                                      width: 28,
-                                    ),
-                              const SizedBox(height: 7),
-                              Text(
-                                "Profile",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: currentTap == 3
-                                      ? FontWeight.w700
-                                      : FontWeight.normal,
-                                  color: currentTap == 3
-                                      ? tPrimaryActionColor
-                                      : tSecondActionColor,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+                  children: [
+                    buildBottomBarButton(
+                        0, "Plant", "Path 8.png", "Path 84.png"),
+                    buildBottomBarButton(
+                        1, "Community", "communities1.png", "communities.png"),
+                    buildBottomBarButton(
+                        2, "Notifications", "bell (1).png", "bell.png"),
+                    buildBottomBarButton(
+                        3, "Profile", "Path 64.png", "Path 6.png"),
                   ],
                 ),
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildBottomBarButton(
+      int index, String label, String activeImage, String inactiveImage) {
+    return MaterialButton(
+      minWidth: 40,
+      onPressed: () {
+        setState(() {
+          currentTap = index;
+        });
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          currentTap == index
+              ? Image.asset(
+                  "assets/images/icons/$activeImage",
+                  height: 28,
+                  width: 28,
+                )
+              : Image.asset(
+                  "assets/images/icons/$inactiveImage",
+                  height: 28,
+                  width: 28,
+                ),
+          const SizedBox(height: 7),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight:
+                  currentTap == index ? FontWeight.w700 : FontWeight.normal,
+              color: currentTap == index
+                  ? tPrimaryActionColor
+                  : tSecondActionColor,
+            ),
+          )
+        ],
       ),
     );
   }
