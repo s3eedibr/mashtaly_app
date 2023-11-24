@@ -98,7 +98,7 @@ class _CreatePostState extends State<CreateSellplant> {
           .doc(currentUser.uid)
           .collection('SellPlant')
           .add({
-        "id": '${currentUser.uid}${generateUniqueRandom5DigitsNumber()}',
+        "id": '${generateUniqueRandom5DigitsNumber()}',
         "title": _titleController.text.trim(),
         "content": _contentController.text.trim(),
         "post_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
@@ -107,8 +107,17 @@ class _CreatePostState extends State<CreateSellplant> {
         "post_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
         "post_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
         "posted": false,
-        "date":
-            '${DateTime.now().month}/${DateTime.now().day}/${DateTime.now().year}',
+        "date": '${DateTime.now()}',
+        "user": (await FirebaseFirestore.instance
+                .collection('users')
+                .doc(currentUser.uid)
+                .get())
+            .get('name'),
+        "profile_pic": (await FirebaseFirestore.instance
+                .collection('users')
+                .doc(currentUser.uid)
+                .get())
+            .get('profile_pic'),
       });
       showSankBar(context, 'Post submitted! Admin review in progress.',
           color: tPrimaryActionColor);

@@ -17,6 +17,7 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
   Connectivity().checkConnectivity();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int? isViewed =
       prefs.getInt('onBoard'); // Check if onboarding has been viewed.

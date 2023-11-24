@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -12,31 +13,19 @@ class WeatherService {
     LocationPermission? permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are disabled
-      return null;
-    }
+    if (!serviceEnabled) return null;
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        // Location permissions are denied
-        return null;
-      }
+          permission != LocationPermission.always) return null;
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Location permissions are permanently denied, handle appropriately.
-      return null;
-    }
+    if (permission == LocationPermission.deniedForever) return null;
 
     var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      // No internet connection
-      return null;
-    }
+    if (connectivityResult == ConnectivityResult.none) return null;
 
     String apiKey = "0a971b7c5266468ab32110003232003";
     String apiUrl =
@@ -46,16 +35,13 @@ class WeatherService {
       http.Response response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
-        // Weather data successfully retrieved
         Map<String, dynamic> weatherData = jsonDecode(response.body);
         return weatherData;
       } else {
-        // Error occurred while fetching weather data
         print("Error: ${response.statusCode}");
         return null;
       }
     } catch (e) {
-      // Handle network errors
       print("Network error: $e");
       return null;
     }
