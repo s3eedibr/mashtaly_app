@@ -39,6 +39,42 @@ class _CommunityScreenState extends State<CommunityScreen> {
     return true;
   }
 
+  Future<void> getAllPosts() async {
+    final db = FirebaseFirestore.instance;
+
+    final userUidsRef = db.collection('users');
+    final getAllPostsRef = db.collection('getAllPosts');
+
+    try {
+      final userUidsSnapshot = await userUidsRef.get();
+
+      for (final userDoc in userUidsSnapshot.docs) {
+        final userId = userDoc.id;
+        final userPostsRef =
+            db.collection('posts').doc(userId).collection('Posts');
+
+        final userPostsSnapshot =
+            await userPostsRef.where('posted', isEqualTo: true).get();
+
+        for (final postDoc in userPostsSnapshot.docs) {
+          final postId = postDoc.id;
+          final postData = postDoc.data();
+
+          // Check if the "posted" flag is true before adding to getAllPosts
+          if (postData['posted'] == true) {
+            // Add the post to getAllPosts collection group
+            await getAllPostsRef.doc(postId).set(postData);
+            print('Post added to getAllPosts collection group: $postId');
+          } else {
+            print('Post skipped (not posted): $postId');
+          }
+        }
+      }
+    } catch (error) {
+      print('Error creating getAllPosts collection group: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -280,75 +316,106 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 showSankBar(context, 'No internet connection.');
               }
 
-              return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collectionGroup('posts')
-                    .where('posted', isEqualTo: true)
-                    .snapshots(),
+              return FutureBuilder(
+                future: getAllPosts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  if (snapshot.hasError) {
                     return Center(
-                      child: Text('Error: ${snapshot.error}'),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/plant_loading2.gif",
+                            height: 60,
+                            width: 60,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Loading...',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Mulish',
+                              decoration: TextDecoration.none,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }
 
-                  final posts = snapshot.data?.docs;
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collectionGroup('getAllPosts')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
 
-                  if (posts == null || posts.isEmpty) {
-                    return const Center(
-                      child: Text('No posts available.'),
-                    );
-                  }
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      }
 
-                  return SizedBox(
-                    height: 250,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: posts.length + 1,
-                      itemBuilder: (BuildContext context, index) {
-                        if (index == posts.length) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const PostDetails(),
-                                ),
-                              );
-                            },
-                            child: const Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  top: 5,
-                                ),
-                                child: Text(
-                                  'See More',
-                                  style: TextStyle(
-                                    color: tPrimaryActionColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
+                      final posts = snapshot.data?.docs;
+
+                      if (posts == null || posts.isEmpty) {
+                        return const Center(
+                          child: Text('No posts available.'),
+                        );
+                      }
+
+                      return SizedBox(
+                        height: 250,
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: posts.length + 1,
+                          itemBuilder: (BuildContext context, index) {
+                            if (index == posts.length) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const PostDetails(),
+                                    ),
+                                  );
+                                },
+                                child: const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 5,
+                                    ),
+                                    child: Text(
+                                      'See More',
+                                      style: TextStyle(
+                                        color: tPrimaryActionColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          final post =
-                              posts[index].data() as Map<String, dynamic>;
-                          return ArticlesCard2(
-                            title: post['title'],
-                            imageURL: post['post_pic1'],
-                            user: post['user'],
-                          );
-                        }
-                      },
-                    ),
+                              );
+                            } else {
+                              final post =
+                                  posts[index].data() as Map<String, dynamic>;
+                              return ArticlesCard2(
+                                title: post['title'],
+                                imageURL: post['post_pic1'],
+                                user: post['user'],
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    },
                   );
                 },
               );

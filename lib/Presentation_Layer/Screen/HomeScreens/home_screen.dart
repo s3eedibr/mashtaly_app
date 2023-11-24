@@ -188,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildBottomBarButton(
       int index, String label, String activeImage, String inactiveImage) {
     return MaterialButton(
+      elevation: 0,
       minWidth: 40,
       onPressed: () {
         setState(() {

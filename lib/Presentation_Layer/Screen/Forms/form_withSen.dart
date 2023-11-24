@@ -1,9 +1,11 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../Constants/colors.dart';
 import 'Utils.dart';
+import 'package:http/http.dart' as http;
 
 import '../HomeScreens/home_screen.dart';
 
@@ -15,6 +17,19 @@ class AddPlantFormWithSen extends StatefulWidget {
 }
 
 class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
+  Future<void> setUidToDweet() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser!.uid;
+      var response = await http.post(
+        Uri.parse("https://dweet.io/dweet/for/Uid"),
+        body: {'uid': currentUser},
+      );
+      print("Response from Dweet.io: ${response.body}");
+    } catch (e) {
+      print("Error connecting to Dweet.io: $e");
+    }
+  }
+
   int selectedWeek = -1; // Initialize with -1, indicating no button selected.
 
   void selectWeek(int weekNumber) {
@@ -128,6 +143,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                           ),
                           GestureDetector(
                             onTap: () {
+                              setUidToDweet();
                               AppSettings.openAppSettings(
                                 type: AppSettingsType.wifi,
                               );

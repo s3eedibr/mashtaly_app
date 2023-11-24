@@ -29,13 +29,11 @@ class _CreatePostState extends State<CreatePost> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
-
   Future<List<String>> uploadImages(List<XFile> selectedImages) async {
     List<String> imageUrls = [];
-
+    final random5digit = generateUniqueRandom5DigitsNumber();
     for (int i = 0; i < selectedImages.length; i++) {
       var image = selectedImages[i];
-
       try {
         final currentUser = _auth.currentUser;
 
@@ -44,7 +42,8 @@ class _CreatePostState extends State<CreatePost> {
           return [];
         }
 
-        String imagePath = 'Post_Pic/${currentUser.uid}/post_image_${i + 1}';
+        String imagePath =
+            'Post_Pic/${currentUser.uid}/Post$random5digit/post_image_${i + 1}';
         UploadTask uploadTask =
             _storage.ref().child(imagePath).putFile(File(image.path));
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
@@ -154,6 +153,7 @@ class _CreatePostState extends State<CreatePost> {
         showSankBar(context, 'Please enter content for article.');
         return;
       }
+
       List<String> imageUrls = await uploadImages(_selectedImages);
 
       await addPostToFirestore(imageUrls);
