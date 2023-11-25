@@ -4,6 +4,7 @@ import '../../../Auth/auth.dart';
 import '../../../Constants/assets.dart';
 import '../../../Constants/colors.dart';
 import '../../../Constants/text_strings.dart';
+import '../../Widget/sankBar.dart';
 import 'otp_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -201,22 +202,4 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
-}
-
-void showSankBar(BuildContext context, String message,
-    {Color color = tThirdTextErrorColor}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-      backgroundColor: color,
-    ),
-  );
 }

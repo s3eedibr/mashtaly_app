@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../Constants/colors.dart';
 import '../CameraScreen/camera_scanner_screen.dart';
-import '../CommunityScreen/community.dart';
+import '../Community/community.dart';
 import 'notification.dart';
 import '../PlantScreen/plant.dart';
 import 'profile.dart';
@@ -126,6 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 64,
             width: 64,
             child: FloatingActionButton(
+              focusColor: Colors.transparent,
+              splashColor: Colors.transparent,
               backgroundColor: tPrimaryActionColor,
               shape: const CircleBorder(),
               child: Image.asset(
@@ -188,7 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildBottomBarButton(
       int index, String label, String activeImage, String inactiveImage) {
     return MaterialButton(
-      elevation: 0,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
       minWidth: 40,
       onPressed: () {
         setState(() {

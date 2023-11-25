@@ -146,6 +146,8 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                     child: Row(
                       children: [
                         IconButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
                           onPressed: () {},
                           icon: Image.asset(
                             "assets/images/icons/Path 417.png",
@@ -154,6 +156,8 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                           ),
                         ),
                         IconButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -494,6 +498,8 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                             ),
                           ),
                           MaterialButton(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
                             onPressed: () {
                               showModalBottomSheet(
                                 backgroundColor: Colors.white,

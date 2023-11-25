@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../Constants/colors.dart';
-import '../Screen/CommunityScreen/createPost.dart';
-import '../Screen/CommunityScreen/createSellplant.dart';
+import '../../../../Constants/colors.dart';
+import '../createPost.dart';
+import '../createSellplant.dart';
 
 class ExpandWidget extends StatefulWidget {
   @override
