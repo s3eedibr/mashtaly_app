@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Authentication/forgotpassword_screen.dart';
 
 import '../../../Constants/colors.dart';
 import '../../Widget/articles_card.dart';
 import '../../Widget/articles_card2.dart';
-import 'createPost.dart';
-import 'createSellplant.dart';
+import '../../Widget/expandedButton.dart';
 import 'postDetails.dart';
 import 'sellDetails.dart';
 
@@ -27,7 +25,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
       isExpanded = !isExpanded;
     });
   }
-  // Column buttonColumn = const CustomAddButton() as Column;
 
   Future<ConnectivityResult> _checkConnectivity() async {
     final connectivityResult = await Connectivity().checkConnectivity();
@@ -115,166 +112,93 @@ class _CommunityScreenState extends State<CommunityScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: tBgColor,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                color: Colors.white,
-                height: 56,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 8,
-                        left: 16,
-                        top: 2,
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        width: 336,
-                        child: TextField(
-                          cursorColor: tPrimaryActionColor,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
+        backgroundColor: tBgColor,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: Colors.white,
+              height: 56,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 8,
+                      left: 16,
+                      top: 2,
+                    ),
+                    child: SizedBox(
+                      height: 40,
+                      width: 336,
+                      child: TextField(
+                        cursorColor: tPrimaryActionColor,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          height: 1.5,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: tSearchBarColor,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 15,
                           ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: tSearchBarColor,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 15,
-                            ),
-                            prefixIcon: const Icon(
-                              Icons.search_rounded,
-                              color: tSearchIconColor,
-                              size: 27,
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
+                          prefixIcon: const Icon(
+                            Icons.search_rounded,
+                            color: tSearchIconColor,
+                            size: 27,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 1),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.filter_list_rounded,
-                              color: tSearchIconColor,
-                              size: 27,
-                            ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 1),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.filter_list_rounded,
+                            color: tSearchIconColor,
+                            size: 27,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
                   ),
-                  child: ListView.builder(
-                    itemCount: 4,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Expanded(child: buildNewArticleUI());
-                      } else if (index == 1) {
-                        return Expanded(child: buildArticleUI());
-                      } else if (index == 2) {
-                        return Expanded(child: buildNewPlantsForSell());
-                      } else if (index == 3) {
-                        return Expanded(child: buildPlantsForSellUI());
-                      } else {
-                        return const SizedBox(height: 50);
-                      }
-                    },
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildNewArticleUI(),
+                      buildArticleUI(),
+                      buildNewPlantsForSell(),
+                      buildPlantsForSellUI(),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            verticalDirection: VerticalDirection.up,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  toggleExpansion();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: tPrimaryActionColor,
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(19.0),
-                ),
-                child: Icon(
-                  isExpanded ? FontAwesomeIcons.xmark : FontAwesomeIcons.plus,
-                  size: 26.0,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 5),
-              if (isExpanded) ...[
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CreatePost(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(55, 55),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(55.0),
-                    ),
-                    backgroundColor: tPrimaryActionColor,
-                    padding: const EdgeInsets.all(10),
-                  ),
-                  child: const Icon(
-                    FontAwesomeIcons.newspaper,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CreateSellPlant(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(55, 55),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(55.0),
-                    ),
-                    backgroundColor: tPrimaryActionColor,
-                    padding: const EdgeInsets.all(10),
-                  ),
-                  child: const Icon(
-                    FontAwesomeIcons.dollarSign,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ],
-          )),
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: ExpandWidget(),
+      ),
     );
   }
 
