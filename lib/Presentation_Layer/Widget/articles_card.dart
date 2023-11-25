@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../Constants/assets.dart';
 import '../../Constants/colors.dart';
 
 class ArticlesCard extends StatelessWidget {
-  final bool isLoading;
   final int? id;
   final String? title;
   final String? desc;
   final String? type;
   final String? date;
+  final String? imageURL;
+  final String? user;
 
   const ArticlesCard({
     Key? key,
-    required this.isLoading,
+    required this.imageURL,
+    required this.user,
+    required this.title,
     this.id,
-    this.title,
     this.desc,
     this.type,
     this.date,
@@ -24,14 +25,28 @@ class ArticlesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return _buildShimmerCard();
-    } else {
-      return _buildContentCard();
-    }
+    return FutureBuilder(
+      future: _loadData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return buildShimmerCard();
+        } else {
+          return _buildContentCard(
+            imageURL: imageURL!,
+            user: user!,
+            title: title!,
+          );
+        }
+      },
+    );
   }
 
-  Widget _buildShimmerCard() {
+  Future<void> _loadData() async {
+    // Simulate an asynchronous operation
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
+  static Widget buildShimmerCard() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -93,8 +108,11 @@ class ArticlesCard extends StatelessWidget {
     );
   }
 
-  Widget _buildContentCard() {
-    // Replace this with your actual content card
+  Widget _buildContentCard({
+    required String title,
+    required String user,
+    required String imageURL,
+  }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -112,8 +130,8 @@ class ArticlesCard extends StatelessWidget {
                 Radius.circular(12),
               ),
             ),
-            child: const Padding(
-              padding: EdgeInsets.only(
+            child: Padding(
+              padding: const EdgeInsets.only(
                 left: 16,
                 top: 8,
                 right: 16,
@@ -122,29 +140,45 @@ class ArticlesCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image(
-                    image: AssetImage(
-                        Assets.assetsImagesPlantsInfoImagesMaskGroup17),
-                    height: 150,
-                    width: 250,
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      bottomLeft: Radius.circular(12),
+                    ),
+                    child: SizedBox(
+                      height: 150,
+                      width: 250,
+                      child: imageURL.isNotEmpty
+                          ? Image.network(
+                              imageURL,
+                              height: 150,
+                              width: 250,
+                              fit: BoxFit.cover,
+                            )
+                          : const Placeholder(
+                              color: Colors.grey,
+                              fallbackHeight: 72,
+                              fallbackWidth: 72,
+                            ),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Text(
-                    'Title of article',
-                    style: TextStyle(
+                    title,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: tPrimaryTextColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    'by user',
-                    style: TextStyle(
+                    'by $user',
+                    style: const TextStyle(
                       fontSize: 16,
                       color: tSecondTextColor,
                       fontWeight: FontWeight.w600,

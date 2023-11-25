@@ -10,7 +10,7 @@ import '../Forms/form_withSen.dart';
 import '../HomeScreens/notification.dart';
 
 class PlantScreen extends StatelessWidget {
-  const PlantScreen({Key? key});
+  const PlantScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class PlantScreen extends StatelessWidget {
 }
 
 class PlantScreenContent extends StatefulWidget {
-  const PlantScreenContent({Key? key});
+  const PlantScreenContent({super.key});
 
   @override
   _PlantScreenContentState createState() => _PlantScreenContentState();
@@ -51,6 +51,10 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
     return true;
   }
 
+  Future<void> _refreshRandomNumbers() =>
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {});
+      });
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
@@ -151,7 +155,7 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
@@ -178,534 +182,551 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
               ),
             ),
             Expanded(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                children: [
-                  const SizedBox(height: 12),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 16, bottom: 0, left: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            icon.isNotEmpty
-                                ? Image.network(
-                                    icon,
-                                    height: 38,
-                                    width: 38,
-                                  )
-                                : const Icon(
-                                    Icons.cloud_off_sharp,
-                                    color: Colors.transparent,
-                                  ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            weatherText.isNotEmpty
-                                ? Text(
-                                    weatherText,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : const Text(
-                                    "",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            if (temperature.isNotEmpty &&
-                                double.parse(temperature) < 30)
-                              Image.asset(
-                                'assets/images/icons/Group 237.png',
-                                height: 35,
-                                width: 35,
-                              )
-                            else if (temperature.isNotEmpty &&
-                                double.parse(temperature) >= 30)
-                              Image.asset(
-                                'assets/images/icons/Group 226.png',
-                                height: 35,
-                                width: 35,
-                              )
-                            else
-                              const Icon(
-                                Icons.cloud_off_rounded,
-                                color: Colors.transparent,
-                              ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            temperature.isNotEmpty
-                                ? Text(
-                                    '$temperature°C',
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : const Text(
-                                    '',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    height: 9,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Padding(
+              child: RefreshIndicator(
+                onRefresh: _refreshRandomNumbers,
+                color: tPrimaryActionColor,
+                backgroundColor: tBgColor,
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  children: [
+                    const SizedBox(height: 12),
+                    Padding(
                       padding:
-                          const EdgeInsets.only(right: 16, bottom: 0, left: 16),
-                      child: SizedBox(
-                        height: 80,
-                        child: DatePicker(
-                          DateTime.now(),
-                          width: 45,
-                          initialSelectedDate: selectedDate,
-                          selectionColor: tPrimaryActionColor,
-                          selectedTextColor: Colors.white,
-                          dateTextStyle: const TextStyle(
-                            fontSize: 20,
-                          ),
-                          daysCount: 14,
-                          onDateChange: onDateSelected,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 10,
-                    color: Colors.white,
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(18),
-                        bottomRight: Radius.circular(18),
-                      ),
-                    ),
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-                      child: SizedBox(
-                        height: 73,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/icons/Group 204.png',
-                                  height: 45,
-                                  width: 45,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Cloud",
-                                        style: TextStyle(
-                                            color: tPrimaryPlusTextColor,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      cloud.isNotEmpty
-                                          ? Text(
-                                              '$cloud%',
-                                              style: const TextStyle(
-                                                  color: tPrimaryTextColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          : const Text(
-                                              '',
-                                              style: TextStyle(
-                                                  color: tPrimaryTextColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/icons/Group 203.png',
-                                  height: 45,
-                                  width: 45,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Wind",
-                                        style: TextStyle(
-                                            color: tPrimaryPlusTextColor,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      wind.isNotEmpty
-                                          ? Text(
-                                              '$wind Km/h',
-                                              style: const TextStyle(
-                                                  color: tPrimaryTextColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          : const Text(
-                                              '',
-                                              style: TextStyle(
-                                                  color: tPrimaryTextColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/icons/Group 199.png',
-                                  height: 45,
-                                  width: 45,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Humidity",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            color: tPrimaryPlusTextColor,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      humidity.isNotEmpty
-                                          ? Text(
-                                              '$humidity%',
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                  color: tPrimaryTextColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          : const Text(
-                                              '',
-                                              style: TextStyle(
-                                                  color: tPrimaryTextColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 19,
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Schedule",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              backgroundColor: Colors.white,
-                              context: context,
-                              builder: (context) {
-                                return Container(
-                                  height: 225,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 16, bottom: 0, left: 17),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              height: 130,
-                                              width: 130,
-                                              decoration: BoxDecoration(
-                                                color: tPrimaryActionColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.16),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 7,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const AddPlantFormWithSen(),
-                                                    ),
-                                                  );
-                                                },
-                                                highlightColor: Colors.white
-                                                    .withOpacity(0.05),
-                                                icon: Image.asset(
-                                                  'assets/images/icons/smart-farm.png',
-                                                  height: 65,
-                                                  width: 65,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            const Text(
-                                              'With Sensor',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500),
-                                            )
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const SizedBox(
-                                              height: 18,
-                                            ),
-                                            Container(
-                                              height: 130,
-                                              width: 130,
-                                              decoration: BoxDecoration(
-                                                color: tPrimaryActionColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.16),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 7,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const AddPlantFormWithOutSen(),
-                                                    ),
-                                                  );
-                                                },
-                                                highlightColor: Colors.white
-                                                    .withOpacity(0.05),
-                                                icon: Image.asset(
-                                                  'assets/images/icons/Untitled-3@3x.png',
-                                                  height: 65,
-                                                  width: 65,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            const Text(
-                                              'Without Sensor',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                            const Text(
-                                              'Mashtaly Data',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          color: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Row(
+                          const EdgeInsets.only(right: 16, bottom: 0, left: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
                             children: [
-                              FaIcon(
-                                FontAwesomeIcons.plus,
-                                color: tPrimaryActionColor,
-                                size: 20,
-                              ),
-                              SizedBox(
+                              icon.isNotEmpty
+                                  ? Image.network(
+                                      icon,
+                                      height: 38,
+                                      width: 38,
+                                    )
+                                  : const Icon(
+                                      Icons.cloud_off_sharp,
+                                      color: Colors.transparent,
+                                    ),
+                              const SizedBox(
                                 width: 5,
                               ),
-                              Text(
-                                "Add Plant",
-                                style: TextStyle(
-                                    color: tPrimaryActionColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                              weatherText.isNotEmpty
+                                  ? Text(
+                                      weatherText,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              if (temperature.isNotEmpty &&
+                                  double.parse(temperature) < 30)
+                                Image.asset(
+                                  'assets/images/icons/Group 237.png',
+                                  height: 35,
+                                  width: 35,
+                                )
+                              else if (temperature.isNotEmpty &&
+                                  double.parse(temperature) >= 30)
+                                Image.asset(
+                                  'assets/images/icons/Group 226.png',
+                                  height: 35,
+                                  width: 35,
+                                )
+                              else
+                                const Icon(
+                                  Icons.cloud_off_rounded,
+                                  color: Colors.transparent,
+                                ),
+                              const SizedBox(
+                                width: 5,
                               ),
+                              temperature.isNotEmpty
+                                  ? Text(
+                                      '$temperature°C',
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : const Text(
+                                      '',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 9,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 16, bottom: 0, left: 16),
+                        child: SizedBox(
+                          height: 80,
+                          child: DatePicker(
+                            DateTime.now(),
+                            width: 45,
+                            initialSelectedDate: selectedDate,
+                            selectionColor: tPrimaryActionColor,
+                            selectedTextColor: Colors.white,
+                            dateTextStyle: const TextStyle(
+                              fontSize: 20,
+                            ),
+                            daysCount: 14,
+                            onDateChange: onDateSelected,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 10,
+                      color: Colors.white,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(18),
+                          bottomRight: Radius.circular(18),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 16, bottom: 0, left: 17),
+                        child: SizedBox(
+                          height: 73,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/icons/Group 204.png',
+                                    height: 45,
+                                    width: 45,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Cloud",
+                                          style: TextStyle(
+                                              color: tPrimaryPlusTextColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        cloud.isNotEmpty
+                                            ? Text(
+                                                '$cloud%',
+                                                style: const TextStyle(
+                                                    color: tPrimaryTextColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            : const Text(
+                                                '',
+                                                style: TextStyle(
+                                                    color: tPrimaryTextColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/icons/Group 203.png',
+                                    height: 45,
+                                    width: 45,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Wind",
+                                          style: TextStyle(
+                                              color: tPrimaryPlusTextColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        wind.isNotEmpty
+                                            ? Text(
+                                                '$wind Km/h',
+                                                style: const TextStyle(
+                                                    color: tPrimaryTextColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            : const Text(
+                                                '',
+                                                style: TextStyle(
+                                                    color: tPrimaryTextColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/icons/Group 199.png',
+                                    height: 45,
+                                    width: 45,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Humidity",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              color: tPrimaryPlusTextColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        humidity.isNotEmpty
+                                            ? Text(
+                                                '$humidity%',
+                                                textAlign: TextAlign.left,
+                                                style: const TextStyle(
+                                                    color: tPrimaryTextColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            : const Text(
+                                                '',
+                                                style: TextStyle(
+                                                    color: tPrimaryTextColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          height: 250,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF1F1F1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 88.5,
-                          top: 15,
-                          right: 125,
-                          left: 125,
-                          child: Image.asset(
-                            'assets/images/stack_images/Group 2.png',
-                            height: 102,
-                            width: 88,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 153,
-                          right: 27,
-                          left: 235,
-                          child: Image.asset(
-                            'assets/images/stack_images/Group 390.png',
-                            height: 110,
-                            width: 80,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                            top: 180,
-                            bottom: 13,
-                          ),
-                          child: Text(
-                            textAlign: TextAlign.center,
-                            "You don't have any plants yet\nAdd your plant now",
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Schedule",
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ],
+                          MaterialButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                backgroundColor: Colors.white,
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    height: 225,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 16, bottom: 0, left: 17),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 130,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                  color: tPrimaryActionColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.16),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 7,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const AddPlantFormWithSen(),
+                                                      ),
+                                                    );
+                                                  },
+                                                  highlightColor: Colors.white
+                                                      .withOpacity(0.05),
+                                                  icon: Image.asset(
+                                                    'assets/images/icons/smart-farm.png',
+                                                    height: 65,
+                                                    width: 65,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              const Text(
+                                                'With Sensor',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const SizedBox(
+                                                height: 18,
+                                              ),
+                                              Container(
+                                                height: 130,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                  color: tPrimaryActionColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.16),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 7,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const AddPlantFormWithOutSen(),
+                                                      ),
+                                                    );
+                                                  },
+                                                  highlightColor: Colors.white
+                                                      .withOpacity(0.05),
+                                                  icon: Image.asset(
+                                                    'assets/images/icons/Untitled-3@3x.png',
+                                                    height: 65,
+                                                    width: 65,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              const Text(
+                                                'Without Sensor',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              const Text(
+                                                'Mashtaly Data',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            color: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.plus,
+                                  color: tPrimaryActionColor,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "Add Plant",
+                                  style: TextStyle(
+                                      color: tPrimaryActionColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            height: 250,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F1F1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 88.5,
+                            top: 15,
+                            right: 125,
+                            left: 125,
+                            child: Image.asset(
+                              'assets/images/stack_images/Group 2.png',
+                              height: 102,
+                              width: 88,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 153,
+                            right: 27,
+                            left: 235,
+                            child: Image.asset(
+                              'assets/images/stack_images/Group 390.png',
+                              height: 110,
+                              width: 80,
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              top: 180,
+                              bottom: 13,
+                            ),
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              "You don't have any plants yet\nAdd your plant now",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
