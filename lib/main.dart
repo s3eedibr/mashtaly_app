@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,7 +52,7 @@ class SplashScreenApp extends StatelessWidget {
 class App extends StatelessWidget {
   final int? isViewed;
 
-  const App({super.key, required this.isViewed});
+  App({super.key, required this.isViewed});
 
   @override
   Widget build(BuildContext context) {

@@ -29,7 +29,7 @@ class ArticlesCard2 extends StatelessWidget {
       future: _loadData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildShimmerCard();
+          return buildShimmerCard();
         } else {
           return _buildContentCard(
             imageURL: imageURL!,
@@ -46,7 +46,7 @@ class ArticlesCard2 extends StatelessWidget {
     await Future.delayed(const Duration(seconds: 2));
   }
 
-  Widget _buildShimmerCard() {
+  static Widget buildShimmerCard() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,

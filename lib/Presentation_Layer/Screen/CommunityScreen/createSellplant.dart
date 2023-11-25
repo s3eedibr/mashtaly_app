@@ -12,14 +12,16 @@ import 'package:image_picker/image_picker.dart';
 import '../../../Constants/colors.dart';
 import '../Authentication/forgotpassword_screen.dart';
 
-class CreateSellplant extends StatefulWidget {
-  const CreateSellplant({Key? key}) : super(key: key);
+class CreateSellPlant extends StatefulWidget {
+  const CreateSellPlant({
+    super.key,
+  });
 
   @override
-  State<CreateSellplant> createState() => _CreatePostState();
+  State<CreateSellPlant> createState() => _CreateSellPlantState();
 }
 
-class _CreatePostState extends State<CreateSellplant> {
+class _CreateSellPlantState extends State<CreateSellPlant> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   final List<XFile> _selectedImages = [];
@@ -27,13 +29,11 @@ class _CreatePostState extends State<CreateSellplant> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
-
   Future<List<String>> uploadImages(List<XFile> selectedImages) async {
     List<String> imageUrls = [];
-
+    final random5digit = generateUniqueRandom5DigitsNumber();
     for (int i = 0; i < selectedImages.length; i++) {
       var image = selectedImages[i];
-
       try {
         final currentUser = _auth.currentUser;
 
@@ -43,7 +43,7 @@ class _CreatePostState extends State<CreateSellplant> {
         }
 
         String imagePath =
-            'SellPlant_Pic/${currentUser.uid}/sellplant_image_${i + 1}';
+            'Sell_Pic/${currentUser.uid}/Sell$random5digit/sell_image_${i + 1}';
         UploadTask uploadTask =
             _storage.ref().child(imagePath).putFile(File(image.path));
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
@@ -94,18 +94,18 @@ class _CreatePostState extends State<CreateSellplant> {
         return;
       }
       await _firestore
-          .collection('sellplant')
+          .collection('sellPlants')
           .doc(currentUser.uid)
-          .collection('SellPlant')
+          .collection('SellPlants')
           .add({
         "id": '${generateUniqueRandom5DigitsNumber()}',
         "title": _titleController.text.trim(),
         "content": _contentController.text.trim(),
-        "post_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
-        "post_pic2": imageUrls.length > 1 ? imageUrls[1] : null,
-        "post_pic3": imageUrls.length > 2 ? imageUrls[2] : null,
-        "post_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
-        "post_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
+        "sell_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
+        "sell_pic2": imageUrls.length > 1 ? imageUrls[1] : null,
+        "sell_pic3": imageUrls.length > 2 ? imageUrls[2] : null,
+        "sell_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
+        "sell_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
         "posted": false,
         "date": '${DateTime.now()}',
         "user": (await FirebaseFirestore.instance
@@ -119,6 +119,7 @@ class _CreatePostState extends State<CreateSellplant> {
                 .get())
             .get('profile_pic'),
       });
+
       showSankBar(context, 'Post submitted! Admin review in progress.',
           color: tPrimaryActionColor);
       Navigator.pop(context);
@@ -142,16 +143,17 @@ class _CreatePostState extends State<CreateSellplant> {
         return;
       }
       if (_titleController.text.isEmpty) {
-        print('Error: Please enter title for post.');
-        showSankBar(context, 'Please enter title.');
+        print('Error: Please enter title for sell.');
+        showSankBar(context, 'Please enter title for sell.');
         return;
       }
 
       if (_contentController.text.isEmpty) {
-        print('Error: Please enter content for post.');
-        showSankBar(context, 'Please enter content.');
+        print('Error: Please enter content for sell.');
+        showSankBar(context, 'Please enter content for sell.');
         return;
       }
+
       List<String> imageUrls = await uploadImages(_selectedImages);
 
       await addPostToFirestore(imageUrls);
@@ -198,7 +200,7 @@ class _CreatePostState extends State<CreateSellplant> {
           ),
         ),
         title: const Text(
-          "Create a sell",
+          "Create a Sell",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
