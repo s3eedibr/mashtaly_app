@@ -10,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../Constants/colors.dart';
-import '../Authentication/forgotpassword_screen.dart';
+import '../../Widget/sankBar.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({
@@ -223,53 +223,7 @@ class _CreatePostState extends State<CreatePost> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SimpleDialog(
-                            title: const Text("Select Image from"),
-                            children: [
-                              SimpleDialogOption(
-                                padding: const EdgeInsets.all(6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.camera);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.camera_alt_rounded),
-                                          Text("Camera"),
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.gallery);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.image),
-                                          Text("Gallery"),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      selectImageDialog(context);
                     },
                     child: Container(
                       height: 200,
@@ -303,53 +257,7 @@ class _CreatePostState extends State<CreatePost> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -375,53 +283,7 @@ class _CreatePostState extends State<CreatePost> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -447,58 +309,7 @@ class _CreatePostState extends State<CreatePost> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Theme(
-                          data: ThemeData(
-                            dialogBackgroundColor: Colors.white,
-                          ),
-                          child: SimpleDialog(
-                            title: const Text("Select Image from"),
-                            children: [
-                              SimpleDialogOption(
-                                padding: const EdgeInsets.all(6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.camera);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.camera_alt_rounded),
-                                          Text("Camera"),
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.gallery);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.image),
-                                          Text("Gallery"),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -524,53 +335,7 @@ class _CreatePostState extends State<CreatePost> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -646,6 +411,53 @@ class _CreatePostState extends State<CreatePost> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> selectImageDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text("Select Image from"),
+          children: [
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      await pickImage(ImageSource.camera);
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.camera_alt_rounded),
+                        Text("Camera"),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      await pickImage(ImageSource.gallery);
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.image),
+                        Text("Gallery"),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

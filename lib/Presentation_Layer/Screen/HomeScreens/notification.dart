@@ -36,7 +36,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           borderRadius: BorderRadius.circular(12)),
                       filled: true,
                       fillColor: tSearchBarColor,
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         vertical: 12,
                         horizontal: 15,
                       ),
@@ -46,7 +46,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     },
                   ),
                 )
-              : Text(
+              : const Text(
                   "Notifications",
                   style: TextStyle(
                     fontSize: 20,
@@ -55,6 +55,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
           actions: [
             IconButton(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
               onPressed: () {
                 setState(() {
                   isSearching = !isSearching;
@@ -66,25 +68,27 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 size: 27,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
             IconButton(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.filter_list_rounded,
                 color: tSearchIconColor, // Change the color as needed
                 size: 27,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
           ],
         ),
         body: ListView.builder(
           itemBuilder: (BuildContext context, index) {
-            return notificationCard();
+            return const notificationCard();
           },
         ),
       ),

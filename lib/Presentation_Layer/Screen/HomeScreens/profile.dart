@@ -7,10 +7,10 @@ import 'package:app_settings/app_settings.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:mashtaly_app/Presentation_Layer/Screen/Authentication/forgotpassword_screen.dart';
 
 import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
+import '../../Widget/sankBar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

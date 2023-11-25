@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../Constants/colors.dart';
+import '../../../../Constants/colors.dart';
 
 class ArticlesCard2 extends StatelessWidget {
   final int? id;

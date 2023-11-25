@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../Constants/colors.dart';
+import '../../../../Constants/colors.dart';
 
 class ArticlesCard extends StatelessWidget {
   final int? id;
@@ -141,9 +141,8 @@ class ArticlesCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      bottomLeft: Radius.circular(12),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(12),
                     ),
                     child: SizedBox(
                       height: 150,
