@@ -1,25 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
-import '../../../Constants/assets.dart';
 import '../../../Constants/colors.dart';
 
-class PostDetails extends StatefulWidget {
-  const PostDetails({super.key});
+// Widget to display post details
+class PostDetails extends StatelessWidget {
+  const PostDetails({
+    Key? key,
+    this.title,
+    this.content,
+    this.date,
+    this.user,
+    this.profileImage,
+    this.imageURL1,
+    this.imageURL2,
+    this.imageURL3,
+    this.imageURL4,
+    this.imageURL5,
+  }) : super(key: key);
 
-  @override
-  State<PostDetails> createState() => _CommunityState();
-}
+  final String? title;
+  final String? content;
+  final String? date;
+  final String? user;
+  final String? profileImage;
+  final String? imageURL1;
+  final String? imageURL2;
+  final String? imageURL3;
+  final String? imageURL4;
+  final String? imageURL5;
 
-class _CommunityState extends State<PostDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
+        // App bar configuration
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: IconButton(
+          // Back button
           color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
@@ -29,7 +50,7 @@ class _CommunityState extends State<PostDetails> {
           ),
         ),
         title: const Text(
-          "Community",
+          "Community / Post",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -37,83 +58,295 @@ class _CommunityState extends State<PostDetails> {
         ),
       ),
       body: Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-          ),
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              const Row(
-                children: [
-                  Stack(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    children: [
-                      CircleAvatar(
-                        radius: 25.0,
-                        backgroundImage: AssetImage(
-                          Assets.assetsImagesIconsBell,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    'Name of user',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // const Image(
-                  //     width: double.infinity,
-                  //     height: 300.0,
-                  //     image: NetworkImage(
-                  //       'https://scontent.famm10-1.fna.fbcdn.net/v/t39.30808-6/347225219_982283046117731_3528217653228803303_n.jpg?stp=dst-jpg_p843x403&_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGN7teVU4kRnBbLSRFkbMKBuqzAYdutmAO6rMBh262YA-1zgyWoPoxJvedY7V-gB_Abn1PiWl7ZGZ3mBXY_Nbb0&_nc_ohc=6va5kvECAMoAX_kD1aV&_nc_oc=AQnr-sXbGNHa9mVJpXVl7xKm5A1WDy-DtKkuDOqlZuZM2fpei7u1hHz8Yufy1N1V_Ng&_nc_ht=scontent.famm10-1.fna&oh=00_AfCA_ayp9sXDjbFrH8R4blRlCfbprA1plfZN1Fo-eQ1roA&oe=6533C166',
-                  //     )),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  const Text(
-                    'How to plant Tomatoes Properly without worry',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'December 21, 2023',
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  const Text(
-                    'test',
-                    maxLines: 200,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ],
-          )),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+        ),
+        child: FutureBuilder(
+          // Simulating a future that returns data after some delay
+          future:
+              fetchData(), // Replace fetchData with your actual data fetching function
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Display shimmer content while waiting for data
+              return buildShimmerContent();
+            } else if (snapshot.hasError) {
+              // Display error message if an error occurs
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else {
+              // Display actual content once data is available
+              return buildContent();
+            }
+          },
+        ),
+      ),
     );
+  }
+
+  // Widget for shimmer loading content
+  Widget buildShimmerContent() {
+    return ListView(
+      children: [
+        const SizedBox(
+          height: 15,
+        ),
+        // Shimmer effect for user profile section
+        Row(
+          children: [
+            Stack(
+              alignment: AlignmentDirectional.bottomEnd,
+              children: [
+                CircleAvatar(
+                  radius: 25.0,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: 120,
+                height: 20,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        // Shimmer effect for post image
+        Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            height: 200,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+            ),
+          ),
+        ),
+        // ... (Additional shimmer placeholders)
+        const SizedBox(
+          height: 10.0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildShimmerImageContainer(),
+            buildShimmerImageContainer(),
+            buildShimmerImageContainer(),
+            buildShimmerImageContainer(),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: 150,
+            height: 20,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: 100,
+            height: 20,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: SizedBox(
+            height: 100,
+            child: Container(
+              width: double.infinity,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Widget for displaying actual content
+  Widget buildContent() {
+    return ListView(
+      children: [
+        const SizedBox(
+          height: 15,
+        ),
+        // Actual content for user profile section
+        Row(
+          children: [
+            Stack(
+              alignment: AlignmentDirectional.bottomEnd,
+              children: [
+                CircleAvatar(
+                  radius: 25.0,
+                  backgroundImage: NetworkImage(profileImage ?? ""),
+                ),
+              ],
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              user ?? "",
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 20.0,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        // Actual content for post image
+        Container(
+          height: 200,
+          clipBehavior: Clip.antiAlias,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
+            ),
+          ),
+          child: buildImageWidget(imageURL1),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        // Actual content for additional post images
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildImageContainer(imageURL2),
+            buildImageContainer(imageURL3),
+            buildImageContainer(imageURL4),
+            buildImageContainer(imageURL5),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // Actual content for post title
+        Text(
+          title ?? "",
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        // Actual content for post date
+        Text(
+          date ?? "",
+          style: TextStyle(
+            color: Colors.grey[500],
+          ),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        // Actual content for post content
+        Text(
+          content ?? "",
+          maxLines: 200,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+  // Shimmer effect for image containers
+  Widget buildShimmerImageContainer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 95,
+        width: 85,
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(6),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Build an image container with a shimmer effect
+  Widget buildImageContainer(String? imageURL) {
+    return Container(
+      height: 95,
+      width: 85,
+      clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(6),
+        ),
+      ),
+      child: buildImageWidget(imageURL),
+    );
+  }
+
+  // Build an image widget with or without an actual image URL
+  Widget buildImageWidget(String? imageURL) {
+    if (imageURL?.isNotEmpty ?? false) {
+      return Image.network(
+        imageURL!,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Container(
+        height: 95,
+        width: 85,
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(6),
+          ),
+        ),
+      );
+    }
+  }
+
+  // Simulate fetching data after some delay
+  Future<void> fetchData() async {
+    await Future.delayed(const Duration(seconds: 2));
   }
 }

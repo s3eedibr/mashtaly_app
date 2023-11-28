@@ -117,7 +117,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         "id": currentUser.uid,
         "email": _emilController.text.trim(),
         "name": _nameController.text.trim(),
-        "profile_pic": null,
+        "profile_pic":
+            'https://firebasestorage.googleapis.com/v0/b/mashtaly-hu.appspot.com/o/default_profile.jpg?alt=media&token=c2365fe7-8e7d-4674-9c13-c88fc9f43b03',
       });
       showSankBar(context, 'User added successfully',
           color: tPrimaryActionColor);

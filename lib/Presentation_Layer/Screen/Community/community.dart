@@ -21,11 +21,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Search bar
             Container(
               color: Colors.white,
               height: 56,
               child: Row(
                 children: [
+                  // Search input field
                   Padding(
                     padding: const EdgeInsets.only(
                       right: 8,
@@ -61,6 +63,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       ),
                     ),
                   ),
+                  // Filter icon button
                   Padding(
                     padding: const EdgeInsets.only(right: 1),
                     child: Row(
@@ -81,6 +84,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 ],
               ),
             ),
+            // Body content
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -99,9 +103,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        buildNewArticleUI(),
+                        // UI for new articles
+                        buildNewArticleUI(context),
+                        // UI for articles
                         buildArticleUI(context),
-                        buildNewPlantsForSell(),
+                        // UI for new plants for sell
+                        buildNewPlantsForSell(context),
+                        // UI for plants for sell
                         buildPlantsForSellUI(context),
                       ],
                     ),
@@ -111,6 +119,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
             )
           ],
         ),
+        // Floating Action Button
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: ExpandWidget(),
       ),

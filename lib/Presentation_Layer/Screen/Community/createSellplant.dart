@@ -94,6 +94,10 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
         print('Error: No currently signed-in user');
         return;
       }
+      await _firestore.collection('posts').doc(currentUser.uid).set({
+        "lastUpdate": DateTime.now().toUtc().toString(),
+      });
+
       await _firestore
           .collection('sellPlants')
           .doc(currentUser.uid)
@@ -114,6 +118,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
                 .doc(currentUser.uid)
                 .get())
             .get('name'),
+        "user_id": currentUser.uid,
         "profile_pic": (await FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser.uid)

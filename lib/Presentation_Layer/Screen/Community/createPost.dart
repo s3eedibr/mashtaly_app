@@ -24,12 +24,17 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  // List to store selected images
   final List<XFile> _selectedImages = [];
+  // Flag to track if the operation is in progress
   bool isLoading = false;
 
+// Firebase instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  // Function to upload images to Firebase Storage
   Future<List<String>> uploadImages(List<XFile> selectedImages) async {
     List<String> imageUrls = [];
     final random5digit = generateUniqueRandom5DigitsNumber();
@@ -43,11 +48,14 @@ class _CreatePostState extends State<CreatePost> {
           return [];
         }
 
+// Construct image path in Firebase Storage
         String imagePath =
             'Post_Pic/${currentUser.uid}/Post$random5digit/post_image_${i + 1}';
+        // Upload image to Firebase Storage
         UploadTask uploadTask =
             _storage.ref().child(imagePath).putFile(File(image.path));
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+        // Get image download URL
         String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
         imageUrls.add(imageUrl);
@@ -59,6 +67,7 @@ class _CreatePostState extends State<CreatePost> {
     return imageUrls;
   }
 
+// Function to generate a unique random 5-digit number
   int generateUniqueRandom5DigitsNumber() {
     // Get the current DateTime
     DateTime now = DateTime.now().toUtc();
@@ -86,6 +95,7 @@ class _CreatePostState extends State<CreatePost> {
     return uniqueRandomNumber;
   }
 
+// Function to add post data to Firestore
   Future<void> addPostToFirestore(List<String> imageUrls) async {
     try {
       final currentUser = _auth.currentUser;
@@ -94,6 +104,10 @@ class _CreatePostState extends State<CreatePost> {
         print('Error: No currently signed-in user');
         return;
       }
+      await _firestore.collection('posts').doc(currentUser.uid).set({
+        "lastUpdate": DateTime.now().toUtc().toString(),
+      });
+
       await _firestore
           .collection('posts')
           .doc(currentUser.uid)
@@ -114,6 +128,7 @@ class _CreatePostState extends State<CreatePost> {
                 .doc(currentUser.uid)
                 .get())
             .get('name'),
+        "user_id": currentUser.uid,
         "profile_pic": (await FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser.uid)
@@ -129,6 +144,7 @@ class _CreatePostState extends State<CreatePost> {
     }
   }
 
+// Function to check internet connectivity
   Future<void> uploadImagesAndAddPost() async {
     try {
       bool isConnected = await checkConnectivity();
@@ -171,11 +187,13 @@ class _CreatePostState extends State<CreatePost> {
     }
   }
 
+// Function to check internet connectivity
   Future<bool> checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     return connectivityResult != ConnectivityResult.none;
   }
 
+// Function to pick an image from camera or gallery
   pickImage(ImageSource source) async {
     final imagePicker = ImagePicker();
     XFile? file = await imagePicker.pickImage(
@@ -373,6 +391,7 @@ class _CreatePostState extends State<CreatePost> {
             const SizedBox(
               height: 15,
             ),
+            // UI for title and content input fields
             CustomField(
               titleField: 'Title',
               heightField: 65,
@@ -457,6 +476,7 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
+// Function to display image selection dialog
   Future<dynamic> selectImageDialog(BuildContext context) {
     return showDialog(
       context: context,
@@ -505,6 +525,7 @@ class _CreatePostState extends State<CreatePost> {
   }
 }
 
+// Custom widget for input fields
 class CustomField extends StatelessWidget {
   const CustomField({
     Key? key,
