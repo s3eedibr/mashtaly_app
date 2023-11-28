@@ -111,6 +111,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // Update profile_pic in 'sellPlants'
           await FirebaseFirestore.instance
               .collection('sellPlants')
+              .doc(currentUserUid)
+              .collection('SellPlants')
               .where('user_id', isEqualTo: currentUserUid)
               .get()
               .then((querySnapshot) {
