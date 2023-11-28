@@ -99,9 +99,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        buildNewArticleUI(),
+                        buildNewArticleUI(context),
                         buildArticleUI(context),
-                        buildNewPlantsForSell(),
+                        buildNewPlantsForSell(context),
                         buildPlantsForSellUI(context),
                       ],
                     ),

@@ -114,6 +114,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
                 .doc(currentUser.uid)
                 .get())
             .get('name'),
+        "user_id": currentUser.uid,
         "profile_pic": (await FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser.uid)

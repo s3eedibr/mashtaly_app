@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Community/sellDetails.dart';
+
 import '../../../Constants/colors.dart';
 import 'Data/getData.dart';
 import 'Widget/appBar.dart';
@@ -19,49 +21,84 @@ class _ListAllSellsState extends State<ListAllSells> {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBarWidget(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            setState(() {});
+      body: buildSellsList(),
+    );
+  }
+
+  Widget buildSellsList() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {});
+        },
+        color: tPrimaryActionColor,
+        backgroundColor: tBgColor,
+        child: FutureBuilder(
+          future: getAllSellsList(),
+          builder:
+              (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return buildShimmerList();
+            } else if (snapshot.hasError) {
+              return buildErrorWidget(snapshot.error.toString());
+            } else {
+              return buildPostsListView(snapshot.data!);
+            }
           },
-          color: tPrimaryActionColor,
-          backgroundColor: tBgColor,
-          child: FutureBuilder(
-            future: getAllSellsList(),
-            builder:
-                (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return ListView.builder(
-                  itemCount: 9,
-                  itemBuilder: (context, index) {
-                    return PostCard3.buildShimmerCard();
-                  },
-                );
-              } else if (snapshot.hasError) {
-                // Handle error case
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                // Display the posts using GridView.builder
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    final post = snapshot.data![index];
-                    return PostCard3(
-                      imageURL: post['sell_pic1'],
-                      user: post['user'],
-                      title: post['title'],
-                    );
-                  },
-                );
-              }
-            },
-          ),
         ),
       ),
+    );
+  }
+
+  Widget buildShimmerList() {
+    return ListView.builder(
+      itemCount: 9,
+      itemBuilder: (context, index) {
+        return PostCard3.buildShimmerCard();
+      },
+    );
+  }
+
+  Widget buildErrorWidget(String errorMessage) {
+    return Center(
+      child: Text('Error: $errorMessage'),
+    );
+  }
+
+  Widget buildPostsListView(List<Map<String, dynamic>> sells) {
+    return ListView.builder(
+      itemCount: sells.length,
+      itemBuilder: (context, index) {
+        final post = sells[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SellDetails(
+                  profileImage: post['profile_pic'],
+                  user: post['user'],
+                  imageURL1: post['sell_pic1'],
+                  imageURL2: post['sell_pic2'],
+                  imageURL3: post['sell_pic3'],
+                  imageURL4: post['sell_pic4'],
+                  imageURL5: post['sell_pic5'],
+                  title: post['title'],
+                  date: post['date'],
+                  content: post['content'],
+                ),
+              ),
+            );
+          },
+          child: PostCard3(
+            imageURL: post['sell_pic1'],
+            user: post['user'],
+            title: post['title'],
+          ),
+        );
+      },
     );
   }
 }

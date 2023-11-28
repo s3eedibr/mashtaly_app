@@ -71,7 +71,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
-        // Handle no internet connection
         print('No internet connection');
         return;
       }
@@ -88,16 +87,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
           TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
           String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
-          setState(() {});
+          // Update profile_pic in 'users'
           await FirebaseFirestore.instance
               .collection('users')
               .doc(currentUserUid)
               .update({
             'profile_pic': imageUrl,
           });
+
+          // Update profile_pic in 'posts'
+          await FirebaseFirestore.instance
+              .collection('posts')
+              .doc(currentUserUid)
+              .collection('Posts')
+              .where('user_id', isEqualTo: currentUserUid)
+              .get()
+              .then((querySnapshot) {
+            for (var doc in querySnapshot.docs) {
+              doc.reference.update({'profile_pic': imageUrl});
+            }
+          });
+
+          // Update profile_pic in 'sellPlants'
+          await FirebaseFirestore.instance
+              .collection('sellPlants')
+              .where('user_id', isEqualTo: currentUserUid)
+              .get()
+              .then((querySnapshot) {
+            for (var doc in querySnapshot.docs) {
+              doc.reference.update({'profile_pic': imageUrl});
+            }
+          });
+
+          setState(() {});
           getUserData();
         } catch (e) {
-          print('Error uploading image: $e');
+          print('Error updating profile_pic in collections: $e');
         }
       }
     } catch (e) {
@@ -107,6 +132,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getUserData();
+    });
     return SafeArea(
       child: Scaffold(
         backgroundColor: tBgColor,
