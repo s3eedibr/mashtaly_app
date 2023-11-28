@@ -94,6 +94,10 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
         print('Error: No currently signed-in user');
         return;
       }
+      await _firestore.collection('posts').doc(currentUser.uid).set({
+        "lastUpdate": DateTime.now().toUtc().toString(),
+      });
+
       await _firestore
           .collection('sellPlants')
           .doc(currentUser.uid)

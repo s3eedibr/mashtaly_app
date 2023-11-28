@@ -25,6 +25,7 @@ class _ListAllSellsState extends State<ListAllSells> {
     );
   }
 
+  // Function to build the list of sell posts
   Widget buildSellsList() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -36,15 +37,18 @@ class _ListAllSellsState extends State<ListAllSells> {
         color: tPrimaryActionColor,
         backgroundColor: tBgColor,
         child: FutureBuilder(
+          // Fetch all sell posts using the getAllSellsList() function
           future: getAllSellsList(),
           builder:
               (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return buildShimmerList();
+              return buildShimmerList(); // Display shimmer loading animation while waiting for data
             } else if (snapshot.hasError) {
-              return buildErrorWidget(snapshot.error.toString());
+              return buildErrorWidget(snapshot.error
+                  .toString()); // Display error message if an error occurs
             } else {
-              return buildPostsListView(snapshot.data!);
+              return buildPostsListView(
+                  snapshot.data!); // Build the sell posts list view
             }
           },
         ),
@@ -52,21 +56,25 @@ class _ListAllSellsState extends State<ListAllSells> {
     );
   }
 
+  // Function to build a shimmer loading list
   Widget buildShimmerList() {
     return ListView.builder(
       itemCount: 9,
       itemBuilder: (context, index) {
-        return PostCard3.buildShimmerCard();
+        return PostCard3
+            .buildShimmerCard(); // Use a shimmer card widget to simulate loading
       },
     );
   }
 
+  // Function to build an error widget
   Widget buildErrorWidget(String errorMessage) {
     return Center(
-      child: Text('Error: $errorMessage'),
+      child: Text('Error: $errorMessage'), // Display an error message
     );
   }
 
+  // Function to build the actual sell posts list view
   Widget buildPostsListView(List<Map<String, dynamic>> sells) {
     return ListView.builder(
       itemCount: sells.length,
@@ -74,6 +82,7 @@ class _ListAllSellsState extends State<ListAllSells> {
         final post = sells[index];
         return GestureDetector(
           onTap: () {
+            // Navigate to the sell post details screen when a sell post is tapped
             Navigator.push(
               context,
               MaterialPageRoute(

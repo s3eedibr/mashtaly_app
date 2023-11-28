@@ -3,6 +3,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../Constants/colors.dart';
 
+// Widget to display details of a sell post
 class SellDetails extends StatelessWidget {
   const SellDetails({
     Key? key,
@@ -18,6 +19,7 @@ class SellDetails extends StatelessWidget {
     this.imageURL5,
   }) : super(key: key);
 
+  // Properties for post details
   final String? title;
   final String? content;
   final String? date;
@@ -34,10 +36,12 @@ class SellDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
+        // App bar configuration
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: IconButton(
+          // Back button
           color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
@@ -65,12 +69,15 @@ class SellDetails extends StatelessWidget {
               fetchData(), // Replace fetchData with your actual data fetching function
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
+              // Display shimmer content while waiting for data
               return buildShimmerContent();
             } else if (snapshot.hasError) {
+              // Display error message if an error occurs
               return Center(
                 child: Text('Error: ${snapshot.error}'),
               );
             } else {
+              // Display actual content once data is available
               return buildContent();
             }
           },
@@ -79,12 +86,14 @@ class SellDetails extends StatelessWidget {
     );
   }
 
+  // Widget for shimmer loading content
   Widget buildShimmerContent() {
     return ListView(
       children: [
         const SizedBox(
           height: 15,
         ),
+        // Shimmer effect for user profile section
         Row(
           children: [
             Stack(
@@ -121,6 +130,7 @@ class SellDetails extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
+        // Shimmer effect for post image
         Shimmer.fromColors(
           baseColor: Colors.grey[300]!,
           highlightColor: Colors.grey[100]!,
@@ -135,6 +145,7 @@ class SellDetails extends StatelessWidget {
             ),
           ),
         ),
+        // ... (Additional shimmer placeholders)
         const SizedBox(
           height: 10.0,
         ),
@@ -187,12 +198,14 @@ class SellDetails extends StatelessWidget {
     );
   }
 
+  // Widget for displaying actual content
   Widget buildContent() {
     return ListView(
       children: [
         const SizedBox(
           height: 15,
         ),
+        // Actual content for user profile section
         Row(
           children: [
             Stack(
@@ -219,6 +232,7 @@ class SellDetails extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
+        // Actual content for post image
         Container(
           height: 200,
           clipBehavior: Clip.antiAlias,
@@ -233,6 +247,7 @@ class SellDetails extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
+        // Actual content for additional post images
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -243,6 +258,7 @@ class SellDetails extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
+        // Actual content for post title
         Text(
           title ?? "",
           style: const TextStyle(
@@ -253,6 +269,7 @@ class SellDetails extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
+        // Actual content for post date
         Text(
           date ?? "",
           style: TextStyle(
@@ -262,6 +279,7 @@ class SellDetails extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
+        // Actual content for post content
         Text(
           content ?? "",
           maxLines: 200,
@@ -271,6 +289,7 @@ class SellDetails extends StatelessWidget {
     );
   }
 
+  // Shimmer effect for image containers
   Widget buildShimmerImageContainer() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
@@ -289,6 +308,7 @@ class SellDetails extends StatelessWidget {
     );
   }
 
+  // Build an image container with a shimmer effect
   Widget buildImageContainer(String? imageURL) {
     return Container(
       height: 95,
@@ -304,6 +324,7 @@ class SellDetails extends StatelessWidget {
     );
   }
 
+  // Build an image widget with or without an actual image URL
   Widget buildImageWidget(String? imageURL) {
     if (imageURL?.isNotEmpty ?? false) {
       return Image.network(
@@ -325,8 +346,8 @@ class SellDetails extends StatelessWidget {
     }
   }
 
+  // Simulate fetching data after some delay
   Future<void> fetchData() async {
-    // Simulate fetching data after some delay
     await Future.delayed(const Duration(seconds: 2));
   }
 }

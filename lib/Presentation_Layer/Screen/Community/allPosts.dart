@@ -25,6 +25,7 @@ class _ListAllPostsState extends State<ListAllPosts> {
     );
   }
 
+  // Function to build the post list
   Widget buildPostList() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -36,15 +37,18 @@ class _ListAllPostsState extends State<ListAllPosts> {
         color: tPrimaryActionColor,
         backgroundColor: tBgColor,
         child: FutureBuilder(
+          // Fetch all posts using the getAllPostsList() function
           future: getAllPostsList(),
           builder:
               (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return buildShimmerList();
+              return buildShimmerList(); // Display shimmer loading animation while waiting for data
             } else if (snapshot.hasError) {
-              return buildErrorWidget(snapshot.error.toString());
+              return buildErrorWidget(snapshot.error
+                  .toString()); // Display error message if an error occurs
             } else {
-              return buildPostsListView(snapshot.data!);
+              return buildPostsListView(
+                  snapshot.data!); // Build the post list view
             }
           },
         ),
@@ -52,21 +56,25 @@ class _ListAllPostsState extends State<ListAllPosts> {
     );
   }
 
+  // Function to build a shimmer loading list
   Widget buildShimmerList() {
     return ListView.builder(
       itemCount: 9,
       itemBuilder: (context, index) {
-        return PostCard3.buildShimmerCard();
+        return PostCard3
+            .buildShimmerCard(); // Use a shimmer card widget to simulate loading
       },
     );
   }
 
+  // Function to build an error widget
   Widget buildErrorWidget(String errorMessage) {
     return Center(
-      child: Text('Error: $errorMessage'),
+      child: Text('Error: $errorMessage'), // Display an error message
     );
   }
 
+  // Function to build the actual post list view
   Widget buildPostsListView(List<Map<String, dynamic>> posts) {
     return ListView.builder(
       itemCount: posts.length,
@@ -74,6 +82,7 @@ class _ListAllPostsState extends State<ListAllPosts> {
         final post = posts[index];
         return GestureDetector(
           onTap: () {
+            // Navigate to the post details screen when a post is tapped
             Navigator.push(
               context,
               MaterialPageRoute(
