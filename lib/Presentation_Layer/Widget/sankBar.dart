@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Constants/colors.dart';
 
-void showSankBar(BuildContext context, String message,
+void showSnakBar(BuildContext context, String message,
     {Color color = tThirdTextErrorColor}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

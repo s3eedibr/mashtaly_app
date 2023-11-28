@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Community/allPosts.dart';
 
 import '../../../../Constants/colors.dart';
-import 'articles_card.dart';
-import 'articles_card2.dart';
+import 'post_card.dart';
+import 'post_card2.dart';
+
 import '../../../Widget/sankBar.dart';
 import '../Data/getData.dart';
 import '../postDetails.dart';
@@ -29,81 +30,52 @@ Widget buildNewArticleUI() {
           future: checkConnectivity(),
           builder: (context, snapshot) {
             if (snapshot.data == ConnectivityResult.none) {
-              showSankBar(context, 'No internet connection.');
+              showSnakBar(context, 'No internet connection.');
+              return Container(); // Return an empty container when there is no internet connection
             }
 
-            return FutureBuilder(
-              future: getAllPosts(),
-              builder: (context, snapshot) {
+            return FutureBuilder<List<Map<String, dynamic>>>(
+              future: getLatestPosts(),
+              builder: (context,
+                  AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      ArticlesCard.buildShimmerCard(),
-                      ArticlesCard.buildShimmerCard(),
+                      PostCard.buildShimmerCard(),
+                      PostCard.buildShimmerCard(),
                     ],
                   );
                 }
 
-                return StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collectionGroup('getAllPosts')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          ArticlesCard.buildShimmerCard(),
-                          ArticlesCard.buildShimmerCard(),
-                        ],
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+
+                final posts = snapshot.data;
+
+                if (posts == null || posts.isEmpty) {
+                  return const Center(
+                    child: Text('No posts available.'),
+                  );
+                }
+
+                return SizedBox(
+                  height: 250,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, index) {
+                      final post = posts[index];
+                      return PostCard(
+                        title: post['title'],
+                        imageURL: post['post_pic1'],
+                        user: post['user'],
                       );
-                    }
-
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    }
-
-                    final posts = snapshot.data?.docs;
-
-                    if (posts == null || posts.isEmpty) {
-                      return const Center(
-                        child: Text('No posts available.'),
-                      );
-                    }
-
-                    return SizedBox(
-                      height: 250,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 2,
-                        itemBuilder: (BuildContext context, index) {
-                          if (index == posts.length) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PostDetails(),
-                                  ),
-                                );
-                              },
-                            );
-                          } else {
-                            final post =
-                                posts[index].data() as Map<String, dynamic>;
-                            return ArticlesCard(
-                              title: post['title'],
-                              imageURL: post['post_pic1'],
-                              user: post['user'],
-                            );
-                          }
-                        },
-                      ),
-                    );
-                  },
+                    },
+                  ),
                 );
               },
             );
@@ -114,18 +86,41 @@ Widget buildNewArticleUI() {
   );
 }
 
-Widget buildArticleUI() {
+Widget buildArticleUI(BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Padding(
-        padding: EdgeInsets.only(bottom: 3),
-        child: Text(
-          'Articles',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 3),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Articles',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ListAllPosts(),
+                  ),
+                );
+              },
+              child: const Text(
+                'See more',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: tPrimaryActionColor,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       SizedBox(
@@ -133,101 +128,72 @@ Widget buildArticleUI() {
         child: FutureBuilder(
           future: checkConnectivity(),
           builder: (context, snapshot) {
-            if (snapshot.data == ConnectivityResult.none) {
-              showSankBar(context, 'No internet connection.');
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  PostCard2.buildShimmerCard(),
+                  PostCard2.buildShimmerCard(),
+                  PostCard2.buildShimmerCard(),
+                ],
+              );
             }
 
-            return FutureBuilder(
+            return FutureBuilder<List<Map<String, dynamic>>>(
               future: getAllPosts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return ListView(
                     scrollDirection: Axis.vertical,
                     children: [
-                      ArticlesCard2.buildShimmerCard(),
-                      ArticlesCard2.buildShimmerCard(),
-                      ArticlesCard2.buildShimmerCard(),
+                      PostCard2.buildShimmerCard(),
+                      PostCard2.buildShimmerCard(),
+                      PostCard2.buildShimmerCard(),
                     ],
                   );
                 }
 
-                return StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collectionGroup('getAllPosts')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return ListView(
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          ArticlesCard2.buildShimmerCard(),
-                          ArticlesCard2.buildShimmerCard(),
-                          ArticlesCard2.buildShimmerCard(),
-                        ],
-                      );
-                    }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
 
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    }
+                final posts = snapshot.data;
 
-                    final posts = snapshot.data?.docs;
+                if (posts == null || posts.isEmpty) {
+                  return const Center(
+                    child: Text('No posts available.'),
+                  );
+                }
 
-                    if (posts == null || posts.isEmpty) {
-                      return const Center(
-                        child: Text('No posts available.'),
-                      );
-                    }
-
-                    return SizedBox(
-                      height: 250,
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: posts.length + 1,
-                        itemBuilder: (BuildContext context, index) {
-                          if (index == posts.length) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PostDetails(),
-                                  ),
-                                );
-                              },
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 5,
-                                  ),
-                                  child: posts.length > 3
-                                      ? const Text(
-                                          'See More',
-                                          style: TextStyle(
-                                            color: tPrimaryActionColor,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        )
-                                      : const Text(''),
-                                ),
+                return SizedBox(
+                  height: 250,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: posts.length > 3 ? 4 : posts.length,
+                    itemBuilder: (BuildContext context, index) {
+                      if (index == posts.length) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PostDetails(),
                               ),
                             );
-                          } else {
-                            final post =
-                                posts[index].data() as Map<String, dynamic>;
-                            return ArticlesCard2(
-                              title: post['title'],
-                              imageURL: post['post_pic1'],
-                              user: post['user'],
-                            );
-                          }
-                        },
-                      ),
-                    );
-                  },
+                          },
+                        );
+                      } else {
+                        final post = posts[index];
+                        return PostCard2(
+                          title: post['title'],
+                          imageURL: post['post_pic1'],
+                          user: post['user'],
+                        );
+                      }
+                    },
+                  ),
                 );
               },
             );

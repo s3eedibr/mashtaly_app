@@ -40,7 +40,7 @@ class _OTPScreenState extends State<OTPScreen> {
       otpType: OTPType.digitsOnly,
     );
     if (await myauth.sendOTP() == true) {
-      showSankBar(context, 'OTP has been sent to your email',
+      showSnakBar(context, 'OTP has been sent to your email',
           color: tPrimaryActionColor);
     } else {
       Navigator.pushReplacement(
@@ -160,7 +160,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               onPressed: () async {
                                 if (await myauth.verifyOTP(otp: veryOTP) ==
                                     true) {
-                                  showSankBar(context,
+                                  showSnakBar(context,
                                       'Check your email to reset your password',
                                       color: tPrimaryActionColor);
                                   FirebaseAuth.instance
@@ -172,7 +172,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                     ),
                                   );
                                 } else {
-                                  showSankBar(context, 'Invalid OTP');
+                                  showSnakBar(context, 'Invalid OTP');
                                 }
                               },
                             ),

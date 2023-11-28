@@ -87,16 +87,24 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   left: 16,
                   right: 16,
                 ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      buildNewArticleUI(),
-                      buildArticleUI(),
-                      buildNewPlantsForSell(),
-                      buildPlantsForSellUI(),
-                    ],
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 2));
+                    setState(() {});
+                  },
+                  color: tPrimaryActionColor,
+                  backgroundColor: tBgColor,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildNewArticleUI(),
+                        buildArticleUI(context),
+                        buildNewPlantsForSell(),
+                        buildPlantsForSellUI(context),
+                      ],
+                    ),
                   ),
                 ),
               ),

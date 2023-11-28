@@ -51,10 +51,6 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
     return true;
   }
 
-  Future<void> _refreshRandomNumbers() =>
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {});
-      });
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
@@ -187,12 +183,14 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
             ),
             Expanded(
               child: RefreshIndicator(
-                onRefresh: _refreshRandomNumbers,
+                onRefresh: () async {
+                  await Future.delayed(const Duration(seconds: 2));
+                  setState(() {});
+                },
                 color: tPrimaryActionColor,
                 backgroundColor: tBgColor,
                 child: ListView(
                   scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
                   children: [
                     const SizedBox(height: 12),
                     Padding(

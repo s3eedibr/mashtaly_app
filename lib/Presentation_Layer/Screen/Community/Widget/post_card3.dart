@@ -3,7 +3,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../Constants/colors.dart';
 
-class ArticlesCard2 extends StatelessWidget {
+class PostCard3 extends StatelessWidget {
   final int? id;
   final String? title;
   final String? desc;
@@ -12,7 +12,7 @@ class ArticlesCard2 extends StatelessWidget {
   final String? imageURL;
   final String? user;
 
-  const ArticlesCard2({
+  const PostCard3({
     Key? key,
     required this.imageURL,
     required this.user,
@@ -41,9 +41,9 @@ class ArticlesCard2 extends StatelessWidget {
     );
   }
 
-  Future<void> _loadData() async {
-    // Simulate an asynchronous operation
+  Future<dynamic> _loadData() async {
     await Future.delayed(const Duration(seconds: 2));
+    return null;
   }
 
   static Widget buildShimmerCard() {
@@ -54,7 +54,7 @@ class ArticlesCard2 extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 10,
+            height: 15,
           ),
           Container(
             decoration: const BoxDecoration(
@@ -72,8 +72,8 @@ class ArticlesCard2 extends StatelessWidget {
                   ),
                   child: Container(
                     color: Colors.grey[300],
-                    height: 72,
-                    width: 72,
+                    height: 82,
+                    width: 82,
                   ),
                 ),
                 Padding(
@@ -117,7 +117,7 @@ class ArticlesCard2 extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(
-          height: 10,
+          height: 15,
         ),
         Container(
           decoration: const BoxDecoration(
@@ -134,19 +134,19 @@ class ArticlesCard2 extends StatelessWidget {
                   bottomLeft: Radius.circular(12),
                 ),
                 child: SizedBox(
-                  height: 72,
-                  width: 72,
+                  height: 82,
+                  width: 82,
                   child: imageURL.isNotEmpty
                       ? Image.network(
                           imageURL,
-                          height: 72,
-                          width: 72,
+                          height: 82,
+                          width: 82,
                           fit: BoxFit.cover,
                         )
                       : const Placeholder(
                           color: Colors.grey,
-                          fallbackHeight: 72,
-                          fallbackWidth: 72,
+                          fallbackHeight: 82,
+                          fallbackWidth: 82,
                         ),
                 ),
               ),
@@ -161,13 +161,13 @@ class ArticlesCard2 extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: tPrimaryTextColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 14,
                     ),
                     Text(
                       'by $user',

@@ -129,7 +129,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             //     builder: (context) => ForgotPasswordScreen(),
                             //   ),
                             // );
-                            showSankBar(context, 'Oops, OTP send failed');
+                            showSnakBar(context, 'Oops, OTP send failed');
                           } else {
                             Navigator.pushReplacement(
                               context,
@@ -138,7 +138,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     OTPScreen(sendtoemail: email!),
                               ),
                             );
-                            showSankBar(
+                            showSnakBar(
                                 context, 'OTP has been sent to your email',
                                 color: tPrimaryActionColor);
                           }
