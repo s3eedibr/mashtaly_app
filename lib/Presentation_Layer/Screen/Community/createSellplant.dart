@@ -25,6 +25,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   final List<XFile> _selectedImages = [];
+  bool isLoading = false;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -60,7 +61,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
 
   int generateUniqueRandom5DigitsNumber() {
     // Get the current DateTime
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().toUtc();
 
     // Extract individual components (year, month, day, hour, minute, second)
     int year = now.year;
@@ -107,7 +108,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
         "sell_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
         "sell_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
         "posted": false,
-        "date": '${DateTime.now()}',
+        "date": '${DateTime.now().toUtc()}',
         "user": (await FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser.uid)
@@ -120,7 +121,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
             .get('profile_pic'),
       });
 
-      showSankBar(context, 'Post submitted! Admin review in progress.',
+      showSnakBar(context, 'Post submitted! Admin review in progress.',
           color: tPrimaryActionColor);
       Navigator.pop(context);
     } catch (e) {
@@ -134,30 +135,38 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
 
       if (!isConnected) {
         print('No internet connection.');
-        showSankBar(context, 'No internet connection.');
+        showSnakBar(context, 'No internet connection.');
         return;
       }
       if (_selectedImages.length < 3) {
         print('Error: Please choose at least 3 pictures.');
-        showSankBar(context, 'Please choose at least 3 pictures.');
+        showSnakBar(context, 'Please choose at least 3 pictures.');
         return;
       }
       if (_titleController.text.isEmpty) {
         print('Error: Please enter title for sell.');
-        showSankBar(context, 'Please enter title for sell.');
+        showSnakBar(context, 'Please enter title for sell.');
         return;
       }
 
       if (_contentController.text.isEmpty) {
         print('Error: Please enter content for sell.');
-        showSankBar(context, 'Please enter content for sell.');
+        showSnakBar(context, 'Please enter content for sell.');
         return;
       }
 
       List<String> imageUrls = await uploadImages(_selectedImages);
 
       await addPostToFirestore(imageUrls);
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
+      // Set isLoading to false in case of an error
+      setState(() {
+        isLoading = false;
+      });
+
       print('Error uploading images and adding post: $e');
     }
   }
@@ -223,53 +232,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SimpleDialog(
-                            title: const Text("Select Image from"),
-                            children: [
-                              SimpleDialogOption(
-                                padding: const EdgeInsets.all(6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.camera);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.camera_alt_rounded),
-                                          Text("Camera"),
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.gallery);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.image),
-                                          Text("Gallery"),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      selectImageDialog(context);
                     },
                     child: Container(
                       height: 200,
@@ -303,53 +266,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -375,53 +292,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -447,58 +318,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Theme(
-                          data: ThemeData(
-                            dialogBackgroundColor: Colors.white,
-                          ),
-                          child: SimpleDialog(
-                            title: const Text("Select Image from"),
-                            children: [
-                              SimpleDialogOption(
-                                padding: const EdgeInsets.all(6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.camera);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.camera_alt_rounded),
-                                          Text("Camera"),
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.of(context).pop();
-                                        await pickImage(ImageSource.gallery);
-                                      },
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Icon(Icons.image),
-                                          Text("Gallery"),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -524,53 +344,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text("Select Image from"),
-                          children: [
-                            SimpleDialogOption(
-                              padding: const EdgeInsets.all(6),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.camera);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.camera_alt_rounded),
-                                        Text("Camera"),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pop();
-                                      await pickImage(ImageSource.gallery);
-                                    },
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text("Gallery"),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    selectImageDialog(context);
                   },
                   child: Container(
                     height: 95,
@@ -632,20 +406,101 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
             ),
           ),
           onPressed: () {
-            uploadImagesAndAddPost();
+            // Check if the operation is already in progress
+            if (!isLoading) {
+              // Set isLoading to true to show the loading indicator
+              setState(() {
+                isLoading = true;
+              });
+
+              // Call the function that performs the upload and adds the post
+              uploadImagesAndAddPost().then((_) {
+                // Set isLoading to false when the operation is complete
+                setState(() {
+                  isLoading = false;
+                });
+              });
+            }
           },
-          child: const Center(
-            child: Text(
-              "Publish",
-              style: TextStyle(
-                color: tThirdTextColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
+          child: Center(
+            child: isLoading
+                ? const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 24,
+                      ),
+                      Text(
+                        'Please wait...',
+                        style: TextStyle(
+                          color: tThirdTextColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      )
+                    ],
+                  )
+                : const Text(
+                    "Publish",
+                    style: TextStyle(
+                      color: tThirdTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> selectImageDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text("Select Image from"),
+          children: [
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      await pickImage(ImageSource.camera);
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.camera_alt_rounded),
+                        Text("Camera"),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      await pickImage(ImageSource.gallery);
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.image),
+                        Text("Gallery"),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

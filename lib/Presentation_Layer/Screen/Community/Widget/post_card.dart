@@ -3,7 +3,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../Constants/colors.dart';
 
-class ArticlesCard extends StatelessWidget {
+class PostCard extends StatelessWidget {
   final int? id;
   final String? title;
   final String? desc;
@@ -12,7 +12,7 @@ class ArticlesCard extends StatelessWidget {
   final String? imageURL;
   final String? user;
 
-  const ArticlesCard({
+  const PostCard({
     Key? key,
     required this.imageURL,
     required this.user,
@@ -41,9 +41,9 @@ class ArticlesCard extends StatelessWidget {
     );
   }
 
-  Future<void> _loadData() async {
-    // Simulate an asynchronous operation
+  Future<dynamic> _loadData() async {
     await Future.delayed(const Duration(seconds: 2));
+    return null;
   }
 
   static Widget buildShimmerCard() {

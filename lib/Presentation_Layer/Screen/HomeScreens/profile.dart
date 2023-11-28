@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
         // Handle no internet connection
-        showSankBar(context, 'No internet connection');
+        showSnakBar(context, 'No internet connection');
         return;
       }
 
