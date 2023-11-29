@@ -11,6 +11,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/sankBar.dart';
+import 'myPosts.dart';
+import 'mySells.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -262,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 16,
                               ),
                               Image.asset(
-                                'assets/images/icons/Group 268.png',
+                                'assets/images/icons/Group 185.png',
                                 height: 38,
                                 width: 38,
                               ),
@@ -279,7 +281,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ListMyPosts(),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 16,
@@ -297,7 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 16,
                               ),
                               Image.asset(
-                                'assets/images/icons/Group 268.png',
+                                'assets/images/icons/Group 192.png',
                                 height: 38,
                                 width: 38,
                               ),
@@ -314,7 +322,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ListMySells(),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 16,

@@ -7,277 +7,111 @@ Future<ConnectivityResult> checkConnectivity() async {
   return connectivityResult;
 }
 
-// Simulated loading delay function
-Future<bool> isLoading() async {
-  await Future.delayed(const Duration(milliseconds: 2500));
-  return true;
+Future<List<Map<String, dynamic>>> getAllData(String collectionName) async {
+  List<Map<String, dynamic>> allData = [];
+
+  final userUidsRef = FirebaseFirestore.instance.collection('users');
+
+  try {
+    // Get a snapshot of all user documents
+    final userUidsSnapshot = await userUidsRef.get();
+
+    // Iterate through each user document
+    for (final userDoc in userUidsSnapshot.docs) {
+      final userId = userDoc.id;
+      final userPostsRef = FirebaseFirestore.instance
+          .collection(collectionName)
+          .doc(userId)
+          .collection(collectionName == 'posts' ? 'Posts' : 'SellPlants');
+
+      try {
+        // Get a snapshot of data for the current user, ordered by date in descending order
+        QuerySnapshot userDataSnapshot = await userPostsRef
+            .where('posted', isEqualTo: true)
+            .orderBy('date', descending: true)
+            .get();
+
+        // Iterate through each data document and add data to the list
+        for (final dataDoc in userDataSnapshot.docs) {
+          final data = dataDoc.data() as Map<String, dynamic>;
+          allData.add(data);
+        }
+      } catch (e) {
+        // Handle errors when getting data for a user
+        print('Error getting data for user $userId: $e');
+      }
+    }
+  } catch (e) {
+    // Handle errors when getting user documents
+    print('Error getting user documents: $e');
+  }
+
+  // Sort the list in descending order by date
+  allData.sort((a, b) => b['date'].compareTo(a['date']));
+
+  return allData;
 }
 
-// Function to get all posts from all users
+// Example usage for getting all posts
 Future<List<Map<String, dynamic>>> getAllPosts() async {
-  List<Map<String, dynamic>> allPosts = [];
-  final userUidsRef = FirebaseFirestore.instance.collection('users');
-
-  try {
-    // Get a snapshot of all user documents
-    final userUidsSnapshot = await userUidsRef.get();
-
-    // Iterate through each user document
-    for (final userDoc in userUidsSnapshot.docs) {
-      final userId = userDoc.id;
-      final userPostsRef = FirebaseFirestore.instance
-          .collection('posts')
-          .doc(userId)
-          .collection('Posts');
-
-      try {
-        // Get a snapshot of posts for the current user, ordered by date in descending order
-        QuerySnapshot userPostsSnapshot = await userPostsRef
-            .where('posted', isEqualTo: true)
-            .orderBy('date', descending: true)
-            .get();
-
-        // Iterate through each post document
-        for (final postDoc in userPostsSnapshot.docs) {
-          final postData = postDoc.data() as Map<String, dynamic>;
-          // Add the post data to the list
-          allPosts.add(postData);
-          print('User $userId Post:');
-        }
-      } catch (e) {
-        // Handle errors when getting posts for a user
-        print('Error getting posts for user $userId: $e');
-      }
-    }
-
-    return allPosts;
-  } catch (e) {
-    // Handle errors when getting user documents
-    print('Error getting user documents: $e');
-    return [];
-  }
+  return await getAllData('posts');
 }
 
-// Function to get the latest posts (limited to 3) from all users
-Future<List<Map<String, dynamic>>> getLatestPosts() async {
-  List<Map<String, dynamic>> latestPosts = [];
-  final userUidsRef = FirebaseFirestore.instance.collection('users');
-
-  try {
-    // Get a snapshot of all user documents
-    final userUidsSnapshot = await userUidsRef.get();
-
-    // Iterate through each user document
-    for (final userDoc in userUidsSnapshot.docs) {
-      final userId = userDoc.id;
-      final userPostsRef = FirebaseFirestore.instance
-          .collection('posts')
-          .doc(userId)
-          .collection('Posts');
-
-      try {
-        // Get a snapshot of the latest 3 posts for the current user, ordered by date in descending order
-        QuerySnapshot userPostsSnapshot = await userPostsRef
-            .where('posted', isEqualTo: true)
-            .orderBy('date', descending: true)
-            .limit(3)
-            .get();
-
-        // Iterate through each post document
-        for (final postDoc in userPostsSnapshot.docs) {
-          final postData = postDoc.data() as Map<String, dynamic>;
-          // Add the post data to the list
-          latestPosts.add(postData);
-          // Process each post data as needed
-          print('User $userId Post:');
-        }
-      } catch (e) {
-        // Handle errors when getting posts for a user
-        print('Error getting posts for user $userId: $e');
-      }
-    }
-
-    return latestPosts;
-  } catch (e) {
-    // Handle errors when getting user documents
-    print('Error getting user documents: $e');
-    return [];
-  }
-}
-
-// Function to get all posts from all users without additional processing
-Future<List<Map<String, dynamic>>> getAllPostsList() async {
-  List<Map<String, dynamic>> allPosts = [];
-
-  final userUidsRef = FirebaseFirestore.instance.collection('users');
-
-  try {
-    // Get a snapshot of all user documents
-    final userUidsSnapshot = await userUidsRef.get();
-
-    // Iterate through each user document
-    for (final userDoc in userUidsSnapshot.docs) {
-      final userId = userDoc.id;
-      final userPostsRef = FirebaseFirestore.instance
-          .collection('posts')
-          .doc(userId)
-          .collection('Posts');
-
-      try {
-        // Get a snapshot of posts for the current user, ordered by date in descending order
-        QuerySnapshot userPostsSnapshot = await userPostsRef
-            .where('posted', isEqualTo: true)
-            .orderBy('date', descending: true)
-            .get();
-
-        // Iterate through each post document and add data to the list
-        for (final postDoc in userPostsSnapshot.docs) {
-          final postData = postDoc.data() as Map<String, dynamic>;
-          allPosts.add(postData);
-        }
-      } catch (e) {
-        // Handle errors when getting posts for a user
-        print('Error getting posts for user $userId: $e');
-      }
-    }
-  } catch (e) {
-    // Handle errors when getting user documents
-    print('Error getting user documents: $e');
-  }
-
-  return allPosts;
-}
-
-// Function to get all sell posts from all users
+// Example usage for getting all sell posts
 Future<List<Map<String, dynamic>>> getAllSellPosts() async {
-  List<Map<String, dynamic>> allSellPosts = [];
-  final userUidsRef = FirebaseFirestore.instance.collection('users');
-
-  try {
-    // Get a snapshot of all user documents
-    final userUidsSnapshot = await userUidsRef.get();
-
-    // Iterate through each user document
-    for (final userDoc in userUidsSnapshot.docs) {
-      final userId = userDoc.id;
-      final userSellsRef = FirebaseFirestore.instance
-          .collection('sellPlants')
-          .doc(userId)
-          .collection('SellPlants');
-
-      try {
-        // Get a snapshot of sell posts for the current user, ordered by date in descending order
-        QuerySnapshot userSellsSnapshot = await userSellsRef
-            .where('posted', isEqualTo: true)
-            .orderBy('date', descending: true)
-            .get();
-
-        // Iterate through each sell post document
-        for (final sellDoc in userSellsSnapshot.docs) {
-          final sellData = sellDoc.data() as Map<String, dynamic>;
-          // Add the sell data to the list
-          allSellPosts.add(sellData);
-          // Process each sell data as needed
-          print('User $userId Sell:');
-        }
-      } catch (e) {
-        // Handle errors when getting sells for a user
-        print('Error getting sells for user $userId: $e');
-      }
-    }
-  } catch (e) {
-    // Handle errors when getting user documents
-    print('Error getting user documents: $e');
-  }
-
-  return allSellPosts;
+  return await getAllData('sellPlants');
 }
 
-// Function to get the latest sell posts (limited to 3) from all users
+// Example usage for getting the latest posts (limited to 3)
+Future<List<Map<String, dynamic>>> getLatestPosts() async {
+  List<Map<String, dynamic>> latestPosts = await getAllData('posts');
+  return latestPosts.take(3).toList();
+}
+
+// Example usage for getting the latest sell posts (limited to 3)
 Future<List<Map<String, dynamic>>> getLatestSellPosts() async {
-  List<Map<String, dynamic>> latestSellPosts = [];
-  final userUidsRef = FirebaseFirestore.instance.collection('users');
-
-  try {
-    // Get a snapshot of all user documents
-    final userUidsSnapshot = await userUidsRef.get();
-
-    // Iterate through each user document
-    for (final userDoc in userUidsSnapshot.docs) {
-      final userId = userDoc.id;
-      final userSellsRef = FirebaseFirestore.instance
-          .collection('sellPlants')
-          .doc(userId)
-          .collection('SellPlants');
-
-      try {
-        // Get a snapshot of the latest 3 sell posts for the current user, ordered by date in descending order
-        QuerySnapshot userSellsSnapshot = await userSellsRef
-            .where('posted', isEqualTo: true)
-            .orderBy('date', descending: true)
-            .limit(3)
-            .get();
-
-        // Iterate through each sell post document
-        for (final sellDoc in userSellsSnapshot.docs) {
-          final sellData = sellDoc.data() as Map<String, dynamic>;
-          // Add the sell data to the list
-          latestSellPosts.add(sellData);
-          // Process each sell data as needed
-          print('User $userId Sell');
-        }
-      } catch (e) {
-        // Handle errors when getting sells for a user
-        print('Error getting sells for user $userId: $e');
-      }
-    }
-  } catch (e) {
-    // Handle errors when getting user documents
-    print('Error getting user documents: $e');
-  }
-
-  return latestSellPosts;
+  List<Map<String, dynamic>> latestSellPosts = await getAllData('sellPlants');
+  return latestSellPosts.take(3).toList();
 }
 
-// Function to get all sell posts from all users without additional processing
-Future<List<Map<String, dynamic>>> getAllSellsList() async {
-  List<Map<String, dynamic>> allSells = [];
+Future<List<Map<String, dynamic>>> getMyData(
+    String collectionName, String userId) async {
+  List<Map<String, dynamic>> myData = [];
 
-  final userUidsRef = FirebaseFirestore.instance.collection('users');
+  final userPostsRef = FirebaseFirestore.instance
+      .collection(collectionName)
+      .doc(userId)
+      .collection(collectionName == 'posts' ? 'Posts' : 'SellPlants');
 
   try {
-    // Get a snapshot of all user documents
-    final userUidsSnapshot = await userUidsRef.get();
+    // Get a snapshot of data for the current user, ordered by date in descending order
+    QuerySnapshot userPostsSnapshot = await userPostsRef
+        .where('posted', isEqualTo: true)
+        .orderBy('date', descending: true)
+        .get();
 
-    // Iterate through each user document
-    for (final userDoc in userUidsSnapshot.docs) {
-      final userId = userDoc.id;
-      final userPostsRef = FirebaseFirestore.instance
-          .collection('sellPlants')
-          .doc(userId)
-          .collection('SellPlants');
-
-      try {
-        // Get a snapshot of sell posts for the current user, ordered by date in descending order
-        QuerySnapshot userPostsSnapshot = await userPostsRef
-            .where('posted', isEqualTo: true)
-            .orderBy('date', descending: true)
-            .get();
-
-        // Iterate through each sell post document and add data to the list
-        for (final postDoc in userPostsSnapshot.docs) {
-          final postData = postDoc.data() as Map<String, dynamic>;
-          allSells.add(postData);
-        }
-      } catch (e) {
-        // Handle errors when getting posts for a user
-        print('Error getting posts for user $userId: $e');
-      }
+    // Iterate through each data document and add data to the list
+    for (final dataDoc in userPostsSnapshot.docs) {
+      final data = dataDoc.data() as Map<String, dynamic>;
+      myData.add(data);
     }
   } catch (e) {
-    // Handle errors when getting user documents
-    print('Error getting user documents: $e');
+    // Handle errors when getting data for the user
+    print('Error getting data for user $userId: $e');
   }
 
-  return allSells;
+  // Sort the list in descending order by date
+  myData.sort((a, b) => b['date'].compareTo(a['date']));
+
+  return myData;
+}
+
+// Example usage for getting posts for the current user
+Future<List<Map<String, dynamic>>> getMyPosts(String userId) async {
+  return await getMyData('posts', userId);
+}
+
+// Example usage for getting sell posts for the current user
+Future<List<Map<String, dynamic>>> getMySells(String userId) async {
+  return await getMyData('sellPlants', userId);
 }

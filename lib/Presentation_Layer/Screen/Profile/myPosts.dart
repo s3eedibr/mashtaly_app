@@ -1,19 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Constants/colors.dart';
-import 'Data/getData.dart';
-import 'Widget/appBar.dart';
-import 'Widget/post_card3.dart';
-import 'postDetails.dart';
+import '../Community/Data/getData.dart';
+import '../Community/Widget/appBar.dart';
+import '../Community/Widget/post_card3.dart';
+import '../Community/postDetails.dart';
 
-class ListAllPosts extends StatefulWidget {
-  const ListAllPosts({Key? key}) : super(key: key);
+class ListMyPosts extends StatefulWidget {
+  const ListMyPosts({Key? key}) : super(key: key);
 
   @override
-  State<ListAllPosts> createState() => _ListAllPostsState();
+  State<ListMyPosts> createState() => _ListMyPostsState();
 }
 
-class _ListAllPostsState extends State<ListAllPosts> {
+class _ListMyPostsState extends State<ListMyPosts> {
   bool isSearching = false;
 
   @override
@@ -21,7 +22,7 @@ class _ListAllPostsState extends State<ListAllPosts> {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBarWidget(
-        title: 'Articles',
+        title: 'My article',
       ),
       body: buildPostList(),
     );
@@ -33,14 +34,13 @@ class _ListAllPostsState extends State<ListAllPosts> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RefreshIndicator(
         onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 2));
           setState(() {});
         },
         color: tPrimaryActionColor,
         backgroundColor: tBgColor,
-        child: FutureBuilder(
-          // Fetch all posts using the getAllPostsList() function
-          future: getAllPosts(),
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+          // Fetch all posts using the getMyPosts() function
+          future: getMyPosts(FirebaseAuth.instance.currentUser!.uid),
           builder:
               (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

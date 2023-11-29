@@ -20,7 +20,9 @@ class _ListAllSellsState extends State<ListAllSells> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: tBgColor,
-      appBar: AppBarWidget(),
+      appBar: AppBarWidget(
+        title: 'Plants for sell',
+      ),
       body: buildSellsList(),
     );
   }
@@ -38,7 +40,7 @@ class _ListAllSellsState extends State<ListAllSells> {
         backgroundColor: tBgColor,
         child: FutureBuilder(
           // Fetch all sell posts using the getAllSellsList() function
-          future: getAllSellsList(),
+          future: getAllSellPosts(),
           builder:
               (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

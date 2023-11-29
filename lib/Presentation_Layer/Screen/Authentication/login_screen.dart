@@ -102,34 +102,89 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: tBgColor,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          reverse: false,
-          child: Column(
-            children: [
-              Image(
-                image: const AssetImage(Assets.assetsImagesLoginPage),
-                width: width,
-              ),
-              const SizedBox(height: 20),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    const Text(
-                      "Welcome to Mashtaly",
-                      style: TextStyle(
-                        color: tPrimaryTextColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+    return Scaffold(
+      backgroundColor: tBgColor,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        reverse: false,
+        child: Column(
+          children: [
+            Image(
+              image: const AssetImage(Assets.assetsImagesLoginPage),
+              width: width,
+            ),
+            const SizedBox(height: 20),
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const Text(
+                    "Welcome to Mashtaly",
+                    style: TextStyle(
+                      color: tPrimaryTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "This field is required";
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emilController,
+                      cursorColor: tPrimaryActionColor,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 12),
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: tSecondActionColor,
+                          size: 28,
+                        ),
+                        hintText: "Email",
+                        hintStyle: TextStyle(color: tSecondActionColor),
+                        filled: true,
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: tPrimaryActionColor,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: tPrimaryActionColor,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 25),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                  ),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      },
                       child: TextFormField(
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -138,35 +193,37 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                             return null;
                           }
                         },
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emilController,
+                        controller: _passwordController,
                         cursorColor: tPrimaryActionColor,
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                         ),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 12),
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: !_showPassword,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 12),
+                          prefixIcon: const Icon(
+                            Icons.lock_outline_rounded,
                             color: tSecondActionColor,
                             size: 28,
                           ),
-                          hintText: "Email",
-                          hintStyle: TextStyle(color: tSecondActionColor),
+                          hintText: "Password",
+                          hintStyle: const TextStyle(color: tSecondActionColor),
                           filled: true,
                           fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: tPrimaryActionColor,
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
                             ),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: tPrimaryActionColor,
                             ),
@@ -174,158 +231,98 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                               Radius.circular(12),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _showPassword = !_showPassword;
-                          });
-                        },
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "This field is required";
-                            } else {
-                              return null;
-                            }
-                          },
-                          controller: _passwordController,
-                          cursorColor: tPrimaryActionColor,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: !_showPassword,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(vertical: 12),
-                            prefixIcon: const Icon(
-                              Icons.lock_outline_rounded,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _showPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                               color: tSecondActionColor,
-                              size: 28,
+                              size: 20,
                             ),
-                            hintText: "Password",
-                            hintStyle:
-                                const TextStyle(color: tSecondActionColor),
-                            filled: true,
-                            fillColor: Colors.white,
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: tPrimaryActionColor,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: tPrimaryActionColor,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _showPassword
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: tSecondActionColor,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _showPassword = !_showPassword;
-                                });
-                              },
-                            ),
+                            onPressed: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ForgotPasswordScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: tPrimaryActionColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                  ),
+                  const SizedBox(height: 15),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ForgotPasswordScreen(),
                         ),
+                      );
+                    },
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                        color: tPrimaryActionColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
                       ),
                     ),
-                    SizedBox(height: height - 721),
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: login,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: tPrimaryActionColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            width: 343,
-                            height: 50,
-                            child: const Center(
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                  color: tThirdTextColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
+                  ),
+                  SizedBox(height: height - 721),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: login,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: tPrimaryActionColor,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ),
-                        const SizedBox(height: 15),
-                        GestureDetector(
-                          onTap: widget.showRegScreen,
-                          child: const Text.rich(
-                            TextSpan(
-                              text: "Don't have an account?",
+                          width: 343,
+                          height: 50,
+                          child: const Center(
+                            child: Text(
+                              "Login",
                               style: TextStyle(
-                                color: tPrimaryTextColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
+                                color: tThirdTextColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
-                              children: [
-                                TextSpan(
-                                  text: " Register now",
-                                  style: TextStyle(
-                                    color: tPrimaryActionColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
                             ),
                           ),
                         ),
-                        const SizedBox(height: 15),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      const SizedBox(height: 15),
+                      GestureDetector(
+                        onTap: widget.showRegScreen,
+                        child: const Text.rich(
+                          TextSpan(
+                            text: "Don't have an account?",
+                            style: TextStyle(
+                              color: tPrimaryTextColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: " Register now",
+                                style: TextStyle(
+                                  color: tPrimaryActionColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

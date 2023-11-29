@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../Constants/colors.dart';
 
 class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
+  final String title;
+
+  AppBarWidget({required this.title});
+
   @override
   _AppBarWidgetState createState() => _AppBarWidgetState();
 
@@ -45,9 +49,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                 },
               ),
             )
-          : const Text(
-              "Community",
-              style: TextStyle(
+          : Text(
+              widget.title,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: tPrimaryTextColor, // Adjust text color

@@ -5,7 +5,7 @@ import '../CameraScreen/camera_scanner_screen.dart';
 import '../Community/community.dart';
 import 'notification.dart';
 import '../PlantScreen/plant.dart';
-import 'profile.dart';
+import '../Profile/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -115,70 +115,66 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         return shouldPop!;
       },
-      child: SafeArea(
-        child: Scaffold(
-          // resizeToAvoidBottomInset: false,
-          body: IndexedStack(
-            index: currentTap,
-            children: screens,
+      child: Scaffold(
+        // resizeToAvoidBottomInset: false,
+        body: IndexedStack(
+          index: currentTap,
+          children: screens,
+        ),
+        floatingActionButton: SizedBox(
+          height: 64,
+          width: 64,
+          child: FloatingActionButton(
+            focusColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            backgroundColor: tPrimaryActionColor,
+            shape: const CircleBorder(),
+            child: Image.asset(
+              "assets/images/icons/Path 7.png",
+              height: 26,
+              width: 26,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CameraScanner(),
+                ),
+              );
+            },
           ),
-          floatingActionButton: SizedBox(
-            height: 64,
-            width: 64,
-            child: FloatingActionButton(
-              focusColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              backgroundColor: tPrimaryActionColor,
-              shape: const CircleBorder(),
-              child: Image.asset(
-                "assets/images/icons/Path 7.png",
-                height: 26,
-                width: 26,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: Container(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          decoration: const BoxDecoration(
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Color.fromRGBO(64, 212, 0, 0.063),
+                blurRadius: 25,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CameraScanner(),
-                  ),
-                );
-              },
-            ),
+            ],
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: Container(
+          child: BottomAppBar(
+            height: 80,
+            color: Colors.white,
+            elevation: 0,
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: const BoxDecoration(
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Color(0x10000000),
-                  blurRadius: 25,
-                ),
-              ],
-            ),
-            child: BottomAppBar(
-              height: 80,
-              color: Colors.white,
-              elevation: 0,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              shape: const CircularNotchedRectangle(),
-              notchMargin: 12,
-              child: SizedBox(
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    buildBottomBarButton(
-                        0, "Plant", "Path 8.png", "Path 84.png"),
-                    buildBottomBarButton(
-                        1, "Community", "communities1.png", "communities.png"),
-                    buildBottomBarButton(
-                        2, "Notifications", "bell (1).png", "bell.png"),
-                    buildBottomBarButton(
-                        3, "Profile", "Path 64.png", "Path 6.png"),
-                  ],
-                ),
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 12,
+            child: SizedBox(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildBottomBarButton(0, "Plant", "Path 8.png", "Path 84.png"),
+                  buildBottomBarButton(
+                      1, "Community", "communities1.png", "communities.png"),
+                  buildBottomBarButton(
+                      2, "Notifications", "bell (1).png", "bell.png"),
+                  buildBottomBarButton(
+                      3, "Profile", "Path 64.png", "Path 6.png"),
+                ],
               ),
             ),
           ),

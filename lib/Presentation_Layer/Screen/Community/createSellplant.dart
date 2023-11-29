@@ -96,6 +96,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
       }
       await _firestore.collection('posts').doc(currentUser.uid).set({
         "lastUpdate": DateTime.now().toUtc().toString(),
+        "user_id": currentUser.uid,
       });
 
       await _firestore

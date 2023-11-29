@@ -1,19 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Community/sellDetails.dart';
 
 import '../../../Constants/colors.dart';
-import 'Data/getData.dart';
-import 'Widget/appBar.dart';
-import 'Widget/post_card3.dart';
-import 'postDetails.dart';
+import '../Community/Data/getData.dart';
+import '../Community/Widget/appBar.dart';
+import '../Community/Widget/post_card3.dart';
 
-class ListAllPosts extends StatefulWidget {
-  const ListAllPosts({Key? key}) : super(key: key);
+class ListMySells extends StatefulWidget {
+  const ListMySells({Key? key}) : super(key: key);
 
   @override
-  State<ListAllPosts> createState() => _ListAllPostsState();
+  State<ListMySells> createState() => _ListMySellsState();
 }
 
-class _ListAllPostsState extends State<ListAllPosts> {
+class _ListMySellsState extends State<ListMySells> {
   bool isSearching = false;
 
   @override
@@ -21,14 +22,14 @@ class _ListAllPostsState extends State<ListAllPosts> {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBarWidget(
-        title: 'Articles',
+        title: 'My plant for sell',
       ),
-      body: buildPostList(),
+      body: buildSellsList(),
     );
   }
 
-  // Function to build the post list
-  Widget buildPostList() {
+  // Function to build the list of sell posts
+  Widget buildSellsList() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RefreshIndicator(
@@ -39,8 +40,8 @@ class _ListAllPostsState extends State<ListAllPosts> {
         color: tPrimaryActionColor,
         backgroundColor: tBgColor,
         child: FutureBuilder(
-          // Fetch all posts using the getAllPostsList() function
-          future: getAllPosts(),
+          // Fetch all sell posts using the getMySells() function
+          future: getMySells(FirebaseAuth.instance.currentUser!.uid),
           builder:
               (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,7 +51,7 @@ class _ListAllPostsState extends State<ListAllPosts> {
                   .toString()); // Display error message if an error occurs
             } else {
               return buildPostsListView(
-                  snapshot.data!); // Build the post list view
+                  snapshot.data!); // Build the sell posts list view
             }
           },
         ),
@@ -76,26 +77,26 @@ class _ListAllPostsState extends State<ListAllPosts> {
     );
   }
 
-  // Function to build the actual post list view
-  Widget buildPostsListView(List<Map<String, dynamic>> posts) {
+  // Function to build the actual sell posts list view
+  Widget buildPostsListView(List<Map<String, dynamic>> sells) {
     return ListView.builder(
-      itemCount: posts.length,
+      itemCount: sells.length,
       itemBuilder: (context, index) {
-        final post = posts[index];
+        final post = sells[index];
         return GestureDetector(
           onTap: () {
-            // Navigate to the post details screen when a post is tapped
+            // Navigate to the sell post details screen when a sell post is tapped
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PostDetails(
+                builder: (context) => SellDetails(
                   profileImage: post['profile_pic'],
                   user: post['user'],
-                  imageURL1: post['post_pic1'],
-                  imageURL2: post['post_pic2'],
-                  imageURL3: post['post_pic3'],
-                  imageURL4: post['post_pic4'],
-                  imageURL5: post['post_pic5'],
+                  imageURL1: post['sell_pic1'],
+                  imageURL2: post['sell_pic2'],
+                  imageURL3: post['sell_pic3'],
+                  imageURL4: post['sell_pic4'],
+                  imageURL5: post['sell_pic5'],
                   title: post['title'],
                   date: post['date'],
                   content: post['content'],
@@ -104,7 +105,7 @@ class _ListAllPostsState extends State<ListAllPosts> {
             );
           },
           child: PostCard3(
-            imageURL: post['post_pic1'],
+            imageURL: post['sell_pic1'],
             user: post['user'],
             title: post['title'],
           ),
