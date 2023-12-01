@@ -81,7 +81,7 @@ class _ListAllSellsState extends State<ListAllSells> {
     return ListView.builder(
       itemCount: sells.length,
       itemBuilder: (context, index) {
-        final post = sells[index];
+        final sell = sells[index];
         return GestureDetector(
           onTap: () {
             // Navigate to the sell post details screen when a sell post is tapped
@@ -89,24 +89,25 @@ class _ListAllSellsState extends State<ListAllSells> {
               context,
               MaterialPageRoute(
                 builder: (context) => SellDetails(
-                  profileImage: post['profile_pic'],
-                  user: post['user'],
-                  imageURL1: post['sell_pic1'],
-                  imageURL2: post['sell_pic2'],
-                  imageURL3: post['sell_pic3'],
-                  imageURL4: post['sell_pic4'],
-                  imageURL5: post['sell_pic5'],
-                  title: post['title'],
-                  date: post['date'],
-                  content: post['content'],
+                  profileImage: sell['profile_pic'],
+                  user: sell['user'],
+                  imageURL1: sell['sell_pic1'],
+                  imageURL2: sell['sell_pic2'],
+                  imageURL3: sell['sell_pic3'],
+                  imageURL4: sell['sell_pic4'],
+                  imageURL5: sell['sell_pic5'],
+                  title: sell['title'],
+                  date: sell['date'],
+                  content: sell['content'],
+                  phoneNumber: sell['phone_number'],
                 ),
               ),
             );
           },
           child: PostCard3(
-            imageURL: post['sell_pic1'],
-            user: post['user'],
-            title: post['title'],
+            imageURL: sell['sell_pic1'],
+            user: sell['user'],
+            title: sell['title'],
           ),
         );
       },
