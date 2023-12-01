@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../Constants/colors.dart';
+import '../Forms/Utils.dart';
 
 // Widget to display post details
 class PostDetails extends StatelessWidget {
@@ -270,7 +271,7 @@ class PostDetails extends StatelessWidget {
         ),
         // Actual content for post date
         Text(
-          date ?? "",
+          Utils.getFormattedDateTimeSimple(date ?? ""),
           style: TextStyle(
             color: Colors.grey[500],
           ),

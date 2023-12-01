@@ -3,6 +3,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Constants/colors.dart';
+import '../Forms/Utils.dart';
 
 // Widget to display details of a sell post
 class SellDetails extends StatelessWidget {
@@ -167,7 +168,8 @@ class SellDetails extends StatelessWidget {
                             icon: const Icon(Icons.message_rounded,
                                 color: tPrimaryActionColor),
                             onPressed: () {
-                              _launchInBrowser('https://wa.me/$phoneNumber');
+                              _launchInBrowser(
+                                  'https://wa.me/+962$phoneNumber');
                             },
                             tooltip: 'Call',
                           ),
@@ -376,7 +378,7 @@ class SellDetails extends StatelessWidget {
         ),
         // Actual content for post date
         Text(
-          date ?? "",
+          Utils.getFormattedDateTimeSimple(date ?? ""),
           style: TextStyle(
             color: Colors.grey[500],
           ),
