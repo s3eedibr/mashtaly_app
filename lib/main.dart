@@ -52,7 +52,7 @@ class SplashScreenApp extends StatelessWidget {
 class App extends StatelessWidget {
   final int? isViewed;
 
-  App({super.key, required this.isViewed});
+  const App({super.key, required this.isViewed});
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +62,9 @@ class App extends StatelessWidget {
         fontFamily: 'Mulish',
         useMaterial3: true,
         dialogBackgroundColor: Colors.white,
+        datePickerTheme: const DatePickerThemeData(
+          backgroundColor: Colors.white,
+        ),
         textSelectionTheme: TextSelectionThemeData(
           selectionColor: tPrimaryActionColor.withOpacity(.5),
           cursorColor: tPrimaryActionColor.withOpacity(.6),

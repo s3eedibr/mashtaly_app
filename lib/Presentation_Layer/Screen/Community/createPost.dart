@@ -106,6 +106,7 @@ class _CreatePostState extends State<CreatePost> {
       }
       await _firestore.collection('posts').doc(currentUser.uid).set({
         "lastUpdate": DateTime.now().toUtc().toString(),
+        "user_id": currentUser.uid,
       });
 
       await _firestore
