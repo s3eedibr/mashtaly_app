@@ -60,15 +60,13 @@ class _OTPScreenState extends State<OTPScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 70),
-                child: Center(
-                  child: Image(
-                    image: const AssetImage(
-                        Assets.assetsImagesResetpasswordImagesResetpassword2),
-                    width: width - 25,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 70),
+              child: Center(
+                child: Image(
+                  image: const AssetImage(
+                      Assets.assetsImagesResetpasswordImagesResetpassword2),
+                  width: width - 25,
                 ),
               ),
             ),
@@ -131,7 +129,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: height - 720),
+                  SizedBox(height: height - 680),
                   Container(
                     child: Column(
                       children: [

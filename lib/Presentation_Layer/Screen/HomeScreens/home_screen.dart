@@ -4,7 +4,7 @@ import '../../../Constants/colors.dart';
 import '../CameraScreen/camera_scanner_screen.dart';
 import '../Community/community.dart';
 import 'notification.dart';
-import '../PlantScreen/plant.dart';
+import '../Plant/plant.dart';
 import '../Profile/profile.dart';
 
 class HomeScreen extends StatefulWidget {

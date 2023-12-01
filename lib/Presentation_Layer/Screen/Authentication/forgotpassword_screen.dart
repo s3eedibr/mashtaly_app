@@ -37,15 +37,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 70),
-                child: Center(
-                  child: Image(
-                    image: const AssetImage(
-                        Assets.assetsImagesResetpasswordImagesResetpassword1),
-                    width: width - 25,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 70),
+              child: Center(
+                child: Image(
+                  image: const AssetImage(
+                      Assets.assetsImagesResetpasswordImagesResetpassword1),
+                  width: width - 25,
                 ),
               ),
             ),
@@ -114,7 +112,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: height - 710),
+                SizedBox(height: height - 670),
                 Column(
                   children: [
                     GestureDetector(

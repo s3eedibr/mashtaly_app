@@ -141,15 +141,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 70),
-                child: Center(
-                  child: Image(
-                    image: const AssetImage(
-                        Assets.assetsImagesRegistrationImages2),
-                    width: width - 25,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 70),
+              child: Center(
+                child: Image(
+                  image:
+                      const AssetImage(Assets.assetsImagesRegistrationImages2),
+                  width: width - 25,
                 ),
               ),
             ),
@@ -375,7 +373,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
             ),
-            SizedBox(height: height - 744),
+            SizedBox(height: height - 708),
             GestureDetector(
                 onTap: registration,
                 child: Container(
