@@ -99,7 +99,7 @@ class PostDetails extends StatelessWidget {
               alignment: AlignmentDirectional.bottomEnd,
               children: [
                 CircleAvatar(
-                  radius: 25.0,
+                  radius: 20.0,
                   child: Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
@@ -211,7 +211,7 @@ class PostDetails extends StatelessWidget {
               alignment: AlignmentDirectional.bottomEnd,
               children: [
                 CircleAvatar(
-                  radius: 25.0,
+                  radius: 20.0,
                   backgroundImage: NetworkImage(profileImage ?? ""),
                 ),
               ],

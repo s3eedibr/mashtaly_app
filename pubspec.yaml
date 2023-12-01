@@ -47,6 +47,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   firebase_app_check: ^0.2.1+5
   shimmer: ^3.0.0
+  url_launcher: ^6.0.3
 
 flutter_assets:
   assets_path: assets/images/

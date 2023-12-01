@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
 
 import '../../../Constants/colors.dart';
 import '../../Widget/sankBar.dart';
@@ -23,7 +24,10 @@ class CreateSellPlant extends StatefulWidget {
 
 class _CreateSellPlantState extends State<CreateSellPlant> {
   final _titleController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
   final _contentController = TextEditingController();
+  static final RegExp _phoneNumberRegExp = RegExp(r'^07[789]\d{7}$');
+
   final List<XFile> _selectedImages = [];
   bool isLoading = false;
 
@@ -106,6 +110,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
           .add({
         "id": '${generateUniqueRandom5DigitsNumber()}',
         "title": _titleController.text.trim(),
+        "phone_number": _phoneNumberController.text.trim(),
         "content": _contentController.text.trim(),
         "sell_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
         "sell_pic2": imageUrls.length > 1 ? imageUrls[1] : null,
@@ -152,6 +157,15 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
       if (_titleController.text.isEmpty) {
         print('Error: Please enter title for sell.');
         showSnakBar(context, 'Please enter title for sell.');
+        return;
+      }
+      if (_phoneNumberController.text.isEmpty) {
+        print('Error: Please enter phone number for sell.');
+        showSnakBar(context, 'Please enter phone number for sell.');
+        return;
+      } else if (!_phoneNumberRegExp.hasMatch(_phoneNumberController.text)) {
+        print('Error: Invalid phone number.');
+        showSnakBar(context, 'E.g. 07 {7,8,9} * * * * * * *.');
         return;
       }
 
@@ -385,6 +399,13 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
               maxLine: 1,
               maxLength: 20,
               controller: _titleController,
+            ),
+            CustomField(
+              titleField: 'Phone number',
+              heightField: 65,
+              maxLine: 1,
+              maxLength: 10,
+              controller: _phoneNumberController,
             ),
             CustomField(
               titleField: 'Content',

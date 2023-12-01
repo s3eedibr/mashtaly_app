@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Constants/colors.dart';
 
@@ -17,6 +18,7 @@ class SellDetails extends StatelessWidget {
     this.imageURL3,
     this.imageURL4,
     this.imageURL5,
+    this.phoneNumber,
   }) : super(key: key);
 
   // Properties for post details
@@ -30,60 +32,164 @@ class SellDetails extends StatelessWidget {
   final String? imageURL3;
   final String? imageURL4;
   final String? imageURL5;
+  final String? phoneNumber;
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    final uri = Uri.parse(url);
+
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tBgColor,
-      appBar: AppBar(
-        // App bar configuration
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        leading: IconButton(
-          // Back button
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_outlined,
+        backgroundColor: tBgColor,
+        appBar: AppBar(
+          // App bar configuration
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: IconButton(
+            // Back button
+            color: Colors.black,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_outlined,
+            ),
+          ),
+          title: const Text(
+            "Community / Sell plant",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        title: const Text(
-          "Community / Sell plant",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+          ),
+          child: FutureBuilder(
+            // Simulating a future that returns data after some delay
+            future:
+                fetchData(), // Replace fetchData with your actual data fetching function
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Display shimmer content while waiting for data
+                return buildShimmerContent();
+              } else if (snapshot.hasError) {
+                // Display error message if an error occurs
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else {
+                // Display actual content once data is available
+                return buildContent();
+              }
+            },
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-        ),
-        child: FutureBuilder(
-          // Simulating a future that returns data after some delay
-          future:
-              fetchData(), // Replace fetchData with your actual data fetching function
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              // Display shimmer content while waiting for data
-              return buildShimmerContent();
-            } else if (snapshot.hasError) {
-              // Display error message if an error occurs
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: SizedBox(
+          height: 50,
+          width: 380,
+          child: FloatingActionButton(
+            backgroundColor: tPrimaryActionColor,
+            elevation: 0,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.0),
+              ),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Theme(
+                    data: ThemeData(
+                      dialogBackgroundColor: Colors.white,
+                    ),
+                    child: AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      backgroundColor: Colors.white,
+                      titlePadding: const EdgeInsets.only(
+                        right: 16,
+                        bottom: 15,
+                        left: 16,
+                        top: 15,
+                      ),
+                      title: Text(
+                        'Phone number : $phoneNumber',
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
+                      actionsPadding: const EdgeInsets.only(
+                        right: 16,
+                        bottom: 15,
+                        left: 16,
+                      ),
+                      actions: [
+                        SizedBox(
+                          height: 45,
+                          width: 120,
+                          child: IconButton(
+                            icon: const Icon(Icons.phone,
+                                color: tPrimaryActionColor),
+                            onPressed: () {
+                              _makePhoneCall(phoneNumber!);
+                            },
+                            tooltip: 'Call',
+                          ),
+                        ),
+                        SizedBox(
+                          height: 45,
+                          width: 120,
+                          child: IconButton(
+                            icon: const Icon(Icons.message_rounded,
+                                color: tPrimaryActionColor),
+                            onPressed: () {
+                              _launchInBrowser('https://wa.me/$phoneNumber');
+                            },
+                            tooltip: 'Call',
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
-            } else {
-              // Display actual content once data is available
-              return buildContent();
-            }
-          },
-        ),
-      ),
-    );
+            },
+            child: const Center(
+              child: Text(
+                "Show phone number",
+                style: TextStyle(
+                  color: tThirdTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 
   // Widget for shimmer loading content
@@ -100,7 +206,7 @@ class SellDetails extends StatelessWidget {
               alignment: AlignmentDirectional.bottomEnd,
               children: [
                 CircleAvatar(
-                  radius: 25.0,
+                  radius: 20.0,
                   child: Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
@@ -145,7 +251,6 @@ class SellDetails extends StatelessWidget {
             ),
           ),
         ),
-        // ... (Additional shimmer placeholders)
         const SizedBox(
           height: 10.0,
         ),
@@ -212,7 +317,7 @@ class SellDetails extends StatelessWidget {
               alignment: AlignmentDirectional.bottomEnd,
               children: [
                 CircleAvatar(
-                  radius: 25.0,
+                  radius: 20.0,
                   backgroundImage: NetworkImage(profileImage ?? ""),
                 ),
               ],

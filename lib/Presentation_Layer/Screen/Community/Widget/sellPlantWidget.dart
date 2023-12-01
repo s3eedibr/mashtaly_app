@@ -85,6 +85,7 @@ Widget buildNewPlantsForSell(BuildContext context) {
                                   title: sell['title'],
                                   date: sell['date'],
                                   content: sell['content'],
+                                  phoneNumber: sell['phone_number'],
                                 ),
                               ),
                             );
@@ -206,6 +207,7 @@ Widget buildPlantsForSellUI(BuildContext context) {
                                   title: sell['title'],
                                   date: sell['date'],
                                   content: sell['content'],
+                                  phoneNumber: sell['phone_number'],
                                 ),
                               ),
                             );
