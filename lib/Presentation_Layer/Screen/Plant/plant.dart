@@ -1,34 +1,23 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
+import '../../../Business_Layer/cubits/weather/weatherCubit.dart';
+import '../../../Business_Layer/cubits/weather/weatherStates.dart';
 import '../../../Constants/colors.dart';
-import '../../../Provider/weather_provider.dart';
 import '../Forms/form_withOutSen.dart';
 import '../Forms/form_withSen.dart';
 import '../HomeScreens/notification.dart';
 
-class PlantScreen extends StatelessWidget {
+class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => WeatherProvider(),
-      child: const PlantScreenContent(),
-    );
-  }
+  _PlantScreenState createState() => _PlantScreenState();
 }
 
-class PlantScreenContent extends StatefulWidget {
-  const PlantScreenContent({super.key});
-
-  @override
-  _PlantScreenContentState createState() => _PlantScreenContentState();
-}
-
-class _PlantScreenContentState extends State<PlantScreenContent> {
+class _PlantScreenState extends State<PlantScreen> {
   DateTime selectedDate = DateTime.now();
 
   void onDateSelected(DateTime date) {
@@ -38,14 +27,6 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    final weatherProvider =
-        Provider.of<WeatherProvider>(context, listen: false);
-    weatherProvider.getLocationAndFetchWeather();
-  }
-
   Future<bool> _loadData() async {
     await Future.delayed(const Duration(milliseconds: 4500));
     return true;
@@ -53,8 +34,8 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final weatherProvider = Provider.of<WeatherProvider>(context);
-
+    final weatherCubit = BlocProvider.of<WeatherCubit>(context);
+    weatherCubit.getLocationAndFetchWeather();
     return Scaffold(
       backgroundColor: tBgColor,
       body: FutureBuilder<bool>(
@@ -65,15 +46,25 @@ class _PlantScreenContentState extends State<PlantScreenContent> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            return buildMainUI(
-              newNotification: false,
-              icon: weatherProvider.icon,
-              weatherText: weatherProvider.weatherText,
-              temperature: weatherProvider.temperature,
-              cloud: weatherProvider.cloud,
-              wind: weatherProvider.wind,
-              humidity: weatherProvider.humidity,
-            );
+            return BlocBuilder<WeatherCubit, WeatherState>(
+                builder: (context, state) {
+              if (state is WeatherLoadingState) {
+                return buildLoadingUI();
+              } else if (state is WeatherDataState) {
+                return buildMainUI(
+                  newNotification: false,
+                  icon: state.icon,
+                  weatherText: state.weatherText,
+                  temperature: state.temperature,
+                  cloud: state.cloud,
+                  wind: state.wind,
+                  humidity: state.humidity,
+                );
+              } else if (state is WeatherLoadingState) {
+                return const Text("Loading ");
+              }
+              return Container();
+            });
           }
         },
       ),

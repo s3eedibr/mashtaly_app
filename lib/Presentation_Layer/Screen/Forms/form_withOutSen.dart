@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
 import 'package:mashtaly_app/Constants/assets.dart';
 import '../../../Constants/colors.dart';
+import '../../Widget/snakBar.dart';
 import 'Utils.dart';
 
 import '../HomeScreens/home_screen.dart';
@@ -15,7 +18,46 @@ class AddPlantFormWithOutSen extends StatefulWidget {
 }
 
 class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
-  int selectedWeek = -1; // Initialize with -1, indicating no button selected.
+  int selectedWeek = -1;
+
+  List<List<String>> weeklySchedules = [
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+  ];
 
   void selectWeek(int weekNumber) {
     setState(() {
@@ -25,6 +67,8 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
 
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController untilDateController = TextEditingController();
+  final TextEditingController plantNameController = TextEditingController();
+  final TextEditingController amountOfWaterController = TextEditingController();
 
   late Future<TimeOfDay?> selectedTime;
   String time = " ";
@@ -99,13 +143,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                 height: 40,
                 width: 300,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "This field is required";
-                    } else {
-                      return null;
-                    }
-                  },
+                  controller: plantNameController,
                   keyboardType: TextInputType.text,
                   cursorColor: tPrimaryActionColor,
                   style: const TextStyle(
@@ -174,7 +212,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         children: [
           const SizedBox(height: 25),
           const Text(
-            "Size of Water per Watering",
+            "Amount of water per watering",
             style: TextStyle(
               fontSize: 15,
               color: Color(0x7C0D1904),
@@ -186,13 +224,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             height: 40,
             width: 375,
             child: TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "This field is required";
-                } else {
-                  return null;
-                }
-              },
+              controller: amountOfWaterController,
               keyboardType: TextInputType.number,
               cursorColor: tPrimaryActionColor,
               style: const TextStyle(
@@ -406,7 +438,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  selectWeek(index + 1);
+                  selectedWeek = index + 1;
                 });
               },
               child: Container(
@@ -446,10 +478,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     return Padding(
       padding: const EdgeInsets.only(left: 17, right: 16),
       child: Visibility(
-        visible: selectedWeek == 1 ||
-            selectedWeek == 2 ||
-            selectedWeek == 3 ||
-            selectedWeek == 4,
+        visible: selectedWeek >= 1 && selectedWeek <= weeklySchedules.length,
         child: SizedBox(
           height: 92,
           width: double.infinity,
@@ -457,15 +486,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             itemCount: 7,
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
-              final List<String> dayNames = [
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-              ];
+              final dayNames = weeklySchedules[selectedWeek - 1];
               return Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Column(
@@ -486,8 +507,9 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(16),
-                            bottomRight: Radius.circular(16)),
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16),
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -542,7 +564,23 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             Radius.circular(12.0),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (plantNameController.text.isEmpty) {
+            print('Error: Please enter plant name.');
+            showSnakBar(context, 'Please enter plant name.');
+            return;
+          }
+          if (amountOfWaterController.text.isEmpty) {
+            print('Error: Please enter Amount of water per watering.');
+            showSnakBar(context, 'Please enter amount of water per watering.');
+            return;
+          }
+          var plantCubit = BlocProvider.of<PlantCubit>(context);
+          plantCubit.addPlant(
+            plantName: plantNameController,
+            amountOfWater: amountOfWaterController,
+          );
+        },
         child: const Center(
           child: Text(
             "Save Schedule",

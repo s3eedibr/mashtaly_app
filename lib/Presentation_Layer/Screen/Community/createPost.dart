@@ -10,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../Constants/colors.dart';
-import '../../Widget/sankBar.dart';
+import '../../Widget/snakBar.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({

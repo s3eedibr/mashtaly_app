@@ -3,6 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/weather/weatherCubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 
@@ -40,7 +43,7 @@ class SplashScreenApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: SplashScreen(
         onSplashFinished: () {
-          runApp(App(
+          runApp(MashtalyApp(
             isViewed: isViewed,
           ));
         },
@@ -49,31 +52,41 @@ class SplashScreenApp extends StatelessWidget {
   }
 }
 
-class App extends StatelessWidget {
+class MashtalyApp extends StatelessWidget {
   final int? isViewed;
 
-  const App({super.key, required this.isViewed});
+  const MashtalyApp({super.key, required this.isViewed});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Mulish',
-        useMaterial3: true,
-        dialogBackgroundColor: Colors.white,
-        datePickerTheme: const DatePickerThemeData(
-          backgroundColor: Colors.white,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PlantCubit>(
+          create: (context) => PlantCubit(),
         ),
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: tPrimaryActionColor.withOpacity(.5),
-          cursorColor: tPrimaryActionColor.withOpacity(.6),
-          selectionHandleColor: tPrimaryActionColor.withOpacity(1),
+        BlocProvider<WeatherCubit>(
+          create: (context) => WeatherCubit(),
         ),
-      ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Mulish',
+          useMaterial3: true,
+          dialogBackgroundColor: Colors.white,
+          datePickerTheme: const DatePickerThemeData(
+            backgroundColor: Colors.white,
+          ),
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: tPrimaryActionColor.withOpacity(.5),
+            cursorColor: tPrimaryActionColor.withOpacity(.6),
+            selectionHandleColor: tPrimaryActionColor.withOpacity(1),
+          ),
+        ),
 
-      // Show OnBoardingScreen if it hasn't been viewed, otherwise show Auth
-      home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
+        // Show OnBoardingScreen if it hasn't been viewed, otherwise show Auth
+        home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
+      ),
     );
   }
 }

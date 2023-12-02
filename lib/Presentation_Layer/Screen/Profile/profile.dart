@@ -10,7 +10,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
-import '../../Widget/sankBar.dart';
+import '../../Widget/snakBar.dart';
 import 'myPosts.dart';
 import 'mySells.dart';
 

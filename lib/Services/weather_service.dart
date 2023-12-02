@@ -9,29 +9,29 @@ class WeatherService {
     required double latitude,
     required double longitude,
   }) async {
-    bool? serviceEnabled;
-    LocationPermission? permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return null;
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) return null;
-    }
-
-    if (permission == LocationPermission.deniedForever) return null;
-
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) return null;
-
-    String apiKey = "0a971b7c5266468ab32110003232003";
-    String apiUrl =
-        "http://api.weatherapi.com/v1/current.json?key=$apiKey&q=$latitude,$longitude&aqi=no";
-
     try {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return null;
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission != LocationPermission.whileInUse &&
+            permission != LocationPermission.always) return null;
+      }
+
+      if (permission == LocationPermission.deniedForever) return null;
+
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) return null;
+
+      const String apiKey = "0a971b7c5266468ab32110003232003";
+      final String apiUrl =
+          "http://api.weatherapi.com/v1/current.json?key=$apiKey&q=${Uri.encodeComponent('$latitude,$longitude')}&aqi=no";
+
       http.Response response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
