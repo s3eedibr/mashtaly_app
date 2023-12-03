@@ -56,41 +56,6 @@ class WeatherCubit extends Cubit<WeatherState> {
     }
   }
 
-  // Future<void> getWeatherData() async {
-  //   var connectivityResult = await Connectivity().checkConnectivity();
-  //   if (connectivityResult != ConnectivityResult.none) {
-  //     if (latitude != null && longitude != null) {
-  //       try {
-  //         Map<String, dynamic>? weatherData = await weather.getWeather(
-  //           latitude: latitude!,
-  //           longitude: longitude!,
-  //         );
-
-  //         if (weatherData != null) {
-  //           final current = weatherData['current'];
-  //           if (current != null) {
-  //             final condition = current['condition'];
-  //             if (condition != null) {
-  //               emit(WeatherDataState(
-  //                 weatherText: condition['text'] ?? '',
-  //                 temperature: current['temp_c'].toString(),
-  //                 icon: 'http:${condition['icon']}',
-  //                 wind: current['wind_kph'].toString(),
-  //                 humidity: current['humidity'].toString(),
-  //                 cloud: current['cloud'].toString(),
-  //               ));
-  //             }
-  //           }
-  //         }
-  //       } catch (e) {
-  //         emit(WeatherErrorState(error: 'Failed to get weather data.'));
-  //       }
-  //     }
-  //   } else {
-  //     emit(WeatherErrorState(error: 'No internet connection.'));
-  //   }
-  // }
-
   void startTimer() {
     timer = Timer.periodic(const Duration(minutes: 30), (Timer t) {
       getLocationAndFetchWeather();

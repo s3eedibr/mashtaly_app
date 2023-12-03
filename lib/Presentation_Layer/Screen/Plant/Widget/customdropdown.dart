@@ -1,59 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Constants/assets.dart';
 
-class CustomDropdown extends StatefulWidget {
-  const CustomDropdown({super.key});
+import '../../../../Constants/assets.dart';
 
-  @override
-  _CustomDropdownState createState() => _CustomDropdownState();
-}
+class CustomDropdown extends StatelessWidget {
+  final ValueChanged<String?> onImageSelected;
 
-class _CustomDropdownState extends State<CustomDropdown> {
-  List<String> imagePaths = [
-    Assets.assetsImagesIconsDefaultProfile,
-    Assets.assetsImagesIconsDefaultProfile,
-    Assets.assetsImagesIconsDefaultProfile,
-    Assets.assetsImagesIconsDefaultProfile,
-  ];
-
-  String? selectedImagePath;
+  const CustomDropdown({super.key, required this.onImageSelected});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        selectedImagePath != null
-            ? Image.asset(
-                selectedImagePath!,
-                width: 100,
-                height: 100,
-              )
-            : Container(),
-        DropdownButton<String>(
-          hint: const Text('Select an image'),
-          value: selectedImagePath,
-          onChanged: (String? value) {
-            setState(() {
-              selectedImagePath = value;
-            });
-          },
-          items: imagePaths.asMap().entries.map<DropdownMenuItem<String>>(
-            (entry) {
-              int index = entry.key;
-              String path = entry.value;
-              return DropdownMenuItem<String>(
-                value: '$index-$path', // Use index as a unique identifier
-                child: Image.asset(
-                  path,
-                  width: 50,
-                  height: 50,
-                ),
-              );
-            },
-          ).toList(),
-        ),
-      ],
+    List<String> imagePaths = [
+      Assets.assetsImagesIconsCommunities, Assets.assetsImagesIconsCommunities,
+      Assets.assetsImagesIconsCommunities, Assets.assetsImagesIconsCommunities,
+      // Add more image paths as needed
+    ];
+
+    return DropdownButton<String>(
+      hint: const Text('Select an image'),
+      value: null,
+      onChanged: (String? value) {
+        onImageSelected(value);
+      },
+      items: imagePaths.asMap().entries.map<DropdownMenuItem<String>>(
+        (entry) {
+          String path = entry.value;
+          return DropdownMenuItem<String>(
+            value: path, // Use image path as a unique identifier
+            child: Image.asset(
+              path,
+              width: 50,
+              height: 50,
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }

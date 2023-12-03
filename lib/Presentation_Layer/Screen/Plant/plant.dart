@@ -2,13 +2,18 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/plant/plantStates.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Widget/plant_card.dart';
 
 import '../../../Business_Layer/cubits/weather/weatherCubit.dart';
 import '../../../Business_Layer/cubits/weather/weatherStates.dart';
 import '../../../Constants/colors.dart';
-import '../Forms/form_withOutSen.dart';
-import '../Forms/form_withSen.dart';
+import '../../../sql.dart';
 import '../HomeScreens/notification.dart';
+import 'Widget/buildLoadingUI.dart';
+import 'Widget/choiceButtons.dart';
+import 'Widget/noPlantData.dart';
 
 class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
@@ -36,50 +41,8 @@ class _PlantScreenState extends State<PlantScreen> {
   Widget build(BuildContext context) {
     final weatherCubit = BlocProvider.of<WeatherCubit>(context);
     weatherCubit.getLocationAndFetchWeather();
-    return Scaffold(
-      backgroundColor: tBgColor,
-      body: FutureBuilder<bool>(
-        future: _loadData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return buildLoadingUI();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return BlocBuilder<WeatherCubit, WeatherState>(
-                builder: (context, state) {
-              if (state is WeatherLoadingState) {
-                return buildLoadingUI();
-              } else if (state is WeatherDataState) {
-                return buildMainUI(
-                  newNotification: false,
-                  icon: state.icon,
-                  weatherText: state.weatherText,
-                  temperature: state.temperature,
-                  cloud: state.cloud,
-                  wind: state.wind,
-                  humidity: state.humidity,
-                );
-              } else if (state is WeatherLoadingState) {
-                return const Text("Loading ");
-              }
-              return Container();
-            });
-          }
-        },
-      ),
-    );
-  }
+    const bool newNotification = true;
 
-  Widget buildMainUI({
-    required bool newNotification,
-    required String icon,
-    required String weatherText,
-    required String temperature,
-    required String cloud,
-    required String wind,
-    required String humidity,
-  }) {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
@@ -160,6 +123,57 @@ class _PlantScreenState extends State<PlantScreen> {
           ],
         ),
       ),
+      body: FutureBuilder<bool>(
+        future: _loadData(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Display a loading UI while waiting for the future to complete.
+            return buildLoadingUI();
+          } else if (snapshot.hasError) {
+            // Display an error message if there is an error in the future.
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // Use BlocBuilder to handle state changes from the WeatherCubit.
+            return BlocBuilder<WeatherCubit, WeatherState>(
+              builder: (context, state) {
+                if (state is WeatherLoadingState) {
+                  // Display a loading UI while waiting for weather data.
+                  return buildLoadingUI();
+                } else if (state is WeatherDataState) {
+                  // Display the main UI with weather data when available.
+                  return buildMainUI(
+                    icon: state.icon,
+                    weatherText: state.weatherText,
+                    temperature: state.temperature,
+                    cloud: state.cloud,
+                    wind: state.wind,
+                    humidity: state.humidity,
+                  );
+                } else if (state is WeatherErrorState) {
+                  // Display an error message if there is an error in the WeatherCubit.
+                  return Text(state.error);
+                }
+                // If none of the above conditions are met, return an empty Container.
+                return Container();
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildMainUI({
+    required String icon,
+    required String weatherText,
+    required String temperature,
+    required String cloud,
+    required String wind,
+    required String humidity,
+  }) {
+    SqlDb sqlDb = SqlDb();
+
+    return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
@@ -461,144 +475,7 @@ class _PlantScreenState extends State<PlantScreen> {
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onPressed: () {
-                      showModalBottomSheet(
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            height: 225,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 16, bottom: 0, left: 17),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 130,
-                                        width: 130,
-                                        decoration: BoxDecoration(
-                                          color: tPrimaryActionColor,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.16),
-                                              spreadRadius: 1,
-                                              blurRadius: 7,
-                                              offset: const Offset(0,
-                                                  3), // changes position of shadow
-                                            ),
-                                          ],
-                                        ),
-                                        child: IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const AddPlantFormWithSen(),
-                                              ),
-                                            );
-                                          },
-                                          highlightColor:
-                                              Colors.white.withOpacity(0.05),
-                                          icon: Image.asset(
-                                            'assets/images/icons/smart-farm.png',
-                                            height: 65,
-                                            width: 65,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      const Text(
-                                        'With Sensor',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        height: 18,
-                                      ),
-                                      Container(
-                                        height: 130,
-                                        width: 130,
-                                        decoration: BoxDecoration(
-                                          color: tPrimaryActionColor,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.16),
-                                              spreadRadius: 1,
-                                              blurRadius: 7,
-                                              offset: const Offset(0,
-                                                  3), // changes position of shadow
-                                            ),
-                                          ],
-                                        ),
-                                        child: IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const AddPlantFormWithOutSen(),
-                                              ),
-                                            );
-                                          },
-                                          highlightColor:
-                                              Colors.white.withOpacity(0.05),
-                                          icon: Image.asset(
-                                            'assets/images/icons/Untitled-3@3x.png',
-                                            height: 65,
-                                            width: 65,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      const Text(
-                                        'Without Sensor',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const Text(
-                                        'Mashtaly Data',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
+                      showChoiceButtonsAddPlant(context);
                     },
                     color: Colors.white,
                     elevation: 0,
@@ -633,53 +510,20 @@ class _PlantScreenState extends State<PlantScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: 250,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F1F1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 88.5,
-                    top: 15,
-                    right: 125,
-                    left: 125,
-                    child: Image.asset(
-                      'assets/images/stack_images/Group 2.png',
-                      height: 102,
-                      width: 88,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 153,
-                    right: 27,
-                    left: 235,
-                    child: Image.asset(
-                      'assets/images/stack_images/Group 390.png',
-                      height: 110,
-                      width: 80,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 180,
-                      bottom: 13,
-                    ),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "You don't have any plants yet\nAdd your plant now",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+              child: BlocBuilder<PlantCubit, PlantState>(
+                builder: (context, state) {
+                  if (state is PlantInitialState) {
+                    return const NoPlantData();
+                  } else if (state is PlantSuccessDataState) {
+                    return PlantCard(
+                      imageFile: state.imageFile,
+                      plantName: state.plantName,
+                    );
+                  } else if (state is PlantErrorState) {
+                    return const Text("There is error");
+                  }
+                  return Container();
+                },
               ),
             ),
             const SizedBox(
@@ -690,32 +534,4 @@ class _PlantScreenState extends State<PlantScreen> {
       ),
     );
   }
-}
-
-// Other methods and variables...
-
-Widget buildLoadingUI() {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          "assets/images/plant_loading2.gif",
-          height: 100,
-          width: 100,
-        ),
-        const SizedBox(height: 16),
-        const Text(
-          'Loading...',
-          style: TextStyle(
-            color: tPrimaryTextColor,
-            fontFamily: 'Mulish',
-            decoration: TextDecoration.none,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    ),
-  );
 }

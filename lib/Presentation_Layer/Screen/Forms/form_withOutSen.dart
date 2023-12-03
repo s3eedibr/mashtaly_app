@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
-import 'package:mashtaly_app/Constants/assets.dart';
+import 'package:mashtaly_app/sql.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/snakBar.dart';
+import '../Plant/Widget/customdropdown.dart';
 import 'Utils.dart';
 
 import '../HomeScreens/home_screen.dart';
@@ -69,10 +73,38 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
   final TextEditingController untilDateController = TextEditingController();
   final TextEditingController plantNameController = TextEditingController();
   final TextEditingController amountOfWaterController = TextEditingController();
+  File? _image;
+  Future<void> _pickImageFromGallery() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 25,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  // Function to capture an image from the camera
+  Future<void> _captureImageFromCamera() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   late Future<TimeOfDay?> selectedTime;
   String time = " ";
   String? selectedImagePath;
+
+  SqlDb sqlDb = SqlDb();
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +136,13 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         children: [
+          const SizedBox(height: 10),
+          _buildPlantImage(),
           _buildPlantNameInput(),
           _buildWateringSizeInput(),
           _buildDateRangeInput(),
           _buildDelayedWateringInput(),
-          const SizedBox(height: 35),
+          const SizedBox(height: 10),
           _buildScheduleHeader(),
           const SizedBox(height: 10),
           _buildDaySchedule(),
@@ -116,6 +150,39 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         ],
       ),
       floatingActionButton: _buildSaveScheduleButton(),
+    );
+  }
+
+  Widget _buildPlantImage() {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            selectImageDialog(context);
+          },
+          child: Container(
+            height: 200,
+            width: 379.4,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+            ),
+            child: _image != null
+                ? Image.file(
+                    _image!,
+                    fit: BoxFit.cover,
+                  )
+                : const Icon(
+                    FontAwesomeIcons.plus,
+                    color: tSearchIconColor,
+                    size: 55,
+                  ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -528,7 +595,9 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                showDialogTimePicker(context);
+                              },
                               child: const Text(
                                 '+  Add Time',
                                 style: TextStyle(
@@ -564,7 +633,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             Radius.circular(12.0),
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           if (plantNameController.text.isEmpty) {
             print('Error: Please enter plant name.');
             showSnakBar(context, 'Please enter plant name.');
@@ -577,9 +646,30 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
           }
           var plantCubit = BlocProvider.of<PlantCubit>(context);
           plantCubit.addPlant(
-            plantName: plantNameController,
-            amountOfWater: amountOfWaterController,
+            plantName: plantNameController.text.trim(),
+            amountOfWater: amountOfWaterController.text.trim(),
+            imageFile: _image,
           );
+          // int response = await sqlDb.insertData('''
+          //     "INSERT INTO 'Plants'
+          //     ('imagePath',
+          //     'plantName',
+          //     'amountOfWater',
+          //     'type',
+          //     'active',
+          //     'fromDate',
+          //     'untilDate')
+          //     VALUES
+          //     ('$_image',
+          //     '${plantNameController.text.trim()}',
+          //     '${amountOfWaterController.text.trim()}',
+          //     'New',
+          //     '1',
+          //     '${fromDateController.text.trim()}',
+          //     '${untilDateController.text.trim()}')"
+          //     ''');
+          // print(response);
+          Navigator.of(context).pop();
         },
         child: const Center(
           child: Text(
@@ -689,40 +779,52 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
       },
     );
   }
-}
 
-class CustomDropdown extends StatelessWidget {
-  final ValueChanged<String?> onImageSelected;
-
-  const CustomDropdown({super.key, required this.onImageSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    List<String> imagePaths = [
-      Assets.assetsImagesIconsCommunities, Assets.assetsImagesIconsCommunities,
-      Assets.assetsImagesIconsCommunities, Assets.assetsImagesIconsCommunities,
-      // Add more image paths as needed
-    ];
-
-    return DropdownButton<String>(
-      hint: const Text('Select an image'),
-      value: null,
-      onChanged: (String? value) {
-        onImageSelected(value);
-      },
-      items: imagePaths.asMap().entries.map<DropdownMenuItem<String>>(
-        (entry) {
-          String path = entry.value;
-          return DropdownMenuItem<String>(
-            value: path, // Use image path as a unique identifier
-            child: Image.asset(
-              path,
-              width: 50,
-              height: 50,
+  // Show options for selecting image from gallery or camera
+  Future<dynamic> selectImageDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text("Select Image from"),
+          children: [
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      _captureImageFromCamera();
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.camera_alt_rounded),
+                        Text("Camera"),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      _pickImageFromGallery();
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.image),
+                        Text("Gallery"),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          );
-        },
-      ).toList(),
+          ],
+        );
+      },
     );
   }
 }
