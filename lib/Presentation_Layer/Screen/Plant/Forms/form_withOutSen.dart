@@ -7,12 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
 import 'package:mashtaly_app/sql.dart';
-import '../../../Constants/colors.dart';
-import '../../Widget/snakBar.dart';
-import '../Plant/Widget/customdropdown.dart';
+import '../../../../Constants/colors.dart';
+import '../../../Widget/snakBar.dart';
+import '../Widget/customdropdown.dart';
 import 'Utils.dart';
 
-import '../HomeScreens/home_screen.dart';
+import '../../HomeScreens/home_screen.dart';
 
 class AddPlantFormWithOutSen extends StatefulWidget {
   const AddPlantFormWithOutSen({Key? key}) : super(key: key);
@@ -634,42 +634,37 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
           ),
         ),
         onPressed: () async {
-          if (plantNameController.text.isEmpty) {
-            print('Error: Please enter plant name.');
-            showSnakBar(context, 'Please enter plant name.');
-            return;
+          try {
+            if (_image == null) {
+              print('Error: Please select an image.');
+              showSnakBar(context, 'Please select an image.');
+              return;
+            }
+
+            if (plantNameController.text.isEmpty) {
+              print('Error: Please enter plant name.');
+              showSnakBar(context, 'Please enter plant name.');
+              return;
+            }
+            if (amountOfWaterController.text.isEmpty) {
+              print('Error: Please enter Amount of water per watering.');
+              showSnakBar(
+                  context, 'Please enter amount of water per watering.');
+              return;
+            }
+
+            var plantCubit = BlocProvider.of<PlantCubit>(context);
+            plantCubit.addPlant(
+              imageFile: _image,
+              plantName: plantNameController.text.trim(),
+              amountOfWater:
+                  double.tryParse(amountOfWaterController.text.trim()) ?? 0.0,
+            );
+            Navigator.of(context).pop();
+          } catch (e) {
+            print('Error adding plant: $e');
+            showSnakBar(context, 'Error adding plant: $e');
           }
-          if (amountOfWaterController.text.isEmpty) {
-            print('Error: Please enter Amount of water per watering.');
-            showSnakBar(context, 'Please enter amount of water per watering.');
-            return;
-          }
-          var plantCubit = BlocProvider.of<PlantCubit>(context);
-          plantCubit.addPlant(
-            plantName: plantNameController.text.trim(),
-            amountOfWater: amountOfWaterController.text.trim(),
-            imageFile: _image,
-          );
-          // int response = await sqlDb.insertData('''
-          //     "INSERT INTO 'Plants'
-          //     ('imagePath',
-          //     'plantName',
-          //     'amountOfWater',
-          //     'type',
-          //     'active',
-          //     'fromDate',
-          //     'untilDate')
-          //     VALUES
-          //     ('$_image',
-          //     '${plantNameController.text.trim()}',
-          //     '${amountOfWaterController.text.trim()}',
-          //     'New',
-          //     '1',
-          //     '${fromDateController.text.trim()}',
-          //     '${untilDateController.text.trim()}')"
-          //     ''');
-          // print(response);
-          Navigator.of(context).pop();
         },
         child: const Center(
           child: Text(

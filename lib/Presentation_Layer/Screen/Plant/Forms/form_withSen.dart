@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../../Constants/colors.dart';
+import '../../../../Constants/colors.dart';
 import 'Utils.dart';
 import 'package:http/http.dart' as http;
 
-import '../HomeScreens/home_screen.dart';
+import '../../HomeScreens/home_screen.dart';
 
 class AddPlantFormWithSen extends StatefulWidget {
   const AddPlantFormWithSen({super.key});
