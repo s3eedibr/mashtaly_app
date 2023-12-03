@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 
 import '../../../Constants/colors.dart';
-import '../../Widget/sankBar.dart';
+import '../../Widget/snakBar.dart';
 
 class CreateSellPlant extends StatefulWidget {
   const CreateSellPlant({

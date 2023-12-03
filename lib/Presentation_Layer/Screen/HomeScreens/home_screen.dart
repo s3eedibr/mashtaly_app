@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../Constants/colors.dart';
 import '../CameraScreen/camera_scanner_screen.dart';
 import '../Community/community.dart';
-import 'notification.dart';
 import '../Plant/plant.dart';
+import 'notification.dart';
 import '../Profile/profile.dart';
 
 class HomeScreen extends StatefulWidget {

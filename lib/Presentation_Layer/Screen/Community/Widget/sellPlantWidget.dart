@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Presentation_Layer/Widget/sankBar.dart';
+import 'package:mashtaly_app/Presentation_Layer/Widget/snakBar.dart';
 
 import '../../../../Constants/colors.dart';
 import '../Data/getData.dart';

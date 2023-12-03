@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mashtaly_app/Constants/assets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
+import 'package:mashtaly_app/sql.dart';
 import '../../../Constants/colors.dart';
+import '../../Widget/snakBar.dart';
+import '../Plant/Widget/customdropdown.dart';
 import 'Utils.dart';
 
 import '../HomeScreens/home_screen.dart';
@@ -15,7 +22,46 @@ class AddPlantFormWithOutSen extends StatefulWidget {
 }
 
 class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
-  int selectedWeek = -1; // Initialize with -1, indicating no button selected.
+  int selectedWeek = -1;
+
+  List<List<String>> weeklySchedules = [
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ],
+  ];
 
   void selectWeek(int weekNumber) {
     setState(() {
@@ -25,10 +71,40 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
 
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController untilDateController = TextEditingController();
+  final TextEditingController plantNameController = TextEditingController();
+  final TextEditingController amountOfWaterController = TextEditingController();
+  File? _image;
+  Future<void> _pickImageFromGallery() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 25,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  // Function to capture an image from the camera
+  Future<void> _captureImageFromCamera() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   late Future<TimeOfDay?> selectedTime;
   String time = " ";
   String? selectedImagePath;
+
+  SqlDb sqlDb = SqlDb();
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +136,13 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         children: [
+          const SizedBox(height: 10),
+          _buildPlantImage(),
           _buildPlantNameInput(),
           _buildWateringSizeInput(),
           _buildDateRangeInput(),
           _buildDelayedWateringInput(),
-          const SizedBox(height: 35),
+          const SizedBox(height: 10),
           _buildScheduleHeader(),
           const SizedBox(height: 10),
           _buildDaySchedule(),
@@ -72,6 +150,39 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         ],
       ),
       floatingActionButton: _buildSaveScheduleButton(),
+    );
+  }
+
+  Widget _buildPlantImage() {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            selectImageDialog(context);
+          },
+          child: Container(
+            height: 200,
+            width: 379.4,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+            ),
+            child: _image != null
+                ? Image.file(
+                    _image!,
+                    fit: BoxFit.cover,
+                  )
+                : const Icon(
+                    FontAwesomeIcons.plus,
+                    color: tSearchIconColor,
+                    size: 55,
+                  ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -99,13 +210,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                 height: 40,
                 width: 300,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "This field is required";
-                    } else {
-                      return null;
-                    }
-                  },
+                  controller: plantNameController,
                   keyboardType: TextInputType.text,
                   cursorColor: tPrimaryActionColor,
                   style: const TextStyle(
@@ -174,7 +279,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         children: [
           const SizedBox(height: 25),
           const Text(
-            "Size of Water per Watering",
+            "Amount of water per watering",
             style: TextStyle(
               fontSize: 15,
               color: Color(0x7C0D1904),
@@ -186,13 +291,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             height: 40,
             width: 375,
             child: TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "This field is required";
-                } else {
-                  return null;
-                }
-              },
+              controller: amountOfWaterController,
               keyboardType: TextInputType.number,
               cursorColor: tPrimaryActionColor,
               style: const TextStyle(
@@ -406,7 +505,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  selectWeek(index + 1);
+                  selectedWeek = index + 1;
                 });
               },
               child: Container(
@@ -446,10 +545,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     return Padding(
       padding: const EdgeInsets.only(left: 17, right: 16),
       child: Visibility(
-        visible: selectedWeek == 1 ||
-            selectedWeek == 2 ||
-            selectedWeek == 3 ||
-            selectedWeek == 4,
+        visible: selectedWeek >= 1 && selectedWeek <= weeklySchedules.length,
         child: SizedBox(
           height: 92,
           width: double.infinity,
@@ -457,15 +553,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             itemCount: 7,
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
-              final List<String> dayNames = [
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-              ];
+              final dayNames = weeklySchedules[selectedWeek - 1];
               return Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Column(
@@ -486,8 +574,9 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(16),
-                            bottomRight: Radius.circular(16)),
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16),
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -506,7 +595,9 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                showDialogTimePicker(context);
+                              },
                               child: const Text(
                                 '+  Add Time',
                                 style: TextStyle(
@@ -542,7 +633,44 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             Radius.circular(12.0),
           ),
         ),
-        onPressed: () {},
+        onPressed: () async {
+          if (plantNameController.text.isEmpty) {
+            print('Error: Please enter plant name.');
+            showSnakBar(context, 'Please enter plant name.');
+            return;
+          }
+          if (amountOfWaterController.text.isEmpty) {
+            print('Error: Please enter Amount of water per watering.');
+            showSnakBar(context, 'Please enter amount of water per watering.');
+            return;
+          }
+          var plantCubit = BlocProvider.of<PlantCubit>(context);
+          plantCubit.addPlant(
+            plantName: plantNameController.text.trim(),
+            amountOfWater: amountOfWaterController.text.trim(),
+            imageFile: _image,
+          );
+          // int response = await sqlDb.insertData('''
+          //     "INSERT INTO 'Plants'
+          //     ('imagePath',
+          //     'plantName',
+          //     'amountOfWater',
+          //     'type',
+          //     'active',
+          //     'fromDate',
+          //     'untilDate')
+          //     VALUES
+          //     ('$_image',
+          //     '${plantNameController.text.trim()}',
+          //     '${amountOfWaterController.text.trim()}',
+          //     'New',
+          //     '1',
+          //     '${fromDateController.text.trim()}',
+          //     '${untilDateController.text.trim()}')"
+          //     ''');
+          // print(response);
+          Navigator.of(context).pop();
+        },
         child: const Center(
           child: Text(
             "Save Schedule",
@@ -651,40 +779,52 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
       },
     );
   }
-}
 
-class CustomDropdown extends StatelessWidget {
-  final ValueChanged<String?> onImageSelected;
-
-  const CustomDropdown({super.key, required this.onImageSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    List<String> imagePaths = [
-      Assets.assetsImagesIconsCommunities, Assets.assetsImagesIconsCommunities,
-      Assets.assetsImagesIconsCommunities, Assets.assetsImagesIconsCommunities,
-      // Add more image paths as needed
-    ];
-
-    return DropdownButton<String>(
-      hint: const Text('Select an image'),
-      value: null,
-      onChanged: (String? value) {
-        onImageSelected(value);
-      },
-      items: imagePaths.asMap().entries.map<DropdownMenuItem<String>>(
-        (entry) {
-          String path = entry.value;
-          return DropdownMenuItem<String>(
-            value: path, // Use image path as a unique identifier
-            child: Image.asset(
-              path,
-              width: 50,
-              height: 50,
+  // Show options for selecting image from gallery or camera
+  Future<dynamic> selectImageDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text("Select Image from"),
+          children: [
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      _captureImageFromCamera();
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.camera_alt_rounded),
+                        Text("Camera"),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      _pickImageFromGallery();
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.image),
+                        Text("Gallery"),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          );
-        },
-      ).toList(),
+          ],
+        );
+      },
     );
   }
 }

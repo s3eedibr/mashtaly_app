@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Auth/auth.dart';
@@ -58,7 +59,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        // systemOverlayStyle: const SystemUiOverlayStyle(
+        //   statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        // ),
+        // backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           TextButton(

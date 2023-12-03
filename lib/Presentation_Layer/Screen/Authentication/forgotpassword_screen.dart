@@ -4,7 +4,7 @@ import '../../../Auth/auth.dart';
 import '../../../Constants/assets.dart';
 import '../../../Constants/colors.dart';
 import '../../../Constants/text_strings.dart';
-import '../../Widget/sankBar.dart';
+import '../../Widget/snakBar.dart';
 import 'otp_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
