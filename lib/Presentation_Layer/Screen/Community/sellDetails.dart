@@ -3,7 +3,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Constants/colors.dart';
-import '../Forms/Utils.dart';
+import '../Plant/Forms/Utils.dart';
 
 // Widget to display details of a sell post
 class SellDetails extends StatelessWidget {

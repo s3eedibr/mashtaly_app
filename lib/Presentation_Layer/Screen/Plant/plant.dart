@@ -515,12 +515,18 @@ class _PlantScreenState extends State<PlantScreen> {
                   if (state is PlantInitialState) {
                     return const NoPlantData();
                   } else if (state is PlantSuccessDataState) {
-                    return PlantCard(
-                      imageFile: state.imageFile,
-                      plantName: state.plantName,
+                    List<PlantCard> plantCards = state.plants.map((plant) {
+                      return PlantCard(
+                        imageFile: plant.imagePath,
+                        plantName: plant.plantName,
+                      );
+                    }).toList();
+
+                    return Column(
+                      children: plantCards,
                     );
                   } else if (state is PlantErrorState) {
-                    return const Text("There is error");
+                    return const Text("There is an error");
                   }
                   return Container();
                 },

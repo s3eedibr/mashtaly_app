@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../Constants/colors.dart';
-import '../Forms/Utils.dart';
+import '../Plant/Forms/Utils.dart';
 
 // Widget to display post details
 class PostDetails extends StatelessWidget {

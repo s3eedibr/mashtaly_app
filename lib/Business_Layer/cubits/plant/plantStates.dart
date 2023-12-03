@@ -1,16 +1,14 @@
+import 'plantData.dart';
+
 class PlantState {}
 
 class PlantInitialState extends PlantState {}
 
-class PlantUpdateDataState extends PlantState {}
-
 class PlantSuccessDataState extends PlantState {
-  final String plantName;
-  final String imageFile;
+  final List<PlantData> plants;
 
   PlantSuccessDataState({
-    required this.imageFile,
-    required this.plantName,
+    required this.plants,
   });
 }
 

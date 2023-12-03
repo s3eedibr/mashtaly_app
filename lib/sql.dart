@@ -62,6 +62,13 @@ class SqlDb {
     return response;
   }
 
+  Future<List<Map<String, dynamic>>> getAllPlants() async {
+    Database? myDb = await db;
+    List<Map<String, dynamic>> plants =
+        await myDb!.query("SELECT * FROM 'Plants'");
+    return plants;
+  }
+
   // Insert data into the database using a raw SQL query
   insertData(String sql, List list) async {
     Database? myDb = await db;
