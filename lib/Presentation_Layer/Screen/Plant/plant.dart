@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/plant/plantStates.dart';
-import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Widget/plant_card.dart';
+// import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Widget/plant_card.dart';
 
 import '../../../Business_Layer/cubits/weather/weatherCubit.dart';
 import '../../../Business_Layer/cubits/weather/weatherStates.dart';
 import '../../../Constants/colors.dart';
-import '../../../sql.dart';
+// import '../../../sql.dart';
 import '../HomeScreens/notification.dart';
 import 'Widget/buildLoadingUI.dart';
 import 'Widget/choiceButtons.dart';
@@ -24,6 +24,12 @@ class PlantScreen extends StatefulWidget {
 
 class _PlantScreenState extends State<PlantScreen> {
   DateTime selectedDate = DateTime.now();
+  // SqlDb sqlDb = SqlDb();
+
+  // Future<List<Map>> readData() async {
+  //   List<Map> response = await sqlDb.readData("SELECT * FROM Plants");
+  //   return response;
+  // }
 
   void onDateSelected(DateTime date) {
     setState(() {
@@ -171,8 +177,6 @@ class _PlantScreenState extends State<PlantScreen> {
     required String wind,
     required String humidity,
   }) {
-    SqlDb sqlDb = SqlDb();
-
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -205,7 +209,7 @@ class _PlantScreenState extends State<PlantScreen> {
                       const SizedBox(
                         width: 5,
                       ),
-                      weatherText.isNotEmpty
+                      weatherText.isNotEmpty && weatherText.length < 20
                           ? Text(
                               weatherText,
                               style: const TextStyle(
@@ -213,14 +217,16 @@ class _PlantScreenState extends State<PlantScreen> {
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             )
-                          : const Text(
-                              "",
-                              style: TextStyle(
+                          : Text(
+                              weatherText,
+                              style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                     ],
                   ),
@@ -502,6 +508,25 @@ class _PlantScreenState extends State<PlantScreen> {
                       ],
                     ),
                   ),
+                  // MaterialButton(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onPressed: () async {
+                  //     await sqlDb.deleteDb();
+                  //   },
+                  //   color: Colors.white,
+                  //   elevation: 0,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: const Text(
+                  //     "delete database",
+                  //     style: TextStyle(
+                  //         color: tThirdTextErrorColor,
+                  //         fontSize: 15,
+                  //         fontWeight: FontWeight.bold),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -515,16 +540,30 @@ class _PlantScreenState extends State<PlantScreen> {
                   if (state is PlantInitialState) {
                     return const NoPlantData();
                   } else if (state is PlantSuccessDataState) {
-                    List<PlantCard> plantCards = state.plants.map((plant) {
-                      return PlantCard(
-                        imageFile: plant.imagePath,
-                        plantName: plant.plantName,
-                      );
-                    }).toList();
-
-                    return Column(
-                      children: plantCards,
-                    );
+                    // return FutureBuilder(
+                    //   future: readData(),
+                    //   builder: (BuildContext context,
+                    //       AsyncSnapshot<List<Map>> snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const CircularProgressIndicator();
+                    //     } else if (snapshot.hasError) {
+                    //       return const Text("There is an error");
+                    //     } else if (snapshot.hasData) {
+                    //       return ListView.builder(
+                    //         scrollDirection: Axis.horizontal,
+                    //         itemBuilder: (context, index) {
+                    //           Map plantData = snapshot.data![index];
+                    //           return PlantCard(
+                    //             imageFile: plantData['imagePath'],
+                    //             plantName: plantData['plantName'],
+                    //           );
+                    //         },
+                    //       );
+                    //     }
+                    //     return Container();
+                    //   },
+                    // );
                   } else if (state is PlantErrorState) {
                     return const Text("There is an error");
                   }

@@ -23,19 +23,10 @@ class PlantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _loadData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return buildShimmerCard();
-        } else {
-          return _buildContentCard(
-            imageFile: imageFile!,
-            user: user!,
-            title: plantName!,
-          );
-        }
-      },
+    return _buildContentCard(
+      imageFile: imageFile!,
+      user: user!,
+      plantName: plantName!,
     );
   }
 
@@ -107,7 +98,7 @@ class PlantCard extends StatelessWidget {
   }
 
   Widget _buildContentCard({
-    required String title,
+    required String plantName,
     required String user,
     required String imageFile,
   }) {
@@ -163,7 +154,7 @@ class PlantCard extends StatelessWidget {
                     height: 12,
                   ),
                   Text(
-                    title,
+                    plantName,
                     style: const TextStyle(
                       fontSize: 16,
                       color: tPrimaryTextColor,
