@@ -1,21 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
-import 'package:mashtaly_app/sql.dart';
+// import 'package:mashtaly_app/sql.dart';
 import '../../../../Constants/colors.dart';
-import '../../../Widget/snakBar.dart';
-import '../Widget/customdropdown.dart';
+import '../../../../Services/scan_plant_service.dart';
+import 'Widget/dateRangeInput.dart';
+import 'Widget/daySchedule.dart';
+import 'Widget/delayedWateringInput.dart';
+import 'Widget/plantImage.dart';
+import 'Widget/saveScheduleButton.dart';
+import 'Widget/scheduleHeader.dart';
+import 'Widget/wateringSizeInput.dart';
+import 'Widget/customdropdown.dart';
 import 'Utils.dart';
 
 import '../../HomeScreens/home_screen.dart';
 
 class AddPlantFormWithOutSen extends StatefulWidget {
-  const AddPlantFormWithOutSen({Key? key}) : super(key: key);
+  const AddPlantFormWithOutSen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<AddPlantFormWithOutSen> createState() => _AddPlantFormWithOutSenState();
@@ -73,8 +82,30 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
   final TextEditingController untilDateController = TextEditingController();
   final TextEditingController plantNameController = TextEditingController();
   final TextEditingController amountOfWaterController = TextEditingController();
+  final ScanPlantService _scanPlantService = ScanPlantService();
+
   File? _image;
-  Future<void> _pickImageFromGallery() async {
+  Future<void> sendToApi() async {
+    try {
+      final imageFile = _image;
+
+      final response = await _scanPlantService.sendImageToApi(imageFile!);
+
+      // Process the response
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        plantName = responseData['results'][0]['species']
+            ['scientificNameWithoutAuthor'];
+        commonName = responseData['results'][0]['species']['commonNames'][0];
+      } else {
+        print('API request failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error capturing photo: $e');
+    }
+  }
+
+  Future<void> pickImageFromGallery() async {
     final imagePicker = ImagePicker();
     final pickedFile = await imagePicker.pickImage(
       source: ImageSource.gallery,
@@ -84,27 +115,41 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        sendToApi();
       });
     }
   }
 
   // Function to capture an image from the camera
-  Future<void> _captureImageFromCamera() async {
+  Future<void> captureImageFromCamera() async {
     final imagePicker = ImagePicker();
     final pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        sendToApi();
       });
     }
   }
 
-  late Future<TimeOfDay?> selectedTime;
-  String time = " ";
+  late Future<TimeOfDay?> selectedTime = Future.value(TimeOfDay.now());
+  String? time;
   String? selectedImagePath;
+  String? selectedWeatherText;
 
-  SqlDb sqlDb = SqlDb();
+  late String? plantName = '';
+  late String? commonName = '';
+  // SqlDb sqlDb = SqlDb();
+  late String currentUserUid;
+  @override
+  void initState() {
+    super.initState();
+    currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+  }
+
+  DateTime delayedDate = DateTime.now();
+  TimeOfDay delayedTime = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -137,52 +182,24 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         shrinkWrap: true,
         children: [
           const SizedBox(height: 10),
-          _buildPlantImage(),
+          buildPlantImage(
+              context, _image, pickImageFromGallery, captureImageFromCamera),
           _buildPlantNameInput(),
-          _buildWateringSizeInput(),
-          _buildDateRangeInput(),
-          _buildDelayedWateringInput(),
+          buildWateringSizeInput(amountOfWaterController),
+          buildDateRangeInput(context, fromDateController, untilDateController,
+              showDialogDatePicker),
+          buildDelayedWateringInput(context, delayedDateTime, showDropdown,
+              calculateDuration(), selectedImagePath, selectedWeatherText),
+          buildScheduleHeader(),
+          _buildWeekButtons(),
           const SizedBox(height: 10),
-          _buildScheduleHeader(),
-          const SizedBox(height: 10),
-          _buildDaySchedule(),
+          buildDaySchedule(
+              selectedWeek, weeklySchedules, showDialogTimePicker, time),
           const SizedBox(height: 110),
         ],
       ),
-      floatingActionButton: _buildSaveScheduleButton(),
-    );
-  }
-
-  Widget _buildPlantImage() {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            selectImageDialog(context);
-          },
-          child: Container(
-            height: 200,
-            width: 379.4,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(6),
-              ),
-            ),
-            child: _image != null
-                ? Image.file(
-                    _image!,
-                    fit: BoxFit.cover,
-                  )
-                : const Icon(
-                    FontAwesomeIcons.plus,
-                    color: tSearchIconColor,
-                    size: 55,
-                  ),
-          ),
-        ),
-      ],
+      floatingActionButton: buildSaveScheduleButton(context, currentUserUid,
+          _image, plantNameController, amountOfWaterController),
     );
   }
 
@@ -243,7 +260,13 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: plantName != null
+                    ? () {
+                        setState(() {
+                          plantNameController.text = plantName!;
+                        });
+                      }
+                    : null,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -255,11 +278,15 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    Image.asset(
-                      'assets/images/icons/Path 754561.png',
-                      height: 24,
-                      width: 24,
-                    ),
+                    plantName != null
+                        ? const Icon(
+                            Icons.search_rounded,
+                            size: 24,
+                            color: Colors.white,
+                          )
+                        : const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                   ],
                 ),
               ),
@@ -270,415 +297,66 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     );
   }
 
-  Widget _buildWateringSizeInput() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(height: 25),
-          const Text(
-            "Amount of water per watering",
-            style: TextStyle(
-              fontSize: 15,
-              color: Color(0x7C0D1904),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 5),
-          SizedBox(
-            height: 40,
-            width: 375,
-            child: TextFormField(
-              controller: amountOfWaterController,
-              keyboardType: TextInputType.number,
-              cursorColor: tPrimaryActionColor,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 15,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(6),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDateRangeInput() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildDateRangeInputColumn(
-            'From',
-            () {
-              showDialogDatePicker(context, fromDateController);
-            },
-            fromDateController,
-          ),
-          _buildDateRangeInputColumn(
-            'Until',
-            () {
-              showDialogDatePicker(context, untilDateController);
-            },
-            untilDateController,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDateRangeInputColumn(
-      String labelText, VoidCallback onTap, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(height: 25),
-        Text(
-          labelText,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Color(0x7C0D1904),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 5),
-        SizedBox(
-          height: 40,
-          width: 150,
-          child: TextFormField(
-            onTap: onTap,
-            readOnly: true,
-            controller: controller,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-              overflow: TextOverflow.ellipsis,
-            ),
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.only(
-                left: 12,
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDelayedWateringInput() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildDelayedWateringColumn("Delayed Watering", FontAwesomeIcons.plus,
-              () {
-            showDialogTimePicker(context);
-          }),
-          _buildDelayedWateringColumn("If", FontAwesomeIcons.plus, () {
-            showDropdown(context);
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDelayedWateringColumn(
-      String labelText, IconData icon, VoidCallback onTap) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 25),
-        Text(
-          labelText,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Color(0x7C0D1904),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 5),
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            height: 40,
-            width: 150,
-            decoration: const BoxDecoration(
-              color: Color(0xffD2D8CF),
-              borderRadius: BorderRadius.all(
-                Radius.circular(6),
-              ),
-            ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildScheduleHeader() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(height: 35),
-          const Text(
-            "Schedule",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 10),
-          _buildWeekButtons(),
-        ],
-      ),
-    );
-  }
-
   Widget _buildWeekButtons() {
-    return SizedBox(
-      height: 40,
-      child: ListView.builder(
-        itemCount: 4,
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          final List<String> weekNum = [
-            'Week 1',
-            'Week 2',
-            'Week 3',
-            'Week 4',
-          ];
-          return Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedWeek = index + 1;
-                });
-              },
-              child: Container(
-                width: 90,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: selectedWeek == index + 1
-                      ? tPrimaryActionColor
-                      : tBgColor,
-                  border: selectedWeek == index + 1
-                      ? Border.all(color: Colors.transparent)
-                      : Border.all(width: 1, color: tSearchIconColor),
-                ),
-                child: Center(
-                  child: Text(
-                    weekNum[index],
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: selectedWeek == index + 1
-                          ? FontWeight.w800
-                          : FontWeight.w600,
-                      color: selectedWeek == index + 1
-                          ? Colors.white
-                          : Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildDaySchedule() {
     return Padding(
       padding: const EdgeInsets.only(left: 17, right: 16),
-      child: Visibility(
-        visible: selectedWeek >= 1 && selectedWeek <= weeklySchedules.length,
-        child: SizedBox(
-          height: 92,
-          width: double.infinity,
-          child: ListView.builder(
-            itemCount: 7,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index) {
-              final dayNames = weeklySchedules[selectedWeek - 1];
-              return Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 12,
-                      width: 120,
-                      decoration: const BoxDecoration(
-                        color: tPrimaryActionColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(16),
-                        ),
+      child: SizedBox(
+        height: 40,
+        child: ListView.builder(
+          itemCount: 4,
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            final List<String> weekNum = [
+              'Week 1',
+              'Week 2',
+              'Week 3',
+              'Week 4',
+            ];
+            return Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedWeek = index + 1;
+                  });
+                },
+                child: Container(
+                  width: 90,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: selectedWeek == index + 1
+                        ? tPrimaryActionColor
+                        : tBgColor,
+                    border: selectedWeek == index + 1
+                        ? Border.all(color: Colors.transparent)
+                        : Border.all(width: 1, color: tSearchIconColor),
+                  ),
+                  child: Center(
+                    child: Text(
+                      weekNum[index],
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: selectedWeek == index + 1
+                            ? FontWeight.w800
+                            : FontWeight.w600,
+                        color: selectedWeek == index + 1
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
-                    Container(
-                      height: 80,
-                      width: 120,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(16),
-                          bottomRight: Radius.circular(16),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          right: 8,
-                          left: 8,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              dayNames[index],
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                showDialogTimePicker(context);
-                              },
-                              child: const Text(
-                                '+  Add Time',
-                                style: TextStyle(
-                                  color: tPrimaryActionColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSaveScheduleButton() {
-    return SizedBox(
-      height: 50,
-      width: 380,
-      child: FloatingActionButton(
-        backgroundColor: tPrimaryActionColor,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(12.0),
-          ),
-        ),
-        onPressed: () async {
-          try {
-            if (_image == null) {
-              print('Error: Please select an image.');
-              showSnakBar(context, 'Please select an image.');
-              return;
-            }
-
-            if (plantNameController.text.isEmpty) {
-              print('Error: Please enter plant name.');
-              showSnakBar(context, 'Please enter plant name.');
-              return;
-            }
-            if (amountOfWaterController.text.isEmpty) {
-              print('Error: Please enter Amount of water per watering.');
-              showSnakBar(
-                  context, 'Please enter amount of water per watering.');
-              return;
-            }
-
-            var plantCubit = BlocProvider.of<PlantCubit>(context);
-            plantCubit.addPlant(
-              imageFile: _image,
-              plantName: plantNameController.text.trim(),
-              amountOfWater:
-                  double.tryParse(amountOfWaterController.text.trim()) ?? 0.0,
+              ),
             );
-            Navigator.of(context).pop();
-          } catch (e) {
-            print('Error adding plant: $e');
-            showSnakBar(context, 'Error adding plant: $e');
-          }
-        },
-        child: const Center(
-          child: Text(
-            "Save Schedule",
-            style: TextStyle(
-              color: tThirdTextColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
+          },
         ),
       ),
     );
   }
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTimee = TimeOfDay.now();
 
   void showDialogDatePicker(
       BuildContext context, TextEditingController controller) {
@@ -718,6 +396,43 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         print(error);
       }
     });
+  }
+
+  Future<void> selectDateTime(BuildContext context) async {
+    DateTime initialDate = selectedDate;
+    TimeOfDay initialTime = selectedTimee;
+
+    // Show Date Picker
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != initialDate) {
+      // Update selected date
+      setState(() {
+        selectedDate = pickedDate;
+      });
+
+      // Show Time Picker
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: initialTime,
+      );
+
+      if (pickedTime != null && pickedTime != initialTime) {
+        // Update selected time
+        setState(() {
+          selectedTimee = pickedTime;
+        });
+
+        // Handle the selected date and time as needed
+        print("Selected Date: $selectedDate");
+        print("Selected Time: $selectedTime");
+      }
+    }
   }
 
   void showDialogTimePicker(BuildContext context) {
@@ -760,66 +475,108 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Select an image'),
-          content: CustomDropdown(
-            onImageSelected: (String? imagePath) {
-              setState(() {
-                selectedImagePath = imagePath;
-              });
-              Navigator.pop(context);
-            },
+        return SizedBox(
+          height: 40,
+          child: AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            contentPadding: const EdgeInsets.only(left: 16, right: 17),
+            content: CustomDropdown(
+              onChange: (Map<String, dynamic>? selectedItem) {
+                setState(() {
+                  selectedImagePath = selectedItem?['path'];
+                  selectedWeatherText = selectedItem?['text'];
+                });
+                Navigator.pop(context);
+              },
+            ),
           ),
         );
       },
     );
   }
 
-  // Show options for selecting image from gallery or camera
-  Future<dynamic> selectImageDialog(BuildContext context) {
-    return showDialog(
+  Future<void> delayedDateTime(BuildContext context) async {
+    DateTime initialDate = delayedDate;
+    TimeOfDay initialTime = delayedTime;
+
+    DateTime? pickedDateTime = await showDatePicker(
       context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text("Select Image from"),
-          children: [
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                      _captureImageFromCamera();
-                    },
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(Icons.camera_alt_rounded),
-                        Text("Camera"),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                      _pickImageFromGallery();
-                    },
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(Icons.image),
-                        Text("Gallery"),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+      initialDate: initialDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2050),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: tPrimaryActionColor,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: tPrimaryTextColor,
             ),
-          ],
+          ),
+          child: child!,
         );
       },
     );
+
+    if (pickedDateTime != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: initialTime,
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: tPrimaryActionColor,
+                onPrimary: Colors.white,
+                surface: Colors.white,
+                onSurface: tPrimaryTextColor,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        pickedDateTime = DateTime(
+          pickedDateTime.year,
+          pickedDateTime.month,
+          pickedDateTime.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        setState(() {
+          delayedDate = pickedDateTime!;
+          delayedTime = pickedTime;
+          print(pickedDateTime);
+          print(pickedTime);
+        });
+      }
+    }
+  }
+
+  String calculateDuration() {
+    // Calculate the total duration in days and hours
+    DateTime now = DateTime.now();
+    DateTime selectedDateTime = DateTime(
+      delayedDate.year,
+      delayedDate.month,
+      delayedDate.day,
+      delayedTime.hour,
+      delayedTime.minute,
+    );
+
+    Duration selectedDuration = selectedDateTime.difference(now);
+
+    // Calculate days and hours separately
+    int days = selectedDuration.inDays;
+    int hours = (selectedDuration.inHours % 24);
+
+    return '$days days, $hours hours';
   }
 }

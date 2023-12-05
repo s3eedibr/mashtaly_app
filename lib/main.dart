@@ -1,16 +1,15 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
-import 'package:mashtaly_app/Business_Layer/cubits/weather/weatherCubit.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
 
+import 'Animations/no_connection_screen.dart';
 import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
+import 'Business_Layer/cubits/plant/plantCubit.dart';
+import 'Business_Layer/cubits/weather/weatherCubit.dart';
 import 'Constants/colors.dart';
 import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
 
@@ -19,32 +18,29 @@ void main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.black));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate();
-  Connectivity().checkConnectivity();
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  int? isViewed =
-      prefs.getInt('onBoard'); // Check if onboarding has been viewed.
-
-  // Run the app by displaying the splash screen.
-  runApp(SplashScreenApp(
-    isViewed: isViewed,
-  ));
+  runApp(const SplashScreenApp());
 }
 
 class SplashScreenApp extends StatelessWidget {
-  final int? isViewed;
-
-  const SplashScreenApp({super.key, required this.isViewed});
+  const SplashScreenApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(
-        onSplashFinished: () {
-          runApp(MashtalyApp(
+        onSplashFinished: () async {
+          // Check for internet connectivity after the splash screen finishes
+          var connectivityResult = await Connectivity().checkConnectivity();
+          bool hasInternet = connectivityResult != ConnectivityResult.none;
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          int? isViewed = prefs.getInt('onBoard');
+
+          runApp(MyApp(
             isViewed: isViewed,
+            hasInternet: hasInternet,
           ));
         },
       ),
@@ -52,10 +48,30 @@ class SplashScreenApp extends StatelessWidget {
   }
 }
 
+class MyApp extends StatelessWidget {
+  final int? isViewed;
+  final bool hasInternet;
+
+  const MyApp({Key? key, this.isViewed, required this.hasInternet})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: hasInternet
+          ? MashtalyApp(
+              isViewed: isViewed,
+            )
+          : const NoConnectionScreen(),
+    );
+  }
+}
+
 class MashtalyApp extends StatelessWidget {
   final int? isViewed;
 
-  const MashtalyApp({super.key, required this.isViewed});
+  const MashtalyApp({Key? key, required this.isViewed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +99,6 @@ class MashtalyApp extends StatelessWidget {
             selectionHandleColor: tPrimaryActionColor.withOpacity(1),
           ),
         ),
-
-        // Show OnBoardingScreen if it hasn't been viewed, otherwise show Auth
         home: isViewed != 0 ? const OnBoardingScreen() : const Auth(),
       ),
     );

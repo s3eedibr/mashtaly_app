@@ -1,6 +1,11 @@
 class Assets {
   Assets._();
 
+  /// Assets for assetsImagesEllipsis2s151px
+  /// assets/images/Ellipsis-2s-151px.gif
+  static const String assetsImagesEllipsis2s151px =
+      "assets/images/Ellipsis-2s-151px.gif";
+
   /// Assets for assetsImagesIconsBell
   /// assets/images/icons/bell.png
   static const String assetsImagesIconsBell = "assets/images/icons/bell.png";
@@ -24,6 +29,16 @@ class Assets {
   /// assets/images/icons/default_profile.jpg
   static const String assetsImagesIconsDefaultProfile =
       "assets/images/icons/default_profile.jpg";
+
+  /// Assets for assetsImagesIconsGroup 185
+  /// assets/images/icons/Group 185.png
+  static const String assetsImagesIconsGroup185 =
+      "assets/images/icons/Group 185.png";
+
+  /// Assets for assetsImagesIconsGroup 192
+  /// assets/images/icons/Group 192.png
+  static const String assetsImagesIconsGroup192 =
+      "assets/images/icons/Group 192.png";
 
   /// Assets for assetsImagesIconsGroup 195
   /// assets/images/icons/Group 195.png
@@ -312,5 +327,488 @@ class Assets {
   static const String assetsImagesStackImagesSubtraction5 =
       "assets/images/stack_images/Subtraction 5.png";
 
-  static const String Ellipsis2s151px = "assets/images/Ellipsis-2s-151px.gif";
+  /// Assets for assetsImagesWeatherCondDay113
+  /// assets/images/weather_cond/day/113.png
+  static const String assetsImagesWeatherCondDay113 =
+      "assets/images/weather_cond/day/113.png";
+
+  /// Assets for assetsImagesWeatherCondDay116
+  /// assets/images/weather_cond/day/116.png
+  static const String assetsImagesWeatherCondDay116 =
+      "assets/images/weather_cond/day/116.png";
+
+  /// Assets for assetsImagesWeatherCondDay119
+  /// assets/images/weather_cond/day/119.png
+  static const String assetsImagesWeatherCondDay119 =
+      "assets/images/weather_cond/day/119.png";
+
+  /// Assets for assetsImagesWeatherCondDay122
+  /// assets/images/weather_cond/day/122.png
+  static const String assetsImagesWeatherCondDay122 =
+      "assets/images/weather_cond/day/122.png";
+
+  /// Assets for assetsImagesWeatherCondDay143
+  /// assets/images/weather_cond/day/143.png
+  static const String assetsImagesWeatherCondDay143 =
+      "assets/images/weather_cond/day/143.png";
+
+  /// Assets for assetsImagesWeatherCondDay176
+  /// assets/images/weather_cond/day/176.png
+  static const String assetsImagesWeatherCondDay176 =
+      "assets/images/weather_cond/day/176.png";
+
+  /// Assets for assetsImagesWeatherCondDay179
+  /// assets/images/weather_cond/day/179.png
+  static const String assetsImagesWeatherCondDay179 =
+      "assets/images/weather_cond/day/179.png";
+
+  /// Assets for assetsImagesWeatherCondDay182
+  /// assets/images/weather_cond/day/182.png
+  static const String assetsImagesWeatherCondDay182 =
+      "assets/images/weather_cond/day/182.png";
+
+  /// Assets for assetsImagesWeatherCondDay185
+  /// assets/images/weather_cond/day/185.png
+  static const String assetsImagesWeatherCondDay185 =
+      "assets/images/weather_cond/day/185.png";
+
+  /// Assets for assetsImagesWeatherCondDay200
+  /// assets/images/weather_cond/day/200.png
+  static const String assetsImagesWeatherCondDay200 =
+      "assets/images/weather_cond/day/200.png";
+
+  /// Assets for assetsImagesWeatherCondDay227
+  /// assets/images/weather_cond/day/227.png
+  static const String assetsImagesWeatherCondDay227 =
+      "assets/images/weather_cond/day/227.png";
+
+  /// Assets for assetsImagesWeatherCondDay230
+  /// assets/images/weather_cond/day/230.png
+  static const String assetsImagesWeatherCondDay230 =
+      "assets/images/weather_cond/day/230.png";
+
+  /// Assets for assetsImagesWeatherCondDay248
+  /// assets/images/weather_cond/day/248.png
+  static const String assetsImagesWeatherCondDay248 =
+      "assets/images/weather_cond/day/248.png";
+
+  /// Assets for assetsImagesWeatherCondDay260
+  /// assets/images/weather_cond/day/260.png
+  static const String assetsImagesWeatherCondDay260 =
+      "assets/images/weather_cond/day/260.png";
+
+  /// Assets for assetsImagesWeatherCondDay263
+  /// assets/images/weather_cond/day/263.png
+  static const String assetsImagesWeatherCondDay263 =
+      "assets/images/weather_cond/day/263.png";
+
+  /// Assets for assetsImagesWeatherCondDay266
+  /// assets/images/weather_cond/day/266.png
+  static const String assetsImagesWeatherCondDay266 =
+      "assets/images/weather_cond/day/266.png";
+
+  /// Assets for assetsImagesWeatherCondDay281
+  /// assets/images/weather_cond/day/281.png
+  static const String assetsImagesWeatherCondDay281 =
+      "assets/images/weather_cond/day/281.png";
+
+  /// Assets for assetsImagesWeatherCondDay284
+  /// assets/images/weather_cond/day/284.png
+  static const String assetsImagesWeatherCondDay284 =
+      "assets/images/weather_cond/day/284.png";
+
+  /// Assets for assetsImagesWeatherCondDay293
+  /// assets/images/weather_cond/day/293.png
+  static const String assetsImagesWeatherCondDay293 =
+      "assets/images/weather_cond/day/293.png";
+
+  /// Assets for assetsImagesWeatherCondDay296
+  /// assets/images/weather_cond/day/296.png
+  static const String assetsImagesWeatherCondDay296 =
+      "assets/images/weather_cond/day/296.png";
+
+  /// Assets for assetsImagesWeatherCondDay299
+  /// assets/images/weather_cond/day/299.png
+  static const String assetsImagesWeatherCondDay299 =
+      "assets/images/weather_cond/day/299.png";
+
+  /// Assets for assetsImagesWeatherCondDay302
+  /// assets/images/weather_cond/day/302.png
+  static const String assetsImagesWeatherCondDay302 =
+      "assets/images/weather_cond/day/302.png";
+
+  /// Assets for assetsImagesWeatherCondDay305
+  /// assets/images/weather_cond/day/305.png
+  static const String assetsImagesWeatherCondDay305 =
+      "assets/images/weather_cond/day/305.png";
+
+  /// Assets for assetsImagesWeatherCondDay308
+  /// assets/images/weather_cond/day/308.png
+  static const String assetsImagesWeatherCondDay308 =
+      "assets/images/weather_cond/day/308.png";
+
+  /// Assets for assetsImagesWeatherCondDay311
+  /// assets/images/weather_cond/day/311.png
+  static const String assetsImagesWeatherCondDay311 =
+      "assets/images/weather_cond/day/311.png";
+
+  /// Assets for assetsImagesWeatherCondDay314
+  /// assets/images/weather_cond/day/314.png
+  static const String assetsImagesWeatherCondDay314 =
+      "assets/images/weather_cond/day/314.png";
+
+  /// Assets for assetsImagesWeatherCondDay317
+  /// assets/images/weather_cond/day/317.png
+  static const String assetsImagesWeatherCondDay317 =
+      "assets/images/weather_cond/day/317.png";
+
+  /// Assets for assetsImagesWeatherCondDay320
+  /// assets/images/weather_cond/day/320.png
+  static const String assetsImagesWeatherCondDay320 =
+      "assets/images/weather_cond/day/320.png";
+
+  /// Assets for assetsImagesWeatherCondDay323
+  /// assets/images/weather_cond/day/323.png
+  static const String assetsImagesWeatherCondDay323 =
+      "assets/images/weather_cond/day/323.png";
+
+  /// Assets for assetsImagesWeatherCondDay326
+  /// assets/images/weather_cond/day/326.png
+  static const String assetsImagesWeatherCondDay326 =
+      "assets/images/weather_cond/day/326.png";
+
+  /// Assets for assetsImagesWeatherCondDay329
+  /// assets/images/weather_cond/day/329.png
+  static const String assetsImagesWeatherCondDay329 =
+      "assets/images/weather_cond/day/329.png";
+
+  /// Assets for assetsImagesWeatherCondDay332
+  /// assets/images/weather_cond/day/332.png
+  static const String assetsImagesWeatherCondDay332 =
+      "assets/images/weather_cond/day/332.png";
+
+  /// Assets for assetsImagesWeatherCondDay335
+  /// assets/images/weather_cond/day/335.png
+  static const String assetsImagesWeatherCondDay335 =
+      "assets/images/weather_cond/day/335.png";
+
+  /// Assets for assetsImagesWeatherCondDay338
+  /// assets/images/weather_cond/day/338.png
+  static const String assetsImagesWeatherCondDay338 =
+      "assets/images/weather_cond/day/338.png";
+
+  /// Assets for assetsImagesWeatherCondDay350
+  /// assets/images/weather_cond/day/350.png
+  static const String assetsImagesWeatherCondDay350 =
+      "assets/images/weather_cond/day/350.png";
+
+  /// Assets for assetsImagesWeatherCondDay353
+  /// assets/images/weather_cond/day/353.png
+  static const String assetsImagesWeatherCondDay353 =
+      "assets/images/weather_cond/day/353.png";
+
+  /// Assets for assetsImagesWeatherCondDay356
+  /// assets/images/weather_cond/day/356.png
+  static const String assetsImagesWeatherCondDay356 =
+      "assets/images/weather_cond/day/356.png";
+
+  /// Assets for assetsImagesWeatherCondDay359
+  /// assets/images/weather_cond/day/359.png
+  static const String assetsImagesWeatherCondDay359 =
+      "assets/images/weather_cond/day/359.png";
+
+  /// Assets for assetsImagesWeatherCondDay362
+  /// assets/images/weather_cond/day/362.png
+  static const String assetsImagesWeatherCondDay362 =
+      "assets/images/weather_cond/day/362.png";
+
+  /// Assets for assetsImagesWeatherCondDay365
+  /// assets/images/weather_cond/day/365.png
+  static const String assetsImagesWeatherCondDay365 =
+      "assets/images/weather_cond/day/365.png";
+
+  /// Assets for assetsImagesWeatherCondDay368
+  /// assets/images/weather_cond/day/368.png
+  static const String assetsImagesWeatherCondDay368 =
+      "assets/images/weather_cond/day/368.png";
+
+  /// Assets for assetsImagesWeatherCondDay371
+  /// assets/images/weather_cond/day/371.png
+  static const String assetsImagesWeatherCondDay371 =
+      "assets/images/weather_cond/day/371.png";
+
+  /// Assets for assetsImagesWeatherCondDay374
+  /// assets/images/weather_cond/day/374.png
+  static const String assetsImagesWeatherCondDay374 =
+      "assets/images/weather_cond/day/374.png";
+
+  /// Assets for assetsImagesWeatherCondDay377
+  /// assets/images/weather_cond/day/377.png
+  static const String assetsImagesWeatherCondDay377 =
+      "assets/images/weather_cond/day/377.png";
+
+  /// Assets for assetsImagesWeatherCondDay386
+  /// assets/images/weather_cond/day/386.png
+  static const String assetsImagesWeatherCondDay386 =
+      "assets/images/weather_cond/day/386.png";
+
+  /// Assets for assetsImagesWeatherCondDay389
+  /// assets/images/weather_cond/day/389.png
+  static const String assetsImagesWeatherCondDay389 =
+      "assets/images/weather_cond/day/389.png";
+
+  /// Assets for assetsImagesWeatherCondDay392
+  /// assets/images/weather_cond/day/392.png
+  static const String assetsImagesWeatherCondDay392 =
+      "assets/images/weather_cond/day/392.png";
+
+  /// Assets for assetsImagesWeatherCondDay395
+  /// assets/images/weather_cond/day/395.png
+  static const String assetsImagesWeatherCondDay395 =
+      "assets/images/weather_cond/day/395.png";
+
+  /// Assets for assetsImagesWeatherCondNight113
+  /// assets/images/weather_cond/night/113.png
+  static const String assetsImagesWeatherCondNight113 =
+      "assets/images/weather_cond/night/113.png";
+
+  /// Assets for assetsImagesWeatherCondNight116
+  /// assets/images/weather_cond/night/116.png
+  static const String assetsImagesWeatherCondNight116 =
+      "assets/images/weather_cond/night/116.png";
+
+  /// Assets for assetsImagesWeatherCondNight119
+  /// assets/images/weather_cond/night/119.png
+  static const String assetsImagesWeatherCondNight119 =
+      "assets/images/weather_cond/night/119.png";
+
+  /// Assets for assetsImagesWeatherCondNight122
+  /// assets/images/weather_cond/night/122.png
+  static const String assetsImagesWeatherCondNight122 =
+      "assets/images/weather_cond/night/122.png";
+
+  /// Assets for assetsImagesWeatherCondNight143
+  /// assets/images/weather_cond/night/143.png
+  static const String assetsImagesWeatherCondNight143 =
+      "assets/images/weather_cond/night/143.png";
+
+  /// Assets for assetsImagesWeatherCondNight176
+  /// assets/images/weather_cond/night/176.png
+  static const String assetsImagesWeatherCondNight176 =
+      "assets/images/weather_cond/night/176.png";
+
+  /// Assets for assetsImagesWeatherCondNight179
+  /// assets/images/weather_cond/night/179.png
+  static const String assetsImagesWeatherCondNight179 =
+      "assets/images/weather_cond/night/179.png";
+
+  /// Assets for assetsImagesWeatherCondNight182
+  /// assets/images/weather_cond/night/182.png
+  static const String assetsImagesWeatherCondNight182 =
+      "assets/images/weather_cond/night/182.png";
+
+  /// Assets for assetsImagesWeatherCondNight185
+  /// assets/images/weather_cond/night/185.png
+  static const String assetsImagesWeatherCondNight185 =
+      "assets/images/weather_cond/night/185.png";
+
+  /// Assets for assetsImagesWeatherCondNight200
+  /// assets/images/weather_cond/night/200.png
+  static const String assetsImagesWeatherCondNight200 =
+      "assets/images/weather_cond/night/200.png";
+
+  /// Assets for assetsImagesWeatherCondNight227
+  /// assets/images/weather_cond/night/227.png
+  static const String assetsImagesWeatherCondNight227 =
+      "assets/images/weather_cond/night/227.png";
+
+  /// Assets for assetsImagesWeatherCondNight230
+  /// assets/images/weather_cond/night/230.png
+  static const String assetsImagesWeatherCondNight230 =
+      "assets/images/weather_cond/night/230.png";
+
+  /// Assets for assetsImagesWeatherCondNight248
+  /// assets/images/weather_cond/night/248.png
+  static const String assetsImagesWeatherCondNight248 =
+      "assets/images/weather_cond/night/248.png";
+
+  /// Assets for assetsImagesWeatherCondNight260
+  /// assets/images/weather_cond/night/260.png
+  static const String assetsImagesWeatherCondNight260 =
+      "assets/images/weather_cond/night/260.png";
+
+  /// Assets for assetsImagesWeatherCondNight263
+  /// assets/images/weather_cond/night/263.png
+  static const String assetsImagesWeatherCondNight263 =
+      "assets/images/weather_cond/night/263.png";
+
+  /// Assets for assetsImagesWeatherCondNight266
+  /// assets/images/weather_cond/night/266.png
+  static const String assetsImagesWeatherCondNight266 =
+      "assets/images/weather_cond/night/266.png";
+
+  /// Assets for assetsImagesWeatherCondNight281
+  /// assets/images/weather_cond/night/281.png
+  static const String assetsImagesWeatherCondNight281 =
+      "assets/images/weather_cond/night/281.png";
+
+  /// Assets for assetsImagesWeatherCondNight284
+  /// assets/images/weather_cond/night/284.png
+  static const String assetsImagesWeatherCondNight284 =
+      "assets/images/weather_cond/night/284.png";
+
+  /// Assets for assetsImagesWeatherCondNight293
+  /// assets/images/weather_cond/night/293.png
+  static const String assetsImagesWeatherCondNight293 =
+      "assets/images/weather_cond/night/293.png";
+
+  /// Assets for assetsImagesWeatherCondNight296
+  /// assets/images/weather_cond/night/296.png
+  static const String assetsImagesWeatherCondNight296 =
+      "assets/images/weather_cond/night/296.png";
+
+  /// Assets for assetsImagesWeatherCondNight299
+  /// assets/images/weather_cond/night/299.png
+  static const String assetsImagesWeatherCondNight299 =
+      "assets/images/weather_cond/night/299.png";
+
+  /// Assets for assetsImagesWeatherCondNight302
+  /// assets/images/weather_cond/night/302.png
+  static const String assetsImagesWeatherCondNight302 =
+      "assets/images/weather_cond/night/302.png";
+
+  /// Assets for assetsImagesWeatherCondNight305
+  /// assets/images/weather_cond/night/305.png
+  static const String assetsImagesWeatherCondNight305 =
+      "assets/images/weather_cond/night/305.png";
+
+  /// Assets for assetsImagesWeatherCondNight308
+  /// assets/images/weather_cond/night/308.png
+  static const String assetsImagesWeatherCondNight308 =
+      "assets/images/weather_cond/night/308.png";
+
+  /// Assets for assetsImagesWeatherCondNight311
+  /// assets/images/weather_cond/night/311.png
+  static const String assetsImagesWeatherCondNight311 =
+      "assets/images/weather_cond/night/311.png";
+
+  /// Assets for assetsImagesWeatherCondNight314
+  /// assets/images/weather_cond/night/314.png
+  static const String assetsImagesWeatherCondNight314 =
+      "assets/images/weather_cond/night/314.png";
+
+  /// Assets for assetsImagesWeatherCondNight317
+  /// assets/images/weather_cond/night/317.png
+  static const String assetsImagesWeatherCondNight317 =
+      "assets/images/weather_cond/night/317.png";
+
+  /// Assets for assetsImagesWeatherCondNight320
+  /// assets/images/weather_cond/night/320.png
+  static const String assetsImagesWeatherCondNight320 =
+      "assets/images/weather_cond/night/320.png";
+
+  /// Assets for assetsImagesWeatherCondNight323
+  /// assets/images/weather_cond/night/323.png
+  static const String assetsImagesWeatherCondNight323 =
+      "assets/images/weather_cond/night/323.png";
+
+  /// Assets for assetsImagesWeatherCondNight326
+  /// assets/images/weather_cond/night/326.png
+  static const String assetsImagesWeatherCondNight326 =
+      "assets/images/weather_cond/night/326.png";
+
+  /// Assets for assetsImagesWeatherCondNight329
+  /// assets/images/weather_cond/night/329.png
+  static const String assetsImagesWeatherCondNight329 =
+      "assets/images/weather_cond/night/329.png";
+
+  /// Assets for assetsImagesWeatherCondNight332
+  /// assets/images/weather_cond/night/332.png
+  static const String assetsImagesWeatherCondNight332 =
+      "assets/images/weather_cond/night/332.png";
+
+  /// Assets for assetsImagesWeatherCondNight335
+  /// assets/images/weather_cond/night/335.png
+  static const String assetsImagesWeatherCondNight335 =
+      "assets/images/weather_cond/night/335.png";
+
+  /// Assets for assetsImagesWeatherCondNight338
+  /// assets/images/weather_cond/night/338.png
+  static const String assetsImagesWeatherCondNight338 =
+      "assets/images/weather_cond/night/338.png";
+
+  /// Assets for assetsImagesWeatherCondNight350
+  /// assets/images/weather_cond/night/350.png
+  static const String assetsImagesWeatherCondNight350 =
+      "assets/images/weather_cond/night/350.png";
+
+  /// Assets for assetsImagesWeatherCondNight353
+  /// assets/images/weather_cond/night/353.png
+  static const String assetsImagesWeatherCondNight353 =
+      "assets/images/weather_cond/night/353.png";
+
+  /// Assets for assetsImagesWeatherCondNight356
+  /// assets/images/weather_cond/night/356.png
+  static const String assetsImagesWeatherCondNight356 =
+      "assets/images/weather_cond/night/356.png";
+
+  /// Assets for assetsImagesWeatherCondNight359
+  /// assets/images/weather_cond/night/359.png
+  static const String assetsImagesWeatherCondNight359 =
+      "assets/images/weather_cond/night/359.png";
+
+  /// Assets for assetsImagesWeatherCondNight362
+  /// assets/images/weather_cond/night/362.png
+  static const String assetsImagesWeatherCondNight362 =
+      "assets/images/weather_cond/night/362.png";
+
+  /// Assets for assetsImagesWeatherCondNight365
+  /// assets/images/weather_cond/night/365.png
+  static const String assetsImagesWeatherCondNight365 =
+      "assets/images/weather_cond/night/365.png";
+
+  /// Assets for assetsImagesWeatherCondNight368
+  /// assets/images/weather_cond/night/368.png
+  static const String assetsImagesWeatherCondNight368 =
+      "assets/images/weather_cond/night/368.png";
+
+  /// Assets for assetsImagesWeatherCondNight371
+  /// assets/images/weather_cond/night/371.png
+  static const String assetsImagesWeatherCondNight371 =
+      "assets/images/weather_cond/night/371.png";
+
+  /// Assets for assetsImagesWeatherCondNight374
+  /// assets/images/weather_cond/night/374.png
+  static const String assetsImagesWeatherCondNight374 =
+      "assets/images/weather_cond/night/374.png";
+
+  /// Assets for assetsImagesWeatherCondNight377
+  /// assets/images/weather_cond/night/377.png
+  static const String assetsImagesWeatherCondNight377 =
+      "assets/images/weather_cond/night/377.png";
+
+  /// Assets for assetsImagesWeatherCondNight386
+  /// assets/images/weather_cond/night/386.png
+  static const String assetsImagesWeatherCondNight386 =
+      "assets/images/weather_cond/night/386.png";
+
+  /// Assets for assetsImagesWeatherCondNight389
+  /// assets/images/weather_cond/night/389.png
+  static const String assetsImagesWeatherCondNight389 =
+      "assets/images/weather_cond/night/389.png";
+
+  /// Assets for assetsImagesWeatherCondNight392
+  /// assets/images/weather_cond/night/392.png
+  static const String assetsImagesWeatherCondNight392 =
+      "assets/images/weather_cond/night/392.png";
+
+  /// Assets for assetsImagesWeatherCondNight395
+  /// assets/images/weather_cond/night/395.png
+  static const String assetsImagesWeatherCondNight395 =
+      "assets/images/weather_cond/night/395.png";
+
+  /// Assets for assetsImagesWeatherCondNightThumbs
+  /// assets/images/weather_cond/night/Thumbs.db
+  static const String assetsImagesWeatherCondNightThumbs =
+      "assets/images/weather_cond/night/Thumbs.db";
 }

@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             Image.asset(
-              Assets.Ellipsis2s151px,
+              Assets.assetsImagesEllipsis2s151px,
               height: 85,
               width: 85,
             )
