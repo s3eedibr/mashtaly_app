@@ -5,9 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../Constants/colors.dart';
 import '../Plant/Forms/Utils.dart';
 
-// Widget to display details of a sell post
-class SellDetails extends StatelessWidget {
-  const SellDetails({
+// Widget to display details of a sale post
+class SaleDetails extends StatelessWidget {
+  const SaleDetails({
     Key? key,
     this.title,
     this.content,
@@ -73,7 +73,7 @@ class SellDetails extends StatelessWidget {
             ),
           ),
           title: const Text(
-            "Community / Sell plant",
+            "Community / Sale plant",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

@@ -1,19 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Presentation_Layer/Screen/Community/sellDetails.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Community/saleDetails.dart';
 
 import '../../../Constants/colors.dart';
-import 'Data/getData.dart';
-import 'Widget/appBar.dart';
-import 'Widget/post_card3.dart';
+import '../Community/Data/getData.dart';
+import '../Community/Widget/appBar.dart';
+import '../Community/Widget/post_card3.dart';
 
-class ListAllSells extends StatefulWidget {
-  const ListAllSells({Key? key}) : super(key: key);
+class ListMySales extends StatefulWidget {
+  const ListMySales({Key? key}) : super(key: key);
 
   @override
-  State<ListAllSells> createState() => _ListAllSellsState();
+  State<ListMySales> createState() => _ListMySalesState();
 }
 
-class _ListAllSellsState extends State<ListAllSells> {
+class _ListMySalesState extends State<ListMySales> {
   bool isSearching = false;
 
   @override
@@ -21,14 +22,14 @@ class _ListAllSellsState extends State<ListAllSells> {
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBarWidget(
-        title: 'Plants for sell',
+        title: 'My plant for sale',
       ),
-      body: buildSellsList(),
+      body: buildSalesList(),
     );
   }
 
-  // Function to build the list of sell posts
-  Widget buildSellsList() {
+  // Function to build the list of sale posts
+  Widget buildSalesList() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RefreshIndicator(
@@ -39,8 +40,8 @@ class _ListAllSellsState extends State<ListAllSells> {
         color: tPrimaryActionColor,
         backgroundColor: tBgColor,
         child: FutureBuilder(
-          // Fetch all sell posts using the getAllSellsList() function
-          future: getAllSellPosts(),
+          // Fetch all sale posts using the getMySales() function
+          future: getMySales(FirebaseAuth.instance.currentUser!.uid),
           builder:
               (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,7 +51,7 @@ class _ListAllSellsState extends State<ListAllSells> {
                   .toString()); // Display error message if an error occurs
             } else {
               return buildPostsListView(
-                  snapshot.data!); // Build the sell posts list view
+                  snapshot.data!); // Build the sale posts list view
             }
           },
         ),
@@ -76,38 +77,38 @@ class _ListAllSellsState extends State<ListAllSells> {
     );
   }
 
-  // Function to build the actual sell posts list view
-  Widget buildPostsListView(List<Map<String, dynamic>> sells) {
+  // Function to build the actual sale posts list view
+  Widget buildPostsListView(List<Map<String, dynamic>> sales) {
     return ListView.builder(
-      itemCount: sells.length,
+      itemCount: sales.length,
       itemBuilder: (context, index) {
-        final sell = sells[index];
+        final sale = sales[index];
         return GestureDetector(
           onTap: () {
-            // Navigate to the sell post details screen when a sell post is tapped
+            // Navigate to the sale post details screen when a sale post is tapped
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SellDetails(
-                  profileImage: sell['profile_pic'],
-                  user: sell['user'],
-                  imageURL1: sell['sell_pic1'],
-                  imageURL2: sell['sell_pic2'],
-                  imageURL3: sell['sell_pic3'],
-                  imageURL4: sell['sell_pic4'],
-                  imageURL5: sell['sell_pic5'],
-                  title: sell['title'],
-                  date: sell['date'],
-                  content: sell['content'],
-                  phoneNumber: sell['phone_number'],
+                builder: (context) => SaleDetails(
+                  profileImage: sale['profile_pic'],
+                  user: sale['user'],
+                  imageURL1: sale['sale_pic1'],
+                  imageURL2: sale['sale_pic2'],
+                  imageURL3: sale['sale_pic3'],
+                  imageURL4: sale['sale_pic4'],
+                  imageURL5: sale['sale_pic5'],
+                  title: sale['title'],
+                  date: sale['date'],
+                  content: sale['content'],
+                  phoneNumber: sale['phone_number'],
                 ),
               ),
             );
           },
           child: PostCard3(
-            imageURL: sell['sell_pic1'],
-            user: sell['user'],
-            title: sell['title'],
+            imageURL: sale['sale_pic1'],
+            user: sale['user'],
+            title: sale['title'],
           ),
         );
       },

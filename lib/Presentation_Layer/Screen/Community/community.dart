@@ -4,7 +4,7 @@ import '../../../Constants/colors.dart';
 import 'Widget/appBar.dart';
 import 'Widget/expandedButton.dart';
 import 'Widget/articleWidget.dart';
-import 'Widget/sellPlantWidget.dart';
+import 'Widget/salePlantWidget.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({Key? key}) : super(key: key);
@@ -47,10 +47,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       buildNewArticleUI(context),
                       // UI for articles
                       buildArticleUI(context),
-                      // UI for new plants for sell
-                      buildNewPlantsForSell(context),
-                      // UI for plants for sell
-                      buildPlantsForSellUI(context),
+                      // UI for new plants for sale
+                      buildNewPlantsForSale(context),
+                      // UI for plants for sale
+                      buildPlantsForSaleUI(context),
                     ],
                   ),
                 ),

@@ -3,9 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../Constants/colors.dart';
 import '../createPost.dart';
-import '../createSellplant.dart';
+import '../createSaleplant.dart';
 
 class ExpandWidget extends StatefulWidget {
+  const ExpandWidget({super.key});
+
   @override
   _ExpandWidgetState createState() => _ExpandWidgetState();
 }
@@ -69,7 +71,7 @@ class _ExpandWidgetState extends State<ExpandWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CreateSellPlant(),
+                  builder: (context) => const CreateSalePlant(),
                 ),
               );
             },

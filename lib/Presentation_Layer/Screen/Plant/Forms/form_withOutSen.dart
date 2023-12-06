@@ -198,8 +198,18 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
           const SizedBox(height: 110),
         ],
       ),
-      floatingActionButton: buildSaveScheduleButton(context, currentUserUid,
-          _image, plantNameController, amountOfWaterController),
+      floatingActionButton: buildSaveScheduleButton(
+        context,
+        currentUserUid,
+        _image,
+        plantNameController,
+        amountOfWaterController,
+        fromDateController,
+        untilDateController,
+        days,
+        hours,
+        selectedWeatherText,
+      ),
     );
   }
 
@@ -560,6 +570,8 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     }
   }
 
+  late int days;
+  late int hours;
   String calculateDuration() {
     // Calculate the total duration in days and hours
     DateTime now = DateTime.now();
@@ -574,8 +586,8 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     Duration selectedDuration = selectedDateTime.difference(now);
 
     // Calculate days and hours separately
-    int days = selectedDuration.inDays;
-    int hours = (selectedDuration.inHours % 24);
+    days = selectedDuration.inDays;
+    hours = (selectedDuration.inHours % 24);
 
     return '$days days, $hours hours';
   }
