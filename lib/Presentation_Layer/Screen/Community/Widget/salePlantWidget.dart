@@ -4,12 +4,12 @@ import 'package:mashtaly_app/Presentation_Layer/Widget/snakBar.dart';
 
 import '../../../../Constants/colors.dart';
 import '../Data/getData.dart';
-import '../allSells.dart';
-import '../sellDetails.dart';
+import '../allSales.dart';
+import '../saleDetails.dart';
 import 'post_card.dart';
 import 'post_card2.dart';
 
-Widget buildNewPlantsForSell(BuildContext context) {
+Widget buildNewPlantsForSale(BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -17,7 +17,7 @@ Widget buildNewPlantsForSell(BuildContext context) {
         height: 10,
       ),
       const Text(
-        'New plants for sell',
+        'New plants for sale',
         style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w700,
@@ -34,7 +34,7 @@ Widget buildNewPlantsForSell(BuildContext context) {
             }
 
             return FutureBuilder<List<Map<String, dynamic>>>(
-              future: getLatestSellPosts(),
+              future: getLatestSalePosts(),
               builder: (context,
                   AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,9 +53,9 @@ Widget buildNewPlantsForSell(BuildContext context) {
                   );
                 }
 
-                final sells = snapshot.data;
+                final sales = snapshot.data;
 
-                if (sells == null || sells.isEmpty) {
+                if (sales == null || sales.isEmpty) {
                   return const Center(
                     child: Text('No posts available.'),
                   );
@@ -65,35 +65,35 @@ Widget buildNewPlantsForSell(BuildContext context) {
                   height: 250,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: sells.length > 2 ? 2 : sells.length,
+                    itemCount: sales.length > 2 ? 2 : sales.length,
                     itemBuilder: (BuildContext context, index) {
-                      if (index < sells.length) {
-                        final sell = sells[index];
+                      if (index < sales.length) {
+                        final sale = sales[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SellDetails(
-                                  profileImage: sell['profile_pic'],
-                                  user: sell['user'],
-                                  imageURL1: sell['sell_pic1'],
-                                  imageURL2: sell['sell_pic2'],
-                                  imageURL3: sell['sell_pic3'],
-                                  imageURL4: sell['sell_pic4'],
-                                  imageURL5: sell['sell_pic5'],
-                                  title: sell['title'],
-                                  date: sell['date'],
-                                  content: sell['content'],
-                                  phoneNumber: sell['phone_number'],
+                                builder: (context) => SaleDetails(
+                                  profileImage: sale['profile_pic'],
+                                  user: sale['user'],
+                                  imageURL1: sale['sale_pic1'],
+                                  imageURL2: sale['sale_pic2'],
+                                  imageURL3: sale['sale_pic3'],
+                                  imageURL4: sale['sale_pic4'],
+                                  imageURL5: sale['sale_pic5'],
+                                  title: sale['title'],
+                                  date: sale['date'],
+                                  content: sale['content'],
+                                  phoneNumber: sale['phone_number'],
                                 ),
                               ),
                             );
                           },
                           child: PostCard(
-                            title: sell['title'],
-                            imageURL: sell['sell_pic1'],
-                            user: sell['user'],
+                            title: sale['title'],
+                            imageURL: sale['sale_pic1'],
+                            user: sale['user'],
                           ),
                         );
                       }
@@ -110,7 +110,7 @@ Widget buildNewPlantsForSell(BuildContext context) {
   );
 }
 
-Widget buildPlantsForSellUI(BuildContext context) {
+Widget buildPlantsForSaleUI(BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -120,7 +120,7 @@ Widget buildPlantsForSellUI(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Plants for sell',
+              'Plants for sale',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
@@ -131,7 +131,7 @@ Widget buildPlantsForSellUI(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ListAllSells(),
+                    builder: (context) => const ListAllSales(),
                   ),
                 );
               },
@@ -157,7 +157,7 @@ Widget buildPlantsForSellUI(BuildContext context) {
             }
 
             return FutureBuilder<List<Map<String, dynamic>>>(
-              future: getAllSellPosts(),
+              future: getAllSalesPosts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return ListView(
@@ -175,9 +175,9 @@ Widget buildPlantsForSellUI(BuildContext context) {
                   );
                 }
 
-                final sells = snapshot.data;
+                final sales = snapshot.data;
 
-                if (sells == null || sells.isEmpty) {
+                if (sales == null || sales.isEmpty) {
                   return const Center(
                     child: Text('No posts available.'),
                   );
@@ -187,35 +187,35 @@ Widget buildPlantsForSellUI(BuildContext context) {
                   height: 250,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: sells.length > 2 ? 2 : sells.length,
+                    itemCount: sales.length > 2 ? 2 : sales.length,
                     itemBuilder: (BuildContext context, index) {
-                      if (index < sells.length) {
-                        final sell = sells[index];
+                      if (index < sales.length) {
+                        final sale = sales[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SellDetails(
-                                  profileImage: sell['profile_pic'],
-                                  user: sell['user'],
-                                  imageURL1: sell['sell_pic1'],
-                                  imageURL2: sell['sell_pic2'],
-                                  imageURL3: sell['sell_pic3'],
-                                  imageURL4: sell['sell_pic4'],
-                                  imageURL5: sell['sell_pic5'],
-                                  title: sell['title'],
-                                  date: sell['date'],
-                                  content: sell['content'],
-                                  phoneNumber: sell['phone_number'],
+                                builder: (context) => SaleDetails(
+                                  profileImage: sale['profile_pic'],
+                                  user: sale['user'],
+                                  imageURL1: sale['sale_pic1'],
+                                  imageURL2: sale['sale_pic2'],
+                                  imageURL3: sale['sale_pic3'],
+                                  imageURL4: sale['sale_pic4'],
+                                  imageURL5: sale['sale_pic5'],
+                                  title: sale['title'],
+                                  date: sale['date'],
+                                  content: sale['content'],
+                                  phoneNumber: sale['phone_number'],
                                 ),
                               ),
                             );
                           },
                           child: PostCard2(
-                            title: sell['title'],
-                            imageURL: sell['sell_pic1'],
-                            user: sell['user'],
+                            title: sale['title'],
+                            imageURL: sale['sale_pic1'],
+                            user: sale['user'],
                           ),
                         );
                       }

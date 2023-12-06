@@ -13,16 +13,16 @@ import 'package:flutter/services.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/snakBar.dart';
 
-class CreateSellPlant extends StatefulWidget {
-  const CreateSellPlant({
+class CreateSalePlant extends StatefulWidget {
+  const CreateSalePlant({
     super.key,
   });
 
   @override
-  State<CreateSellPlant> createState() => _CreateSellPlantState();
+  State<CreateSalePlant> createState() => _CreateSalePlantState();
 }
 
-class _CreateSellPlantState extends State<CreateSellPlant> {
+class _CreateSalePlantState extends State<CreateSalePlant> {
   final _titleController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _contentController = TextEditingController();
@@ -48,7 +48,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
         }
 
         String imagePath =
-            'Sell_Pic/${currentUser.uid}/Sell$random5digit/sell_image_${i + 1}';
+            'Sale_Pic/${currentUser.uid}/Sale$random5digit/sale_image_${i + 1}';
         UploadTask uploadTask =
             _storage.ref().child(imagePath).putFile(File(image.path));
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
@@ -104,19 +104,19 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
       });
 
       await _firestore
-          .collection('sellPlants')
+          .collection('salePlants')
           .doc(currentUser.uid)
-          .collection('SellPlants')
+          .collection('SalePlants')
           .add({
         "id": '${generateUniqueRandom5DigitsNumber()}',
         "title": _titleController.text.trim(),
         "phone_number": _phoneNumberController.text.trim(),
         "content": _contentController.text.trim(),
-        "sell_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
-        "sell_pic2": imageUrls.length > 1 ? imageUrls[1] : null,
-        "sell_pic3": imageUrls.length > 2 ? imageUrls[2] : null,
-        "sell_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
-        "sell_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
+        "sale_pic1": imageUrls.isNotEmpty ? imageUrls[0] : null,
+        "sale_pic2": imageUrls.length > 1 ? imageUrls[1] : null,
+        "sale_pic3": imageUrls.length > 2 ? imageUrls[2] : null,
+        "sale_pic4": imageUrls.length > 3 ? imageUrls[3] : null,
+        "sale_pic5": imageUrls.length > 4 ? imageUrls[4] : null,
         "posted": false,
         "date": '${DateTime.now().toUtc()}',
         "user": (await FirebaseFirestore.instance
@@ -155,13 +155,13 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
         return;
       }
       if (_titleController.text.isEmpty) {
-        print('Error: Please enter title for sell.');
-        showSnakBar(context, 'Please enter title for sell.');
+        print('Error: Please enter title for sale.');
+        showSnakBar(context, 'Please enter title for sale.');
         return;
       }
       if (_phoneNumberController.text.isEmpty) {
-        print('Error: Please enter phone number for sell.');
-        showSnakBar(context, 'Please enter phone number for sell.');
+        print('Error: Please enter phone number for sale.');
+        showSnakBar(context, 'Please enter phone number for sale.');
         return;
       } else if (!_phoneNumberRegExp.hasMatch(_phoneNumberController.text)) {
         print('Error: Invalid phone number.');
@@ -170,8 +170,8 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
       }
 
       if (_contentController.text.isEmpty) {
-        print('Error: Please enter content for sell.');
-        showSnakBar(context, 'Please enter content for sell.');
+        print('Error: Please enter content for sale.');
+        showSnakBar(context, 'Please enter content for sale.');
         return;
       }
 
@@ -229,7 +229,7 @@ class _CreateSellPlantState extends State<CreateSellPlant> {
           ),
         ),
         title: const Text(
-          "Create a Sell",
+          "Create a sale",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

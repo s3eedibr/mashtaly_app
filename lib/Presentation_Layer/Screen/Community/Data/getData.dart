@@ -22,7 +22,7 @@ Future<List<Map<String, dynamic>>> getAllData(String collectionName) async {
       final userPostsRef = FirebaseFirestore.instance
           .collection(collectionName)
           .doc(userId)
-          .collection(collectionName == 'posts' ? 'Posts' : 'SellPlants');
+          .collection(collectionName == 'posts' ? 'Posts' : 'SalePlants');
 
       try {
         // Get a snapshot of data for the current user, ordered by date in descending order
@@ -57,9 +57,9 @@ Future<List<Map<String, dynamic>>> getAllPosts() async {
   return await getAllData('posts');
 }
 
-// Example usage for getting all sell posts
-Future<List<Map<String, dynamic>>> getAllSellPosts() async {
-  return await getAllData('sellPlants');
+// Example usage for getting all sale posts
+Future<List<Map<String, dynamic>>> getAllSalesPosts() async {
+  return await getAllData('salePlants');
 }
 
 // Example usage for getting the latest posts (limited to 3)
@@ -68,10 +68,10 @@ Future<List<Map<String, dynamic>>> getLatestPosts() async {
   return latestPosts.take(3).toList();
 }
 
-// Example usage for getting the latest sell posts (limited to 3)
-Future<List<Map<String, dynamic>>> getLatestSellPosts() async {
-  List<Map<String, dynamic>> latestSellPosts = await getAllData('sellPlants');
-  return latestSellPosts.take(3).toList();
+// Example usage for getting the latest sale posts (limited to 3)
+Future<List<Map<String, dynamic>>> getLatestSalePosts() async {
+  List<Map<String, dynamic>> latestSalePosts = await getAllData('salePlants');
+  return latestSalePosts.take(3).toList();
 }
 
 Future<List<Map<String, dynamic>>> getMyData(
@@ -81,7 +81,7 @@ Future<List<Map<String, dynamic>>> getMyData(
   final userPostsRef = FirebaseFirestore.instance
       .collection(collectionName)
       .doc(userId)
-      .collection(collectionName == 'posts' ? 'Posts' : 'SellPlants');
+      .collection(collectionName == 'posts' ? 'Posts' : 'SalePlants');
 
   try {
     // Get a snapshot of data for the current user, ordered by date in descending order
@@ -111,7 +111,7 @@ Future<List<Map<String, dynamic>>> getMyPosts(String userId) async {
   return await getMyData('posts', userId);
 }
 
-// Example usage for getting sell posts for the current user
-Future<List<Map<String, dynamic>>> getMySells(String userId) async {
-  return await getMyData('sellPlants', userId);
+// Example usage for getting sale posts for the current user
+Future<List<Map<String, dynamic>>> getMySales(String userId) async {
+  return await getMyData('salePlants', userId);
 }

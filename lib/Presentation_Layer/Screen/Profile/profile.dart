@@ -12,7 +12,7 @@ import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/snakBar.dart';
 import 'myPosts.dart';
-import 'mySells.dart';
+import 'mySales.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -110,11 +110,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           });
 
-          // Update profile_pic in 'sellPlants'
+          // Update profile_pic in 'salePlants'
           await FirebaseFirestore.instance
-              .collection('sellPlants')
+              .collection('salePlants')
               .doc(currentUserUid)
-              .collection('SellPlants')
+              .collection('SalePlants')
               .where('user_id', isEqualTo: currentUserUid)
               .get()
               .then((querySnapshot) {
@@ -311,7 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: 16,
                             ),
                             const Text(
-                              'My plant for sell',
+                              'My plant for sale',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -323,7 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const ListMySells(),
+                            builder: (context) => const ListMySales(),
                           ),
                         );
                       },
