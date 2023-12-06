@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:mashtaly_app/sql.dart';
 import '../../../../Constants/colors.dart';
 import '../../../../Services/scan_plant_service.dart';
 import 'Widget/dateRangeInput.dart';
@@ -33,43 +32,14 @@ class AddPlantFormWithOutSen extends StatefulWidget {
 class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
   int selectedWeek = -1;
 
-  List<List<String>> weeklySchedules = [
-    [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ],
-    [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ],
-    [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ],
-    [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ],
+  List<String> weeklySchedules = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
   ];
 
   void selectWeek(int weekNumber) {
@@ -140,7 +110,6 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
 
   late String? plantName = '';
   late String? commonName = '';
-  // SqlDb sqlDb = SqlDb();
   late String currentUserUid;
   @override
   void initState() {
@@ -183,18 +152,38 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         children: [
           const SizedBox(height: 10),
           buildPlantImage(
-              context, _image, pickImageFromGallery, captureImageFromCamera),
+            context,
+            _image,
+            pickImageFromGallery,
+            captureImageFromCamera,
+          ),
           _buildPlantNameInput(),
-          buildWateringSizeInput(amountOfWaterController),
-          buildDateRangeInput(context, fromDateController, untilDateController,
-              showDialogDatePicker),
-          buildDelayedWateringInput(context, delayedDateTime, showDropdown,
-              calculateDuration(), selectedImagePath, selectedWeatherText),
+          buildWateringSizeInput(
+            amountOfWaterController,
+          ),
+          buildDateRangeInput(
+            context,
+            fromDateController,
+            untilDateController,
+            showDialogDatePicker,
+          ),
+          buildDelayedWateringInput(
+            context,
+            delayedDateTime,
+            showDropdown,
+            calculateDuration(),
+            selectedImagePath,
+            selectedWeatherText,
+          ),
           buildScheduleHeader(),
           _buildWeekButtons(),
           const SizedBox(height: 10),
           buildDaySchedule(
-              selectedWeek, weeklySchedules, showDialogTimePicker, time),
+            selectedWeek,
+            weeklySchedules,
+            showDialogTimePicker,
+            time,
+          ),
           const SizedBox(height: 110),
         ],
       ),
