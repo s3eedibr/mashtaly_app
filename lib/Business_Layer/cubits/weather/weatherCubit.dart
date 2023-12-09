@@ -14,7 +14,7 @@ class WeatherCubit extends Cubit<WeatherState> {
   Timer? timer;
   LocationPermission? permission;
 
-  WeatherCubit() : super(WeatherInitialState());
+  WeatherCubit() : super(WeatherLoadingState());
 
   Future<void> getLocationAndFetchWeather() async {
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -31,7 +31,6 @@ class WeatherCubit extends Cubit<WeatherState> {
           latitude: latitude!,
           longitude: longitude!,
         );
-
         if (weatherData != null) {
           final current = weatherData['current'];
           if (current != null) {

@@ -6,10 +6,13 @@ class PlantSuccessDataState extends PlantState {
   final String plantName;
   final String imagePath;
 
-  PlantSuccessDataState({required this.plantName, required this.imagePath});
+  PlantSuccessDataState({
+    required this.plantName,
+    required this.imagePath,
+  });
 }
 
-class SendNotification extends PlantState {}
+class PlantLoadDataState extends PlantState {}
 
 class PlantGetDataState extends PlantState {}
 

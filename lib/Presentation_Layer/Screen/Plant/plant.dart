@@ -14,6 +14,7 @@ import '../HomeScreens/notification.dart';
 import 'Widget/buildLoadingUI.dart';
 import 'Widget/choiceButtons.dart';
 import 'Widget/noPlantData.dart';
+import 'Widget/plant_card.dart';
 
 class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
@@ -508,25 +509,6 @@ class _PlantScreenState extends State<PlantScreen> {
                       ],
                     ),
                   ),
-                  // MaterialButton(
-                  //   highlightColor: Colors.transparent,
-                  //   splashColor: Colors.transparent,
-                  //   onPressed: () async {
-                  //     await sqlDb.deleteDb();
-                  //   },
-                  //   color: Colors.white,
-                  //   elevation: 0,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: const Text(
-                  //     "delete database",
-                  //     style: TextStyle(
-                  //         color: tThirdTextErrorColor,
-                  //         fontSize: 15,
-                  //         fontWeight: FontWeight.bold),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -537,8 +519,20 @@ class _PlantScreenState extends State<PlantScreen> {
               padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
               child: BlocBuilder<PlantCubit, PlantState>(
                 builder: (context, state) {
-                  if (state is PlantInitialState) {
+                  if (state is PlantNoDataState) {
                     return const NoPlantData();
+                  }
+                  if (state is PlantLoadDataState) {
+                    return SizedBox(
+                      height: 250,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          PlantCard.buildShimmerCard(),
+                          PlantCard.buildShimmerCard(),
+                        ],
+                      ),
+                    );
                   } else if (state is PlantSuccessDataState) {
                     // return FutureBuilder(
                     //   future: readData(),
@@ -564,6 +558,19 @@ class _PlantScreenState extends State<PlantScreen> {
                     //     return Container();
                     //   },
                     // );
+                    return SizedBox(
+                      height: 250,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 1,
+                        itemBuilder: (BuildContext context, index) {
+                          return PlantCard(
+                            imageFile: state.imagePath,
+                            plantName: state.plantName,
+                          );
+                        },
+                      ),
+                    );
                   } else if (state is PlantErrorState) {
                     return const Text("There is an error");
                   }

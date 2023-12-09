@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -65,7 +64,7 @@ class _CameraScannerState extends State<CameraScanner> {
 
     try {
       final image = await _cameraController.takePicture();
-      final imageFile = File(image.path);
+      final imageFile = image;
 
       // Save the image to the gallery
       await GallerySaver.saveImage(imageFile.path, albumName: 'Mashtaly');
@@ -101,7 +100,7 @@ class _CameraScannerState extends State<CameraScanner> {
 
     if (image == null) return;
 
-    final imageFile = File(image.path);
+    final imageFile = image;
     sendPhotoToApi(imageFile);
 
     // ignore: use_build_context_synchronously
@@ -346,7 +345,7 @@ class _CameraScannerState extends State<CameraScanner> {
     );
   }
 
-  Future<void> sendPhotoToApi(File imageFile) async {
+  Future<void> sendPhotoToApi(XFile imageFile) async {
     setState(() {
       _isCapturing = true;
       _isCameraAvailable = false;

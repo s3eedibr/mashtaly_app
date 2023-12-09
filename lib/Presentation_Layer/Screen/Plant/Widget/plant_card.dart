@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -25,7 +23,6 @@ class PlantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return _buildContentCard(
       imageFile: imageFile!,
-      user: user!,
       plantName: plantName!,
     );
   }
@@ -99,7 +96,6 @@ class PlantCard extends StatelessWidget {
 
   Widget _buildContentCard({
     required String plantName,
-    required String user,
     required String imageFile,
   }) {
     return Column(
@@ -137,8 +133,8 @@ class PlantCard extends StatelessWidget {
                       height: 150,
                       width: 250,
                       child: imageFile.isNotEmpty
-                          ? Image.file(
-                              File(imageFile),
+                          ? Image.network(
+                              imageFile,
                               height: 150,
                               width: 250,
                               fit: BoxFit.cover,

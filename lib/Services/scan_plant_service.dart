@@ -1,10 +1,10 @@
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 // Define a class for handling the service related to plant image scanning.
 class ScanPlantService {
-  Future<http.Response> sendImageToApi(File imageFile) async {
+  Future<http.Response> sendImageToApi(XFile imageFile) async {
     const apiUrl =
         'https://my-api.plantnet.org/v2/identify/all?include-related-images=true&no-reject=true&lang=en&type=kt&api-key=2b10v6ejuzlL3QNTxCILVgcXO';
 
