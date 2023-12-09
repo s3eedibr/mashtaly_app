@@ -1,30 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import '../../../sql.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Widget/plant_card.dart';
 import 'plantStates.dart';
 
 class PlantCubit extends Cubit<PlantState> {
-  // final SqlDb sqlDb = SqlDb();
-
-  PlantCubit() : super(PlantInitialState());
+  PlantCubit() : super(PlantNoDataState());
 
   addPlant({
     required dynamic imageFile,
     required String plantName,
-    required double amountOfWater,
-    dynamic from,
-    dynamic until,
   }) async {
     try {
-      // int response;
-      // response = await sqlDb.insertData('''
-      //   INSERT INTO Plants
-      //   (imagePath, plantName, amountOfWater, type, active, fromDate, untilDate)
-      //   VALUES
-      //   (?, ?, ?, 'New', '1', ?, ?)
-      //   ''', [imageFile, plantName, amountOfWater, from, until]);
-
-      // print(response);
-
+      PlantCard(
+        plantName: plantName,
+        imageFile: imageFile,
+      );
       emit(PlantSuccessDataState(imagePath: imageFile, plantName: plantName));
     } catch (e) {
       emit(PlantErrorState(error: e.toString()));

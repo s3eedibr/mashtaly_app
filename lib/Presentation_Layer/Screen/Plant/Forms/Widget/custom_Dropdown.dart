@@ -4,7 +4,7 @@ import 'package:mashtaly_app/Constants/colors.dart';
 class CustomDropdown extends StatelessWidget {
   final ValueChanged<Map<String, dynamic>?> onChange;
   const CustomDropdown({Key? key, required this.onChange}) : super(key: key);
-  List<Map<String, dynamic>> mapWeatherData() {
+  static List<Map<String, dynamic>> mapWeatherData() {
     List<Map<String, dynamic>> dropdownItems = [];
 
     final weatherData = [
