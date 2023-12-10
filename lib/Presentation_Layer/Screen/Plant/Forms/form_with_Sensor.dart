@@ -412,13 +412,6 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                 height: 40,
                 width: 300,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "This field is required";
-                    } else {
-                      return null;
-                    }
-                  },
                   keyboardType: TextInputType.text,
                   controller: sensorNameController,
                   cursorColor: tPrimaryActionColor,
@@ -457,6 +450,9 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                   AppSettings.openAppSettings(
                     type: AppSettingsType.wifi,
                   );
+                  setState(() {
+                    sensorNameController.text = 'MashtalySensor';
+                  });
                 },
                 child: Stack(
                   alignment: Alignment.center,
