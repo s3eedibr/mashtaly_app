@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Constants/assets.dart';
+import '../../Widget/snackBar.dart';
 
 import '../../../Constants/colors.dart';
 
@@ -45,23 +46,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               .then((value) => verifyEmail());
         } else {
           // Show error message if passwords don't match
-          showSankBar(context, 'The password is not match.');
+          showSnackBar(context, 'The password is not match.');
         }
       } on FirebaseAuthException catch (e) {
         // Handle Firebase Auth exceptions
         switch (e.code) {
           case 'weak-password':
-            showSankBar(context, 'The password provided is too weak.');
+            showSnackBar(context, 'The password provided is too weak.');
             break;
           case 'email-already-in-use':
-            showSankBar(context, 'The account already exists for that email.');
+            showSnackBar(context, 'The account already exists for that email.');
             break;
           default:
-            showSankBar(context, e.toString());
+            showSnackBar(context, e.toString());
         }
       } catch (e) {
         // Handle general errors
-        showSankBar(context, e.toString());
+        showSnackBar(context, e.toString());
       }
     }
   }
@@ -76,25 +77,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     // Send email verification link
     await user.sendEmailVerification();
-  }
-
-  /// Displays a snackbar with the given message
-  void showSankBar(BuildContext context, String message,
-      {Color color = tThirdTextErrorColor}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        backgroundColor: color,
-      ),
-    );
   }
 
   /// Accesses the users collection in Firestore
@@ -132,6 +114,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         _confirmpasswordController.text.trim();
   }
 
+  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -139,6 +123,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       backgroundColor: tBgColor,
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             Padding(
@@ -285,29 +270,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           fontSize: 16,
                         ),
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 12),
-                          prefixIcon: Icon(
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 12),
+                          prefixIcon: const Icon(
                             Icons.lock_outline_rounded,
                             color: tSecondActionColor,
                             size: 28,
                           ),
                           hintText: "Password",
-                          hintStyle: TextStyle(color: tSecondActionColor),
+                          hintStyle: const TextStyle(color: tSecondActionColor),
                           filled: true,
                           fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: tSecondActionColor,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: tPrimaryActionColor,
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
                             ),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: tPrimaryActionColor,
                             ),
@@ -336,29 +336,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           fontSize: 16,
                         ),
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 12),
-                          prefixIcon: Icon(
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 12),
+                          prefixIcon: const Icon(
                             Icons.lock_outline_rounded,
                             color: tSecondActionColor,
                             size: 28,
                           ),
                           hintText: "Confirm Password",
-                          hintStyle: TextStyle(color: tSecondActionColor),
+                          hintStyle: const TextStyle(color: tSecondActionColor),
                           filled: true,
                           fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: tSecondActionColor,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: tPrimaryActionColor,
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
                             ),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: tPrimaryActionColor,
                             ),
@@ -373,7 +388,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
             ),
-            SizedBox(height: height - 708),
+            SizedBox(height: height - 705),
             GestureDetector(
                 onTap: registration,
                 child: Container(

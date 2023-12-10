@@ -8,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/snackBar.dart';
 import 'myPosts.dart';
@@ -553,15 +552,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Auth(),
-                                            ),
-                                            (Route<dynamic> route) => false,
-                                          );
                                           FirebaseAuth.instance.signOut();
+                                          Navigator.pop(context);
                                         },
                                         child: const Text(
                                           "Confirm",

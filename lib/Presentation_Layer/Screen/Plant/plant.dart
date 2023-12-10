@@ -7,10 +7,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Widget/plant_card.dart';
 
-import '../../../Business_Layer/cubits/show_plant_data/cubit/show_plant_data_cubit.dart';
-import '../../../Business_Layer/cubits/show_plant_data/cubit/show_plant_data_state.dart';
-import '../../../Business_Layer/cubits/weather/weatherCubit.dart';
-import '../../../Business_Layer/cubits/weather/weatherStates.dart';
+import '../../../Business_Layer/cubits/show_plant/cubit/show_plant_data_cubit.dart';
+import '../../../Business_Layer/cubits/show_plant/cubit/show_plant_data_state.dart';
+import '../../../Business_Layer/cubits/show_weather/weatherCubit.dart';
+import '../../../Business_Layer/cubits/show_weather/weatherStates.dart';
 import '../../../Constants/colors.dart';
 // import '../../../sql.dart';
 import '../../Widget/snackBar.dart';
