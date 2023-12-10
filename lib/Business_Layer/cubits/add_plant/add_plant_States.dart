@@ -1,10 +1,10 @@
-class PlantState {}
+class AddPlantState {}
 
-class PlantInitialState extends PlantState {}
+class PlantInitialState extends AddPlantState {}
 
-class PlantLoadDataState extends PlantState {}
+class PlantLoadDataState extends AddPlantState {}
 
-class PlantSuccessDataState extends PlantState {
+class PlantSuccessDataState extends AddPlantState {
   final dynamic image,
       currentUserUid,
       plantNameController,
@@ -22,9 +22,9 @@ class PlantSuccessDataState extends PlantState {
   );
 }
 
-class PlantNoDataState extends PlantState {}
+class PlantNoDataState extends AddPlantState {}
 
-class PlantErrorState extends PlantState {
+class PlantErrorState extends AddPlantState {
   final String error;
 
   PlantErrorState(

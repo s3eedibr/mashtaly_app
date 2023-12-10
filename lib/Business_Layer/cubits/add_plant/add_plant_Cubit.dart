@@ -35,8 +35,8 @@ int generateUniqueRandom5DigitsNumber() {
 
 int random5digit = generateUniqueRandom5DigitsNumber();
 
-class PlantCubit extends Cubit<PlantState> {
-  PlantCubit() : super(PlantInitialState());
+class AddPlantCubit extends Cubit<AddPlantState> {
+  AddPlantCubit() : super(PlantInitialState());
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;

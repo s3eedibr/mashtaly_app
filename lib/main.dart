@@ -9,6 +9,7 @@ import 'Animations/no_connection_screen.dart';
 import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
 import 'Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
+import 'Business_Layer/cubits/show_plant_data/cubit/show_plant_data_cubit.dart';
 import 'Business_Layer/cubits/weather/weatherCubit.dart';
 import 'Constants/colors.dart';
 import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
@@ -77,11 +78,14 @@ class MashtalyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PlantCubit>(
-          create: (context) => PlantCubit(),
+        BlocProvider<AddPlantCubit>(
+          create: (context) => AddPlantCubit(),
         ),
         BlocProvider<WeatherCubit>(
           create: (context) => WeatherCubit(),
+        ),
+        BlocProvider<ShowPlantCubit>(
+          create: (context) => ShowPlantCubit(),
         ),
       ],
       child: MaterialApp(

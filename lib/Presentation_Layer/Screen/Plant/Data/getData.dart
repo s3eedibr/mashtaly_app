@@ -75,7 +75,7 @@ Future<List<Map<String, dynamic>>> getLatestSalePosts() async {
 }
 
 Future<List<Map<String, dynamic>>> getMyData(
-    String collectionName, String userId) async {
+    {required String collectionName, required String userId}) async {
   List<Map<String, dynamic>> myData = [];
 
   final userPlantsRef = FirebaseFirestore.instance
@@ -96,6 +96,7 @@ Future<List<Map<String, dynamic>>> getMyData(
   } catch (e) {
     // Handle errors when getting data for the user
     print('Error getting data for user $userId: $e');
+    rethrow; // Rethrow the exception to let the caller handle it
   }
 
   // Sort the list in descending order by date
@@ -106,10 +107,5 @@ Future<List<Map<String, dynamic>>> getMyData(
 
 // Example usage for getting posts for the current user
 Future<List<Map<String, dynamic>>> getMyPlants(String userId) async {
-  return await getMyData('myPlants', userId);
-}
-
-// Example usage for getting sale posts for the current user
-Future<List<Map<String, dynamic>>> getMySales(String userId) async {
-  return await getMyData('salePlants', userId);
+  return await getMyData(collectionName: 'myPlants', userId: userId);
 }

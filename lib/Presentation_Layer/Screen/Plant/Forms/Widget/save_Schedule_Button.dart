@@ -62,7 +62,7 @@ class _SaveScheduleButtonState extends State<SaveScheduleButton> {
               return;
             }
 
-            var plantCubit = BlocProvider.of<PlantCubit>(context);
+            var plantCubit = BlocProvider.of<AddPlantCubit>(context);
             plantCubit.addPlant(
               image,
               currentUserUid,
