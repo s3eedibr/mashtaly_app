@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mashtaly_app/Presentation_Layer/Widget/snakBar.dart';
+import 'package:mashtaly_app/Presentation_Layer/Widget/snackBar.dart';
 import '../../../../Constants/colors.dart';
 import '../../../../Services/scan_plant_service.dart';
 import 'Widget/date_RangeInput.dart';
@@ -36,6 +36,8 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController untilDateController = TextEditingController();
   final TextEditingController plantNameController = TextEditingController();
+  final TextEditingController sensorNameController = TextEditingController();
+
   final TextEditingController amountOfWaterController = TextEditingController();
   final ScanPlantService _scanPlantService = ScanPlantService();
 
@@ -46,7 +48,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
       final imageFile = image;
       if (imageFile == null) {
         print('Error: Please select an image.');
-        showSnakBar(context, 'Please select an image.');
+        showSnackBar(context, 'Please select an image.');
         return;
       }
 
@@ -221,7 +223,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
               if (duration.isNotEmpty && weatherCondition.isNotEmpty) {
                 addDelayedCondition();
               } else {
-                showSnakBar(context,
+                showSnackBar(context,
                     "Enter all the information in the previous fields first");
               }
             },
@@ -418,6 +420,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                     }
                   },
                   keyboardType: TextInputType.text,
+                  controller: sensorNameController,
                   cursorColor: tPrimaryActionColor,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,

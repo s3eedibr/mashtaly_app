@@ -10,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../Constants/colors.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({
@@ -137,7 +137,7 @@ class _CreatePostState extends State<CreatePost> {
             .get('profile_pic'),
       });
 
-      showSnakBar(context, 'Post submitted! Admin review in progress.',
+      showSnackBar(context, 'Post submitted! Admin review in progress.',
           color: tPrimaryActionColor);
       Navigator.pop(context);
     } catch (e) {
@@ -152,23 +152,23 @@ class _CreatePostState extends State<CreatePost> {
 
       if (!isConnected) {
         print('No internet connection.');
-        showSnakBar(context, 'No internet connection.');
+        showSnackBar(context, 'No internet connection.');
         return;
       }
       if (_selectedImages.length < 3) {
         print('Error: Please choose at least 3 pictures.');
-        showSnakBar(context, 'Please choose at least 3 pictures.');
+        showSnackBar(context, 'Please choose at least 3 pictures.');
         return;
       }
       if (_titleController.text.isEmpty) {
         print('Error: Please enter title for post.');
-        showSnakBar(context, 'Please enter title for article.');
+        showSnackBar(context, 'Please enter title for article.');
         return;
       }
 
       if (_contentController.text.isEmpty) {
         print('Error: Please enter content for post.');
-        showSnakBar(context, 'Please enter content for article.');
+        showSnackBar(context, 'Please enter content for article.');
         return;
       }
 

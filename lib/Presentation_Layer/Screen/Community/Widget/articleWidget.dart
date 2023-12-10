@@ -1,8 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Presentation_Layer/Widget/snakBar.dart';
 
 import '../../../../Constants/colors.dart';
+import '../../../Widget/snackBar.dart';
 import '../Data/getData.dart';
 import '../allPosts.dart';
 import '../postDetails.dart';
@@ -29,7 +29,7 @@ Widget buildNewArticleUI(BuildContext context) {
           future: checkConnectivity(),
           builder: (context, snapshot) {
             if (snapshot.data == ConnectivityResult.none) {
-              showSnakBar(context, 'No internet connection.');
+              showSnackBar(context, 'No internet connection.');
               return Container(); // Return an empty container when there is no internet connection
             }
 

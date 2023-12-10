@@ -4,7 +4,7 @@ import '../../../Auth/auth.dart';
 import '../../../Constants/assets.dart';
 import '../../../Constants/colors.dart';
 import '../../../Constants/text_strings.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 import 'otp_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -126,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           //     builder: (context) => ForgotPasswordScreen(),
                           //   ),
                           // );
-                          showSnakBar(context, 'Oops, OTP send failed');
+                          showSnackBar(context, 'Oops, OTP send failed');
                         } else {
                           Navigator.pushReplacement(
                             context,
@@ -135,7 +135,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   OTPScreen(sendtoemail: email!),
                             ),
                           );
-                          showSnakBar(
+                          showSnackBar(
                               context, 'OTP has been sent to your email',
                               color: tPrimaryActionColor);
                         }

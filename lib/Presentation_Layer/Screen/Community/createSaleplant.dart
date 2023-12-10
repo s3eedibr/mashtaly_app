@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 
 import '../../../Constants/colors.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 
 class CreateSalePlant extends StatefulWidget {
   const CreateSalePlant({
@@ -132,7 +132,7 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
             .get('profile_pic'),
       });
 
-      showSnakBar(context, 'Post submitted! Admin review in progress.',
+      showSnackBar(context, 'Post submitted! Admin review in progress.',
           color: tPrimaryActionColor);
       Navigator.pop(context);
     } catch (e) {
@@ -146,32 +146,32 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
 
       if (!isConnected) {
         print('No internet connection.');
-        showSnakBar(context, 'No internet connection.');
+        showSnackBar(context, 'No internet connection.');
         return;
       }
       if (_selectedImages.length < 3) {
         print('Error: Please choose at least 3 pictures.');
-        showSnakBar(context, 'Please choose at least 3 pictures.');
+        showSnackBar(context, 'Please choose at least 3 pictures.');
         return;
       }
       if (_titleController.text.isEmpty) {
         print('Error: Please enter title for sale.');
-        showSnakBar(context, 'Please enter title for sale.');
+        showSnackBar(context, 'Please enter title for sale.');
         return;
       }
       if (_phoneNumberController.text.isEmpty) {
         print('Error: Please enter phone number for sale.');
-        showSnakBar(context, 'Please enter phone number for sale.');
+        showSnackBar(context, 'Please enter phone number for sale.');
         return;
       } else if (!_phoneNumberRegExp.hasMatch(_phoneNumberController.text)) {
         print('Error: Invalid phone number.');
-        showSnakBar(context, 'E.g. 07 {7,8,9} * * * * * * *.');
+        showSnackBar(context, 'E.g. 07 {7,8,9} * * * * * * *.');
         return;
       }
 
       if (_contentController.text.isEmpty) {
         print('Error: Please enter content for sale.');
-        showSnakBar(context, 'Please enter content for sale.');
+        showSnackBar(context, 'Please enter content for sale.');
         return;
       }
 

@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mashtaly_app/Presentation_Layer/Widget/snakBar.dart';
+import 'package:mashtaly_app/Presentation_Layer/Widget/snackBar.dart';
 import '../../../../Constants/colors.dart';
 import '../../../../Services/scan_plant_service.dart';
 import 'Widget/date_RangeInput.dart';
@@ -44,7 +44,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
       final imageFile = image;
       if (imageFile == null) {
         print('Error: Please select an image.');
-        showSnakBar(context, 'Please select an image.');
+        showSnackBar(context, 'Please select an image.');
         return;
       }
 
@@ -106,6 +106,20 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
   }
 
   List<DelayedWateringInput> delayedCondition = [const DelayedWateringInput()];
+  List<List<dynamic>> weatherConditionAndDuration = [];
+  List<List<dynamic>> combineWeatherAndDuration() {
+    List<List<dynamic>> combinedList = [];
+    for (int i = 0; i < duration.length; i++) {
+      if (i < weatherCondition.length) {
+        combinedList.add([
+          weatherCondition[i],
+          duration[i][0], // days
+          duration[i][1], // hours
+        ]);
+      }
+    }
+    return combinedList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +219,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
               if (duration.isNotEmpty && weatherCondition.isNotEmpty) {
                 addDelayedCondition();
               } else {
-                showSnakBar(context,
+                showSnackBar(context,
                     "Enter all the information in the previous fields first");
               }
             },
@@ -232,6 +246,10 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
           ),
           GestureDetector(
             onTap: () {
+              print(combineWeatherAndDuration());
+              print(delayedCondition);
+              print(weatherCondition);
+              print(duration);
               print(timeInEachWeekAndDay);
             },
             child: Padding(

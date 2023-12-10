@@ -10,7 +10,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../Auth/auth.dart';
 import '../../../Constants/colors.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 import 'myPosts.dart';
 import 'mySales.dart';
 
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
         // Handle no internet connection
-        showSnakBar(context, 'No internet connection');
+        showSnackBar(context, 'No internet connection');
         return;
       }
 

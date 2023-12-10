@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Animations/no_connection_screen.dart';
 import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
-import 'Business_Layer/cubits/plant/plantCubit.dart';
+import 'Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import 'Business_Layer/cubits/weather/weatherCubit.dart';
 import 'Constants/colors.dart';
 import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';

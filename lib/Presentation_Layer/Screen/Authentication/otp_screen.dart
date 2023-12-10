@@ -8,7 +8,7 @@ import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:mashtaly_app/Constants/assets.dart';
 
 import '../../../Constants/colors.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 import 'forgotpassword_screen.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class _OTPScreenState extends State<OTPScreen> {
       otpType: OTPType.digitsOnly,
     );
     if (await myauth.sendOTP() == true) {
-      showSnakBar(context, 'OTP has been sent to your email',
+      showSnackBar(context, 'OTP has been sent to your email',
           color: tPrimaryActionColor);
     } else {
       Navigator.pushReplacement(
@@ -155,7 +155,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             onPressed: () async {
                               if (await myauth.verifyOTP(otp: veryOTP) ==
                                   true) {
-                                showSnakBar(context,
+                                showSnackBar(context,
                                     'Check your email to reset your password',
                                     color: tPrimaryActionColor);
                                 FirebaseAuth.instance
@@ -167,7 +167,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   ),
                                 );
                               } else {
-                                showSnakBar(context, 'Invalid OTP');
+                                showSnackBar(context, 'Invalid OTP');
                               }
                             },
                           ),
