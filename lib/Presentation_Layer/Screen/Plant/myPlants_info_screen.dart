@@ -1,75 +1,42 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:mashtaly_app/Services/wikipedia_service.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../Constants/colors.dart';
 
-class PlantsInfoScreen extends StatefulWidget {
+class MyPlantsInfoScreen extends StatefulWidget {
   final String? plantName;
-  final String? commonName;
-  const PlantsInfoScreen({
+  final String? imageUrl;
+  final bool? active;
+
+  const MyPlantsInfoScreen({
     Key? key,
     required this.plantName,
-    this.commonName,
+    this.imageUrl,
+    this.active,
   }) : super(key: key);
 
   @override
-  State<PlantsInfoScreen> createState() => _PlantsInfoScreenState();
+  State<MyPlantsInfoScreen> createState() => _MyPlantsInfoScreenState();
 }
 
-class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
+class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
   String para = '';
-  List<String> photoUrls = []; // Move the list declaration here
   bool switchValue = false;
 
   @override
   void initState() {
     super.initState();
-    fetchPhotos();
-    fetchPlantInformation(widget.plantName!, widget.commonName!).then((value) {
+    fetchPlantInformation(widget.plantName!, '').then((value) {
       setState(() {
         para = value;
       });
     }).catchError((error) {
       print('Error fetching plant information: $error');
     });
-  }
-
-  void fetchPhotos() async {
-    String key = '187eIB9xAk7cmtokC5xYlDc4E6IgAB7f1sm6LLLmfs0';
-    String apiUrl =
-        'https://api.unsplash.com/search/photos?query=${widget.plantName}&client_id=$key';
-
-    try {
-      http.Response response = await http.get(Uri.parse(apiUrl));
-
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-
-        List<dynamic> photoDataList = data['results'];
-
-        setState(() {
-          // Extract URLs and store them in photoUrls list
-          photoUrls = photoDataList
-              .map((photoData) => photoData['urls']['regular'].toString())
-              .toList()
-              .take(6) // Take the first 6 URLs only
-              .toList();
-        });
-      } else {
-        // Handle error
-        print('Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Handle exception
-      print('Exception: $e');
-    }
   }
 
   bool _isValidUrl(String url) {
@@ -99,29 +66,29 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(
-        //       left: 16,
-        //       right: 16,
-        //     ),
-        //     child: Switch(
-        //       value: switchValue,
-        //       onChanged: (newValue) {
-        //         setState(() {
-        //           switchValue = newValue;
-        //           print(switchValue);
-        //         });
-        //       },
-        //       activeTrackColor: const Color(0xff9BEC79),
-        //       activeColor: const Color(0xff66B821),
-        //       inactiveTrackColor: const Color(0xFFFF3324),
-        //       inactiveThumbColor: tBgColor,
-        //       trackOutlineColor:
-        //           const MaterialStatePropertyAll<Color?>(Colors.transparent),
-        //     ),
-        //   ),
-        // ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Switch(
+              value: switchValue,
+              onChanged: (newValue) {
+                setState(() {
+                  switchValue = newValue;
+                  print(switchValue);
+                });
+              },
+              activeTrackColor: const Color(0xff9BEC79),
+              activeColor: const Color(0xff66B821),
+              inactiveTrackColor: const Color(0xFFFF3324),
+              inactiveThumbColor: tBgColor,
+              trackOutlineColor:
+                  const MaterialStatePropertyAll<Color?>(Colors.transparent),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -139,57 +106,21 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: photoUrls.isNotEmpty && _isValidUrl(photoUrls[0])
-                      ? CachedNetworkImage(
-                          imageUrl: photoUrls[0],
-                          height: 250,
-                          width: width,
-                          fit: BoxFit.fitWidth,
-                        )
-                      : Container(
-                          // Placeholder image when the photoUrls list is empty or URL is invalid
-                          height: 250,
-                          width: width,
-                          color: Colors
-                              .grey, // You can customize this placeholder color
-                        ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                ),
-                child: SizedBox(
-                  height: 75,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: photoUrls.length,
-                    itemBuilder: (context, index) {
-                      if (_isValidUrl(photoUrls[index])) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(6),
-                            child: CachedNetworkImage(
-                              imageUrl: photoUrls[index],
-                              height: 95,
-                              width: 85,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      } else {
-                        // Return an empty container or a placeholder image
-                        return Container(
-                          width: 100,
-                          color: Colors.grey, // Customize this color as needed
-                        );
-                      }
-                    },
+                  child: CachedNetworkImage(
+                    imageUrl: widget.imageUrl!,
+                    height: 250,
+                    width: width,
+                    fit: BoxFit.fitWidth,
+                    placeholder: (BuildContext context, String url) =>
+                        const Center(
+                            child: CircularProgressIndicator(
+                      color: tPrimaryActionColor,
+                    )),
+                    errorWidget:
+                        (BuildContext context, String url, dynamic error) =>
+                            const Center(
+                      child: Icon(Icons.not_interested_rounded),
+                    ),
                   ),
                 ),
               ),
@@ -230,18 +161,6 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                             ),
                           ),
                         ],
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.commonName ?? "",
-                          textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                            color: tSecondTextColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -522,57 +441,60 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
               ),
             ],
           ),
+          const SizedBox(
+            height: 55,
+          ),
         ],
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: SizedBox(
-      //   height: 50,
-      //   width: 380,
-      //   child: switchValue == false
-      //       ? FloatingActionButton(
-      //           backgroundColor: tPrimaryActionColor,
-      //           elevation: 0,
-      //           shape: const RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.all(
-      //               Radius.circular(12.0),
-      //             ),
-      //           ),
-      //           onPressed: () {
-      //             setState(() {
-      //               switchValue = true;
-      //             });
-      //           },
-      //           child: const Center(
-      //               child: Text(
-      //             "Add to My Plants",
-      //             style: TextStyle(
-      //               color: tThirdTextColor,
-      //               fontWeight: FontWeight.bold,
-      //               fontSize: 20,
-      //             ),
-      //           )),
-      //         )
-      //       : FloatingActionButton(
-      //           backgroundColor: tThirdTextErrorColor,
-      //           elevation: 0,
-      //           shape: const RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.all(
-      //               Radius.circular(12.0),
-      //             ),
-      //           ),
-      //           onPressed: () {},
-      //           child: const Center(
-      //             child: Text(
-      //               "Edit My Plant",
-      //               style: TextStyle(
-      //                 color: tThirdTextColor,
-      //                 fontWeight: FontWeight.bold,
-      //                 fontSize: 20,
-      //               ),
-      //             ),
-      //           ),
-      //         ),
-      // ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+        height: 50,
+        width: 380,
+        child: switchValue == false
+            ? FloatingActionButton(
+                backgroundColor: tPrimaryActionColor,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12.0),
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    switchValue = true;
+                  });
+                },
+                child: const Center(
+                    child: Text(
+                  "Add to My Plants",
+                  style: TextStyle(
+                    color: tThirdTextColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                )),
+              )
+            : FloatingActionButton(
+                backgroundColor: tThirdTextErrorColor,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12.0),
+                  ),
+                ),
+                onPressed: () {},
+                child: const Center(
+                  child: Text(
+                    "Edit My Plant",
+                    style: TextStyle(
+                      color: tThirdTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
@@ -8,15 +9,15 @@ import 'package:mashtaly_app/Auth/auth.dart';
 import 'package:mashtaly_app/Constants/assets.dart';
 
 import '../../../Constants/colors.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 import 'forgotpassword_screen.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({
     Key? key,
-    required this.sendtoemail,
+    required this.sendToEmail,
   }) : super(key: key);
-  final String sendtoemail;
+  final String sendToEmail;
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
@@ -24,24 +25,27 @@ class OTPScreen extends StatefulWidget {
 class _OTPScreenState extends State<OTPScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    sendOTP();
+    sendOTP(); // Trigger the OTP sending process when the screen is initialized
   }
 
-  EmailOTP myauth = EmailOTP();
+  EmailOTP myauth =
+      EmailOTP(); // Instance of the EmailOTP class for OTP handling
   void sendOTP() async {
     myauth.setConfig(
       appEmail: "noreply@mashtaly-hu.firebaseapp.com",
       appName: "Mashtaly",
-      userEmail: widget.sendtoemail,
+      userEmail: widget.sendToEmail,
       otpLength: 5,
       otpType: OTPType.digitsOnly,
     );
+
+    // Send OTP and handle success or failure
     if (await myauth.sendOTP() == true) {
-      showSnakBar(context, 'OTP has been sent to your email',
+      showSnackBar(context, 'OTP has been sent to your email',
           color: tPrimaryActionColor);
     } else {
+      // Navigate back to the Forgot Password screen if OTP sending fails
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -51,13 +55,15 @@ class _OTPScreenState extends State<OTPScreen> {
     }
   }
 
-  String? veryOTP;
+  String? veryOTP; // Variable to store the user-entered OTP
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             Padding(
@@ -75,7 +81,7 @@ class _OTPScreenState extends State<OTPScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Enter OTP received on your email $email",
+                    "Enter OTP received on your email ${widget.sendToEmail}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: tPrimaryTextColor,
@@ -102,31 +108,28 @@ class _OTPScreenState extends State<OTPScreen> {
                       onSubmit: (code) {
                         veryOTP = code;
                       }),
-                  const SizedBox(height: 5),
-                  TextButton(
-                    onPressed: () {
-                      sendOTP();
-                    },
-                    style: const ButtonStyle(),
-                    child: const Text.rich(
-                      TextSpan(
-                        text: "Don't receive OTP?",
-                        style: TextStyle(
-                          color: tPrimaryTextColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
-                        children: [
-                          TextSpan(
+                  const SizedBox(height: 30),
+                  Text.rich(
+                    TextSpan(
+                      text: "Don't receive OTP?",
+                      style: const TextStyle(
+                        color: tPrimaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                      children: [
+                        TextSpan(
                             text: " Resend OTP",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: tPrimaryActionColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
-                          ),
-                        ],
-                      ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                sendOTP(); // Resend OTP when the "Resend OTP" button is pressed
+                              }),
+                      ],
                     ),
                   ),
                   SizedBox(height: height - 680),
@@ -153,13 +156,14 @@ class _OTPScreenState extends State<OTPScreen> {
                               ),
                             ),
                             onPressed: () async {
+                              // Verify the entered OTP and proceed accordingly
                               if (await myauth.verifyOTP(otp: veryOTP) ==
                                   true) {
-                                showSnakBar(context,
+                                showSnackBar(context,
                                     'Check your email to reset your password',
                                     color: tPrimaryActionColor);
                                 FirebaseAuth.instance
-                                    .sendPasswordResetEmail(email: email!);
+                                    .sendPasswordResetEmail(email: email);
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -167,7 +171,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   ),
                                 );
                               } else {
-                                showSnakBar(context, 'Invalid OTP');
+                                showSnackBar(context, 'Invalid OTP');
                               }
                             },
                           ),

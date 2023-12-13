@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Constants/assets.dart';
 
 import '../../../Constants/colors.dart';
+import '../../Widget/snackBar.dart';
 import 'forgotpassword_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,45 +42,26 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
         // Handle Firebase Authentication errors
         switch (e.code) {
           case 'user-not-found':
-            showSankBar(context, 'No user found for that email.');
+            showSnackBar(context, 'No user found for that email.');
             break;
           case 'wrong-password':
-            showSankBar(context, 'Wrong password provided for that user.');
+            showSnackBar(context, 'Wrong password provided for that user.');
             break;
           case 'user-disabled':
-            showSankBar(context,
+            showSnackBar(context,
                 'The user account has been disabled by an administrator.');
             break;
           case 'invalid-email':
-            showSankBar(context, 'The email address is badly formatted.');
+            showSnackBar(context, 'The email address is badly formatted.');
             break;
           default:
-            showSankBar(context, e.toString());
+            showSnackBar(context, e.toString());
         }
       } catch (e) {
         // Handle generic errors
-        showSankBar(context, e.toString());
+        showSnackBar(context, e.toString());
       }
     }
-  }
-
-  // Function to display a Snackbar message
-  void showSankBar(BuildContext context, String message,
-      {Color color = tThirdTextErrorColor}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        backgroundColor: color,
-      ),
-    );
   }
 
   @override
@@ -105,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
     return Scaffold(
       backgroundColor: tBgColor,
       body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         reverse: false,
         child: Column(
           children: [

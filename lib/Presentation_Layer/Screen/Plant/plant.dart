@@ -1,13 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mashtaly_app/Business_Layer/cubits/plant/plantCubit.dart';
-import 'package:mashtaly_app/Business_Layer/cubits/plant/plantStates.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_States.dart';
+
+// import '../../../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
+// import '../../../../../Business_Layer/cubits/add_plant/add_plant_States.dart';
+
 // import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Widget/plant_card.dart';
 
-import '../../../Business_Layer/cubits/weather/weatherCubit.dart';
-import '../../../Business_Layer/cubits/weather/weatherStates.dart';
+// import '../../../Business_Layer/cubits/show_plant/cubit/show_plant_data_cubit.dart';
+// import '../../../Business_Layer/cubits/show_plant/cubit/show_plant_data_state.dart';
+import '../../../Business_Layer/cubits/show_weather/weatherCubit.dart';
+import '../../../Business_Layer/cubits/show_weather/weatherStates.dart';
 import '../../../Constants/colors.dart';
 // import '../../../sql.dart';
 import '../HomeScreens/notification.dart';
@@ -15,6 +23,7 @@ import 'Widget/buildLoadingUI.dart';
 import 'Widget/choiceButtons.dart';
 import 'Widget/noPlantData.dart';
 import 'Widget/plant_card.dart';
+import 'myPlants_info_screen.dart';
 
 class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
@@ -25,17 +34,10 @@ class PlantScreen extends StatefulWidget {
 
 class _PlantScreenState extends State<PlantScreen> {
   DateTime selectedDate = DateTime.now();
-  // SqlDb sqlDb = SqlDb();
-
-  // Future<List<Map>> readData() async {
-  //   List<Map> response = await sqlDb.readData("SELECT * FROM Plants");
-  //   return response;
-  // }
 
   void onDateSelected(DateTime date) {
     setState(() {
       selectedDate = date;
-      print(selectedDate);
     });
   }
 
@@ -48,8 +50,8 @@ class _PlantScreenState extends State<PlantScreen> {
   Widget build(BuildContext context) {
     final weatherCubit = BlocProvider.of<WeatherCubit>(context);
     weatherCubit.getLocationAndFetchWeather();
-    const bool newNotification = true;
 
+    const bool newNotification = true;
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
@@ -178,6 +180,10 @@ class _PlantScreenState extends State<PlantScreen> {
     required String wind,
     required String humidity,
   }) {
+    // final myPlantCubit = BlocProvider.of<ShowPlantCubit>(context);
+    // myPlantCubit.loadData(FirebaseAuth.instance.currentUser!.uid);
+    final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
+    myPlantCubit.loadData(FirebaseAuth.instance.currentUser!.uid);
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -198,15 +204,22 @@ class _PlantScreenState extends State<PlantScreen> {
                   Row(
                     children: [
                       icon.isNotEmpty
-                          ? Image.network(
-                              icon,
+                          ? CachedNetworkImage(
+                              imageUrl: icon,
                               height: 38,
                               width: 38,
+                              placeholder: (BuildContext context, String url) =>
+                                  const Center(
+                                      child: CircularProgressIndicator(
+                                color: tPrimaryActionColor,
+                              )),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  const Center(
+                                child: Icon(Icons.cloud_off_rounded),
+                              ),
                             )
-                          : const Icon(
-                              Icons.cloud_off_sharp,
-                              color: Colors.transparent,
-                            ),
+                          : const Icon(Icons.cloud_off_rounded),
                       const SizedBox(
                         width: 5,
                       ),
@@ -513,18 +526,19 @@ class _PlantScreenState extends State<PlantScreen> {
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-              child: BlocBuilder<PlantCubit, PlantState>(
+              child:
+                  // updateSchPro(),
+                  BlocBuilder<AddPlantCubit, AddPlantState>(
                 builder: (context, state) {
                   if (state is PlantNoDataState) {
                     return const NoPlantData();
-                  }
-                  if (state is PlantLoadDataState) {
+                  } else if (state is PlantLoadingState) {
                     return SizedBox(
-                      height: 250,
+                      height: 300,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
@@ -533,40 +547,32 @@ class _PlantScreenState extends State<PlantScreen> {
                         ],
                       ),
                     );
-                  } else if (state is PlantSuccessDataState) {
-                    // return FutureBuilder(
-                    //   future: readData(),
-                    //   builder: (BuildContext context,
-                    //       AsyncSnapshot<List<Map>> snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const CircularProgressIndicator();
-                    //     } else if (snapshot.hasError) {
-                    //       return const Text("There is an error");
-                    //     } else if (snapshot.hasData) {
-                    //       return ListView.builder(
-                    //         scrollDirection: Axis.horizontal,
-                    //         itemBuilder: (context, index) {
-                    //           Map plantData = snapshot.data![index];
-                    //           return PlantCard(
-                    //             imageFile: plantData['imagePath'],
-                    //             plantName: plantData['plantName'],
-                    //           );
-                    //         },
-                    //       );
-                    //     }
-                    //     return Container();
-                    //   },
-                    // );
+                  } else if (state is UpdatePlantScreen) {
+                    // Extract myData from the state
+                    final myData = state.myData;
+
                     return SizedBox(
-                      height: 250,
+                      height: 300,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 1,
+                        itemCount: myData.length,
                         itemBuilder: (BuildContext context, index) {
-                          return PlantCard(
-                            imageFile: state.imagePath,
-                            plantName: state.plantName,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyPlantsInfoScreen(
+                                    plantName: myData[index]['plantName'],
+                                    imageUrl: myData[index]['myPlant_pic1'],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: PlantCard(
+                              imageURL: myData[index]['myPlant_pic1'],
+                              plantName: myData[index]['plantName'],
+                            ),
                           );
                         },
                       ),
@@ -586,4 +592,71 @@ class _PlantScreenState extends State<PlantScreen> {
       ),
     );
   }
+
+  // UpdateSchedule updateSchPro() {
+  //   BlocProvider.of<GetPlantCubit>(context).getPlant();
+  //   return const UpdateSchedule();
+  // }
 }
+
+// class UpdateSchedule extends StatefulWidget {
+//   const UpdateSchedule({super.key});
+
+//   @override
+//   State<UpdateSchedule> createState() => _UpdateScheduleState();
+// }
+
+// class _UpdateScheduleState extends State<UpdateSchedule> {
+//   List<Map<String, dynamic>> myData = [];
+
+//   bool isLoading = true;
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocConsumer<ShowPlantCubit, ShowPlantState>(
+//       listener: (context, state) {
+//         if (state is ShowPlantSucData) {
+//           myData = state.myData;
+//           isLoading = false;
+//         } else if (state is GetPlantLoading) {
+//           isLoading = true;
+//         } else if (state is GetPlantFailure) {
+//           isLoading = false;
+
+//           print('Failure');
+//         }
+//       },
+//       builder: (context, state) {
+//         return myData.isNotEmpty
+//             ? SizedBox(
+//                 height: 300,
+//                 child: isLoading != true
+//                     ? ListView.builder(
+//                         scrollDirection: Axis.horizontal,
+//                         itemCount: myData.length,
+//                         itemBuilder: (BuildContext context, index) {
+//                           return GestureDetector(
+//                             onTap: () {
+//                               Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (context) => MyPlantsInfoScreen(
+//                                     plantName: myData[index]['plantName'],
+//                                     imageUrl: myData[index]['myPlant_pic1'],
+//                                   ),
+//                                 ),
+//                               );
+//                             },
+//                             child: PlantCard(
+//                               imageURL: myData[index]['myPlant_pic1'],
+//                               plantName: myData[index]['plantName'],
+//                             ),
+//                           );
+//                         },
+//                       )
+//                     : const Center(child: CircularProgressIndicator()),
+//               )
+//             : const NoPlantData();
+//       },
+//     );
+//   }
+// }

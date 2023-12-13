@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Auth/auth.dart';
 import '../../../Constants/assets.dart';
 import '../../../Constants/colors.dart';
 import '../../../Constants/text_strings.dart';
-import '../../Widget/snakBar.dart';
+import '../../Widget/snackBar.dart';
 import 'otp_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -14,19 +15,36 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-String? email;
+String email = '';
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _emilController = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey();
+  final emilController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey();
 
+  // Function to check if the provided string is a valid email
   bool isEmail(String em) {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
+    String p = r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
     RegExp regExp = RegExp(p);
-
     return regExp.hasMatch(em);
+  }
+
+  // Function to check if the email exists in the Firestore 'users' collection
+  Future<bool> doesEmailExist(String email) async {
+    try {
+      // Reference to the Firestore collection
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+
+      // Query for a document where the 'email' field matches the specified email
+      QuerySnapshot querySnapshot =
+          await users.where('email', isEqualTo: email).get();
+
+      // Check if any documents were found
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      print('Error checking email existence: $e');
+      return false; // Return false in case of an error
+    }
   }
 
   @override
@@ -35,8 +53,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
+            // Image for the top of the screen
             Padding(
               padding: const EdgeInsets.only(top: 70),
               child: Center(
@@ -50,16 +70,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             const SizedBox(height: 20),
             Column(
               children: [
-                const Text(
-                  tEmailAcc,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: tPrimaryTextColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                // Text for the title of the screen
+                const Padding(
+                  padding: EdgeInsets.only(left: 17, right: 16),
+                  child: Text(
+                    tEmailAcc,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: tPrimaryTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 45),
+                // Form with an email input field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 35),
                   child: Form(
@@ -73,7 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         }
                       },
                       keyboardType: TextInputType.emailAddress,
-                      controller: _emilController,
+                      controller: emilController,
                       cursorColor: tPrimaryActionColor,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
@@ -115,29 +140,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(height: height - 670),
                 Column(
                   children: [
+                    // Button to send instructions for password reset
                     GestureDetector(
-                      onTap: () {
-                        email = _emilController.text.trim();
-                        if (_emilController.text.isEmpty ||
-                            isEmail(email!) == false) {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ForgotPasswordScreen(),
-                          //   ),
-                          // );
-                          showSnakBar(context, 'Oops, OTP send failed');
-                        } else {
+                      onTap: () async {
+                        email = emilController.text.trim();
+                        if (emilController.text.isEmpty) {
+                          showSnackBar(context, 'Enter your email please.');
+                        } else if (!isEmail(emilController.text.trim())) {
+                          showSnackBar(
+                              context, 'The email address is badly formatted.');
+                        } else if (await doesEmailExist(
+                            emilController.text.trim())) {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  OTPScreen(sendtoemail: email!),
+                              builder: (context) => OTPScreen(
+                                  sendToEmail: emilController.text.trim()),
                             ),
                           );
-                          showSnakBar(
+                          showSnackBar(
                               context, 'OTP has been sent to your email',
                               color: tPrimaryActionColor);
+                        } else {
+                          showSnackBar(
+                              context, 'No user found for that email.');
                         }
                       },
                       child: Container(
@@ -160,6 +186,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                     const SizedBox(height: 15),
+                    // Text to navigate to the registration screen
                     GestureDetector(
                       onTap: () {
                         Navigator.pushReplacement(

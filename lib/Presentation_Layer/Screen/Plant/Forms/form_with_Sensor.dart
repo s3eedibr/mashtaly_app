@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mashtaly_app/Presentation_Layer/Widget/snakBar.dart';
+import 'package:mashtaly_app/Presentation_Layer/Widget/snackBar.dart';
 import '../../../../Constants/colors.dart';
 import '../../../../Services/scan_plant_service.dart';
 import 'Widget/date_RangeInput.dart';
@@ -36,6 +36,8 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController untilDateController = TextEditingController();
   final TextEditingController plantNameController = TextEditingController();
+  final TextEditingController sensorNameController = TextEditingController();
+
   final TextEditingController amountOfWaterController = TextEditingController();
   final ScanPlantService _scanPlantService = ScanPlantService();
 
@@ -46,7 +48,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
       final imageFile = image;
       if (imageFile == null) {
         print('Error: Please select an image.');
-        showSnakBar(context, 'Please select an image.');
+        showSnackBar(context, 'Please select an image.');
         return;
       }
 
@@ -221,7 +223,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
               if (duration.isNotEmpty && weatherCondition.isNotEmpty) {
                 addDelayedCondition();
               } else {
-                showSnakBar(context,
+                showSnackBar(context,
                     "Enter all the information in the previous fields first");
               }
             },
@@ -280,11 +282,12 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
         amountOfWaterController: amountOfWaterController,
         fromDateController: fromDateController,
         untilDateController: untilDateController,
+        withSensor: true,
       ),
     );
   }
 
-  int days = 0, hours = 0;
+  int days = 0, hours = 0, min = 0;
   Widget _buildPlantNameInput() {
     return Padding(
       padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
@@ -410,14 +413,8 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                 height: 40,
                 width: 300,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "This field is required";
-                    } else {
-                      return null;
-                    }
-                  },
                   keyboardType: TextInputType.text,
+                  controller: sensorNameController,
                   cursorColor: tPrimaryActionColor,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -454,6 +451,9 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                   AppSettings.openAppSettings(
                     type: AppSettingsType.wifi,
                   );
+                  setState(() {
+                    sensorNameController.text = 'MashtalySensor';
+                  });
                 },
                 child: Stack(
                   alignment: Alignment.center,
