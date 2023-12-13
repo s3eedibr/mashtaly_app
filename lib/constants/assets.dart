@@ -50,6 +50,16 @@ class Assets {
   static const String assetsImagesIconsGroup199 =
       "assets/images/icons/Group 199.png";
 
+  /// Assets for assetsImagesIconsGroup 200
+  /// assets/images/icons/Group 200.png
+  static const String assetsImagesIconsGroup200 =
+      "assets/images/icons/Group 200.png";
+
+  /// Assets for assetsImagesIconsGroup 201
+  /// assets/images/icons/Group 201.png
+  static const String assetsImagesIconsGroup201 =
+      "assets/images/icons/Group 201.png";
+
   /// Assets for assetsImagesIconsGroup 203
   /// assets/images/icons/Group 203.png
   static const String assetsImagesIconsGroup203 =

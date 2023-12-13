@@ -13,3 +13,7 @@ const Color tSecondActionColor = Color(0xFFD2D8CF);
 const Color tThirdTextErrorColor = Color(0xFFFF6724);
 const Color tSearchBarColor = Color(0xFFF5F5F5);
 const Color tSearchIconColor = Color(0xFFD6D6D6);
+
+const Color tWateringColor = Color(0xFF51B1FB);
+const Color tDelayedColor = Color(0xFFFF6724);
+const Color tDelayedTextColor = Color(0xFFBDC1BB);

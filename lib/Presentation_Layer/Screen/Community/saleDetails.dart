@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -432,10 +433,10 @@ class SaleDetails extends StatelessWidget {
   }
 
   // Build an image widget with or without an actual image URL
-  Widget buildImageWidget(String? imageURL) {
-    if (imageURL?.isNotEmpty ?? false) {
-      return Image.network(
-        imageURL!,
+  Widget buildImageWidget(String? imageUrl) {
+    if (imageUrl?.isNotEmpty ?? false) {
+      return CachedNetworkImage(
+        imageUrl: imageUrl!,
         fit: BoxFit.cover,
       );
     } else {

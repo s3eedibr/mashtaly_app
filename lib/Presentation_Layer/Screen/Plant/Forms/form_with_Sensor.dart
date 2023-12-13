@@ -282,11 +282,12 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
         amountOfWaterController: amountOfWaterController,
         fromDateController: fromDateController,
         untilDateController: untilDateController,
+        withSensor: true,
       ),
     );
   }
 
-  int days = 0, hours = 0;
+  int days = 0, hours = 0, min = 0;
   Widget _buildPlantNameInput() {
     return Padding(
       padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
