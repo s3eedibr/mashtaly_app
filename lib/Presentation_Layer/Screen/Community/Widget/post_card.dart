@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -47,64 +48,91 @@ class PostCard extends StatelessWidget {
   }
 
   static Widget buildShimmerCard() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 5,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 5,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 16,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 16,
-            ),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12),
-                ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(12),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  top: 8,
-                  right: 16,
-                  bottom: 5,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      color: Colors.grey[300],
-                      height: 150,
-                      width: 250,
+              border: Border.all(
+                color: tSearchBarColor,
+                width: 2,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                top: 8,
+                right: 16,
+                bottom: 5,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                      child: Container(
+                        height: 150,
+                        width: 250,
+                        color: Colors.grey,
+                      ),
                     ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Container(
-                      color: Colors.grey[300],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
                       height: 16,
                       width: 200,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      color: Colors.grey[300],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
                       height: 16,
-                      width: 80,
+                      width: 120,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -124,11 +152,12 @@ class PostCard extends StatelessWidget {
             right: 16,
           ),
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(12),
               ),
+              
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -148,8 +177,8 @@ class PostCard extends StatelessWidget {
                       height: 150,
                       width: 250,
                       child: imageURL.isNotEmpty
-                          ? Image.network(
-                              imageURL,
+                          ? CachedNetworkImage(
+                              imageUrl: imageURL,
                               height: 150,
                               width: 250,
                               fit: BoxFit.cover,

@@ -1,29 +1,30 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Update PlantCard to use the loaded data
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+
+import 'package:mashtaly_app/Constants/assets.dart';
 
 import '../../../../Constants/colors.dart';
 
 class PlantCard extends StatelessWidget {
-  final int? id;
   final String? plantName;
-  final String? type;
-  final String? imageFile;
-  final String? user;
-
+  final String? status;
+  final String? imageURL;
+  final String? firstWatering;
   const PlantCard({
     Key? key,
-    this.imageFile,
-    this.user,
     this.plantName,
-    this.id,
-    this.type,
+    this.status,
+    this.imageURL,
+    this.firstWatering,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return _buildContentCard(
-      imageFile: imageFile!,
+      imageFile: imageURL!,
       plantName: plantName!,
     );
   }
@@ -31,6 +32,8 @@ class PlantCard extends StatelessWidget {
   Widget _buildContentCard({
     required String plantName,
     required String imageFile,
+    String? status,
+    String? firstWatering,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -43,6 +46,7 @@ class PlantCard extends StatelessWidget {
             right: 16,
           ),
           child: Container(
+            height: 280,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
@@ -52,9 +56,8 @@ class PlantCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 16,
-                top: 8,
                 right: 16,
-                bottom: 5,
+                top: 8,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,22 +66,29 @@ class PlantCard extends StatelessWidget {
                     borderRadius: const BorderRadius.all(
                       Radius.circular(12),
                     ),
-                    child: SizedBox(
-                      height: 150,
-                      width: 250,
-                      child: imageFile.isNotEmpty
-                          ? Image.network(
-                              imageFile,
-                              height: 150,
-                              width: 250,
-                              fit: BoxFit.cover,
-                            )
-                          : const Placeholder(
-                              color: Colors.grey,
-                              fallbackHeight: 72,
-                              fallbackWidth: 72,
+                    child: imageFile.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: imageFile,
+                            height: 120,
+                            width: 180,
+                            fit: BoxFit.cover,
+                            placeholder: (BuildContext context, String url) =>
+                                const Center(
+                                    child: CircularProgressIndicator(
+                              color: tPrimaryActionColor,
+                            )),
+                            errorWidget: (BuildContext context, String url,
+                                    dynamic error) =>
+                                const Center(
+                              child: Icon(Icons
+                                  .signal_wifi_connected_no_internet_4_rounded),
                             ),
-                    ),
+                          )
+                        : const Placeholder(
+                            color: Colors.grey,
+                            fallbackHeight: 72,
+                            fallbackWidth: 72,
+                          ),
                   ),
                   const SizedBox(
                     height: 12,
@@ -90,17 +100,54 @@ class PlantCard extends StatelessWidget {
                       color: tPrimaryTextColor,
                       fontWeight: FontWeight.bold,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
-                  Text(
-                    'by $user',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: tSecondTextColor,
-                      fontWeight: FontWeight.w600,
+                  Container(
+                    height: 40,
+                    width: 100,
+                    decoration: const BoxDecoration(
+                      color: tWateringColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(35),
+                      ),
                     ),
+                    child: const Center(
+                      child: Text(
+                        'status',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        Assets.assetsImagesIconsGroup200,
+                        height: 34,
+                        width: 34,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        '25 days 12hr',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: tWateringColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -112,64 +159,126 @@ class PlantCard extends StatelessWidget {
   }
 
   static Widget buildShimmerCard() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 5,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 5,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 16,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 16,
-            ),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  top: 8,
-                  right: 16,
-                  bottom: 5,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      color: Colors.grey[300],
-                      height: 150,
-                      width: 250,
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Container(
-                      color: Colors.grey[300],
-                      height: 16,
-                      width: 200,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      color: Colors.grey[300],
-                      height: 16,
-                      width: 80,
-                    ),
-                  ],
-                ),
+          child: Container(
+            height: 280,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(12),
               ),
             ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 8,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                      child: Container(
+                        height: 120,
+                        width: 180,
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 20,
+                      width: 150,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      decoration: const BoxDecoration(
+                        color: tWateringColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(35),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 34,
+                          width: 34,
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          height: 18,
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

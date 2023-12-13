@@ -8,8 +8,8 @@ class ShowPlantErrorData extends ShowPlantState {}
 
 class ShowPlantLoadData extends ShowPlantState {}
 
-class ShowPlantLoadedData extends ShowPlantState {
+class ShowPlantSucData extends ShowPlantState {
   final List<Map<String, dynamic>> myData;
 
-  ShowPlantLoadedData(this.myData);
+  ShowPlantSucData(this.myData);
 }

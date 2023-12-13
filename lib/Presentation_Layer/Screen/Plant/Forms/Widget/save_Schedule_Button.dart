@@ -11,16 +11,19 @@ class SaveScheduleButton extends StatefulWidget {
       plantNameController,
       amountOfWaterController,
       fromDateController,
-      untilDateController;
+      untilDateController,
+      withSensor;
 
-  const SaveScheduleButton(
-      {super.key,
-      this.currentUserUid,
-      this.image,
-      this.plantNameController,
-      this.amountOfWaterController,
-      this.fromDateController,
-      this.untilDateController});
+  const SaveScheduleButton({
+    super.key,
+    this.currentUserUid,
+    this.image,
+    this.plantNameController,
+    this.amountOfWaterController,
+    this.fromDateController,
+    this.untilDateController,
+    this.withSensor,
+  });
   @override
   _SaveScheduleButtonState createState() => _SaveScheduleButtonState();
 }
@@ -36,6 +39,7 @@ class _SaveScheduleButtonState extends State<SaveScheduleButton> {
     amountOfWaterController,
     fromDateController,
     untilDateController,
+    withSensor,
   ) {
     return SizedBox(
       height: 50,
@@ -70,6 +74,7 @@ class _SaveScheduleButtonState extends State<SaveScheduleButton> {
               amountOfWaterController,
               fromDateController,
               untilDateController,
+              withSensor,
             );
 
             setState(() {
@@ -133,6 +138,7 @@ class _SaveScheduleButtonState extends State<SaveScheduleButton> {
       widget.amountOfWaterController,
       widget.fromDateController,
       widget.untilDateController,
+      widget.withSensor,
     );
   }
 }

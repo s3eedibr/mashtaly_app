@@ -1,8 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class AddPlantState {}
 
 class PlantInitialState extends AddPlantState {}
-
-class PlantLoadDataState extends AddPlantState {}
 
 class PlantSuccessDataState extends AddPlantState {
   final dynamic image,
@@ -10,7 +9,8 @@ class PlantSuccessDataState extends AddPlantState {
       plantNameController,
       amountOfWaterController,
       fromDateController,
-      untilDateController;
+      untilDateController,
+      withSensor;
 
   PlantSuccessDataState(
     this.image,
@@ -19,10 +19,20 @@ class PlantSuccessDataState extends AddPlantState {
     this.amountOfWaterController,
     this.fromDateController,
     this.untilDateController,
+    this.withSensor,
   );
 }
 
 class PlantNoDataState extends AddPlantState {}
+
+class PlantLoadingState extends AddPlantState {}
+
+class UpdatePlantScreen extends AddPlantState {
+  final List<Map<String, dynamic>> myData;
+  UpdatePlantScreen({
+    required this.myData,
+  });
+}
 
 class PlantErrorState extends AddPlantState {
   final String error;

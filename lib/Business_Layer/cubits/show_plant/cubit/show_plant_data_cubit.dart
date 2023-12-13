@@ -16,7 +16,7 @@ class ShowPlantCubit extends Cubit<ShowPlantState> {
       if (myData.isEmpty) {
         emit(ShowPlantNoData());
       } else {
-        emit(ShowPlantLoadedData(myData));
+        emit(ShowPlantSucData(myData));
       }
     } catch (e) {
       print('Error loading data: $e');

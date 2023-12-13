@@ -115,6 +115,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
           weatherCondition[i],
           duration[i][0], // days
           duration[i][1], // hours
+          duration[i][2], // minutes
         ]);
       }
     }
@@ -282,11 +283,12 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         amountOfWaterController: amountOfWaterController,
         fromDateController: fromDateController,
         untilDateController: untilDateController,
+        withSensor: false,
       ),
     );
   }
 
-  int days = 0, hours = 0;
+  int days = 0, hours = 0, min = 0;
   Widget _buildPlantNameInput() {
     return Padding(
       padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),

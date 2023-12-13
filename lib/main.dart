@@ -1,8 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Animations/no_connection_screen.dart';
@@ -32,7 +32,6 @@ class SplashScreenApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: SplashScreen(
         onSplashFinished: () async {
-          // Check for internet connectivity after the splash screen finishes
           var connectivityResult = await Connectivity().checkConnectivity();
           bool hasInternet = connectivityResult != ConnectivityResult.none;
 

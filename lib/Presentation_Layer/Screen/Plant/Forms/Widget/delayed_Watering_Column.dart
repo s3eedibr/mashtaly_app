@@ -22,7 +22,7 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
     DateTime? pickedDateTime = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime(2000),
+      firstDate: initialDate,
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -74,11 +74,15 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
           print(pickedDateTime);
           print(pickedTime);
           removedIndex = duration.indexWhere((item) =>
-              item[0] == currentValue[0] && item[1] == currentValue[1]);
+              item[0] == currentValue[0] &&
+              item[1] == currentValue[1] &&
+              item[2] == currentValue[2]);
 
           if (removedIndex != -1) {
             duration.removeWhere((item) =>
-                item[0] == currentValue[0] && item[1] == currentValue[1]);
+                item[0] == currentValue[0] &&
+                item[1] == currentValue[1] &&
+                item[2] == currentValue[2]);
             duration.insert(removedIndex, calculateDuration());
           } else {
             // Add the new calculated duration
@@ -108,8 +112,8 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
     // Calculate days and hours separately
     int days = selectedDuration.inDays;
     int hours = selectedDuration.inHours % 24;
-
-    return [days, hours];
+    int minutes = selectedDuration.inMinutes % 60;
+    return [days, hours, minutes];
   }
 
   List<int> currentValue = [];
@@ -129,7 +133,11 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
           GestureDetector(
             onTap: () {
               delayedDateTime();
-              currentValue = [calculateDuration()[0], calculateDuration()[1]];
+              currentValue = [
+                calculateDuration()[0],
+                calculateDuration()[1],
+                calculateDuration()[2],
+              ];
               print(currentValue);
             },
             child: Container(
@@ -141,7 +149,9 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
                   Radius.circular(6),
                 ),
               ),
-              child: calculateDuration()[0] != 0 || calculateDuration()[1] != 0
+              child: calculateDuration()[0] != 0 ||
+                      calculateDuration()[1] != 0 ||
+                      calculateDuration()[2] != 0
                   ? Container(
                       height: 40,
                       width: 150,
@@ -153,7 +163,7 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
                       ),
                       child: Center(
                         child: Text(
-                          '${calculateDuration()[0]} days, ${calculateDuration()[1]} hours',
+                          '${calculateDuration()[0]} days ${calculateDuration()[1]}hr ${calculateDuration()[2]}min',
                           style: const TextStyle(
                             color: tPrimaryTextColor,
                             fontWeight: FontWeight.w700,

@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../Presentation_Layer/Screen/Plant/Data/getData.dart';
 import '../../../Presentation_Layer/Screen/Plant/Forms/Widget/delayed_Watering_Column.dart';
 import '../../../Presentation_Layer/Screen/Plant/Forms/Widget/schedule_Widget.dart';
 import '../../../Presentation_Layer/Screen/Plant/Forms/Widget/weather_Condition_Column.dart';
@@ -51,6 +52,7 @@ class AddPlantCubit extends Cubit<AddPlantState> {
           weatherCondition[i],
           duration[i][0], // days
           duration[i][1], // hours
+          duration[i][2], // minutes
         ]);
       }
     }
@@ -84,13 +86,13 @@ class AddPlantCubit extends Cubit<AddPlantState> {
   }
 
   Future<void> addMyPlantToFirestore(
-    image,
-    currentUserUid,
-    plantNameController,
-    amountOfWaterController,
-    fromDateController,
-    untilDateController,
-  ) async {
+      image,
+      currentUserUid,
+      plantNameController,
+      amountOfWaterController,
+      fromDateController,
+      untilDateController,
+      withSensor) async {
     try {
       final currentUser = auth.currentUser;
 
@@ -116,6 +118,7 @@ class AddPlantCubit extends Cubit<AddPlantState> {
         "active": true,
         "date": '${DateTime.now()}',
         "user_id": currentUser.uid,
+        "sensor": withSensor,
       };
 
       if (weatherConditionAndDuration.isNotEmpty) {
@@ -124,6 +127,7 @@ class AddPlantCubit extends Cubit<AddPlantState> {
                   "weatherCondition": item[0],
                   "delayDay": item[1],
                   "delayHour": item[2],
+                  "delayMinute": item[3],
                 })
             .toList();
       }
@@ -148,23 +152,43 @@ class AddPlantCubit extends Cubit<AddPlantState> {
     }
   }
 
-  void addPlant(
+  Future<void> loadData(String userId) async {
+    try {
+      emit(PlantLoadingState());
+
+      // Fetch data from Firestore using the getMyPlants function
+      final myData = await getMyPlants(userId);
+      emit(PlantLoadingState());
+      if (myData.isEmpty) {
+        emit(PlantNoDataState());
+      } else {
+        emit(UpdatePlantScreen(myData: myData));
+      }
+    } catch (e) {
+      print('Error loading data: $e');
+      emit(PlantNoDataState());
+    }
+  }
+
+  Future<void> addPlant(
     image,
     currentUserUid,
     plantNameController,
     amountOfWaterController,
     fromDateController,
     untilDateController,
+    withSensor,
   ) async {
     try {
-      emit(PlantLoadDataState());
-      addMyPlantToFirestore(
+      emit(PlantLoadingState());
+      await addMyPlantToFirestore(
         image,
         currentUserUid,
         plantNameController,
         amountOfWaterController,
         fromDateController,
         untilDateController,
+        withSensor,
       );
       await Future.delayed(const Duration(seconds: 7));
 
@@ -176,7 +200,13 @@ class AddPlantCubit extends Cubit<AddPlantState> {
           amountOfWaterController,
           fromDateController,
           untilDateController,
+          withSensor,
         ));
+        emit(PlantLoadingState());
+        final myData =
+            await getMyPlants(FirebaseAuth.instance.currentUser!.uid);
+        emit(PlantLoadingState());
+        emit(UpdatePlantScreen(myData: myData));
         weatherCondition.clear();
         duration.clear();
         timeInEachWeekAndDay.clear();

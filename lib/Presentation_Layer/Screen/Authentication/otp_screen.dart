@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
@@ -107,31 +108,28 @@ class _OTPScreenState extends State<OTPScreen> {
                       onSubmit: (code) {
                         veryOTP = code;
                       }),
-                  const SizedBox(height: 5),
-                  TextButton(
-                    onPressed: () {
-                      sendOTP(); // Resend OTP when the "Resend OTP" button is pressed
-                    },
-                    style: const ButtonStyle(),
-                    child: const Text.rich(
-                      TextSpan(
-                        text: "Don't receive OTP?",
-                        style: TextStyle(
-                          color: tPrimaryTextColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
-                        children: [
-                          TextSpan(
+                  const SizedBox(height: 30),
+                  Text.rich(
+                    TextSpan(
+                      text: "Don't receive OTP?",
+                      style: const TextStyle(
+                        color: tPrimaryTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                      children: [
+                        TextSpan(
                             text: " Resend OTP",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: tPrimaryActionColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
-                          ),
-                        ],
-                      ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                sendOTP(); // Resend OTP when the "Resend OTP" button is pressed
+                              }),
+                      ],
                     ),
                   ),
                   SizedBox(height: height - 680),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -166,30 +167,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         radius: 54,
                         backgroundColor: Colors.white,
                         child: ClipOval(
-                          child: Image.network(
-                            profilePic,
+                          child: CachedNetworkImage(
+                            imageUrl: profilePic,
                             width: 108,
                             height: 108,
                             fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              } else {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                            errorBuilder: (BuildContext context, Object error,
-                                StackTrace? stackTrace) {
-                              return Image.asset(
-                                'assets/images/icons/default_profile.jpg',
-                                width: 108,
-                                height: 108,
-                                fit: BoxFit.cover,
-                              );
-                            },
+                            placeholder: (BuildContext context, String url) =>
+                                const Center(
+                                    child: CircularProgressIndicator(
+                              color: tPrimaryActionColor,
+                            )),
+                            errorWidget: (BuildContext context, String url,
+                                    dynamic error) =>
+                                Image.asset(
+                              'assets/images/icons/default_profile.jpg',
+                              width: 108,
+                              height: 108,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
