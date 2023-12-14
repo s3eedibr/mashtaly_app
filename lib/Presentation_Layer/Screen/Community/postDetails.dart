@@ -108,7 +108,12 @@ class PostDetails extends StatelessWidget {
                     child: Container(
                       width: 50,
                       height: 50,
-                      color: Colors.white,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(55),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -123,7 +128,12 @@ class PostDetails extends StatelessWidget {
               child: Container(
                 width: 120,
                 height: 20,
-                color: Colors.white,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                ),
               ),
             ),
           ],
@@ -131,7 +141,7 @@ class PostDetails extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
-        // Shimmer effect for post image
+
         Shimmer.fromColors(
           baseColor: Colors.grey[300]!,
           highlightColor: Colors.grey[100]!,
@@ -146,7 +156,7 @@ class PostDetails extends StatelessWidget {
             ),
           ),
         ),
-        // ... (Additional shimmer placeholders)
+
         const SizedBox(
           height: 10.0,
         ),
@@ -166,7 +176,12 @@ class PostDetails extends StatelessWidget {
           child: Container(
             width: 150,
             height: 20,
-            color: Colors.white,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
           ),
         ),
         const SizedBox(
@@ -178,7 +193,12 @@ class PostDetails extends StatelessWidget {
           child: Container(
             width: 100,
             height: 20,
-            color: Colors.white,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
           ),
         ),
         const SizedBox(
@@ -191,7 +211,12 @@ class PostDetails extends StatelessWidget {
             height: 100,
             child: Container(
               width: double.infinity,
-              color: Colors.white,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
             ),
           ),
         ),
@@ -331,6 +356,14 @@ class PostDetails extends StatelessWidget {
       return CachedNetworkImage(
         imageUrl: imageURL!,
         fit: BoxFit.cover,
+        placeholder: (BuildContext context, String url) => const Center(
+            child: CircularProgressIndicator(
+          color: tPrimaryActionColor,
+        )),
+        errorWidget: (BuildContext context, String url, dynamic error) =>
+            const Center(
+          child: Icon(Icons.image_not_supported_outlined),
+        ),
       );
     } else {
       return Container(

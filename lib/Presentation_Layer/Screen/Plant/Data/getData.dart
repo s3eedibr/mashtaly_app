@@ -109,3 +109,76 @@ Future<List<Map<String, dynamic>>> getMyData(
 Future<List<Map<String, dynamic>>> getMyPlants(String userId) async {
   return await getMyData(collectionName: 'myPlants', userId: userId);
 }
+
+Future<void> updateActiveFlagForMyPlant({
+  required String collectionName,
+  required String userId,
+  required String myId,
+  required bool isActive,
+}) async {
+  final userPlantsRef = FirebaseFirestore.instance
+      .collection(collectionName)
+      .doc(userId)
+      .collection(collectionName == 'myPlants' ? 'MyPlants' : '');
+
+  try {
+    // Get a reference to the document with the specified myId
+    final QuerySnapshot myPlantDocSnapshot =
+        await userPlantsRef.where('id', isEqualTo: myId).get();
+
+    // Check if the document exists
+    if (myPlantDocSnapshot.docs.isNotEmpty) {
+      // Update the 'active' field in the document
+      final DocumentReference myPlantDocRef =
+          userPlantsRef.doc(myPlantDocSnapshot.docs.first.id);
+      await myPlantDocRef.update({'active': isActive});
+    } else {
+      // Handle the case where the document with the specified myId does not exist
+      print(
+          'Document with ID $myId does not exist in $collectionName collection.');
+    }
+  } catch (e) {
+    // Handle errors when updating the active flag
+    print('Error updating active flag for myId $myId: $e');
+    rethrow; // Rethrow the exception to let the caller handle it
+  }
+}
+
+Future<List<List<dynamic>>> fetchWeatherConditionAndDuration({
+  required String myId,
+  required String userId,
+}) async {
+  List<List<dynamic>> weatherConditionAndDuration = [];
+  CollectionReference myPlantsCollection = FirebaseFirestore.instance
+      .collection('myPlants')
+      .doc(userId)
+      .collection('MyPlants');
+
+  try {
+    QuerySnapshot querySnapshot =
+        await myPlantsCollection.where('id', isEqualTo: myId).get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      // Assuming 'weatherConditionsAndDurations' is an array field in your document
+      List<dynamic> weatherConditionsAndDurations =
+          data['weatherConditionsAndDurations'] ?? [];
+
+      for (var weatherCondition in weatherConditionsAndDurations) {
+        weatherConditionAndDuration.add([
+          weatherCondition['weatherCondition'],
+          weatherCondition['delayDay'],
+          weatherCondition['delayHour'],
+          weatherCondition['delayMinute'],
+        ]);
+      }
+    }
+    return weatherConditionAndDuration;
+  } catch (e) {
+    // Handle errors when fetching data from Firebase
+    print('Error fetching weather data: $e');
+    throw e;
+  }
+}

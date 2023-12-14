@@ -64,10 +64,6 @@ class PostCard extends StatelessWidget {
               borderRadius: const BorderRadius.all(
                 Radius.circular(12),
               ),
-              border: Border.all(
-                color: tSearchBarColor,
-                width: 2,
-              ),
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -157,7 +153,6 @@ class PostCard extends StatelessWidget {
               borderRadius: const BorderRadius.all(
                 Radius.circular(12),
               ),
-              
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -182,6 +177,17 @@ class PostCard extends StatelessWidget {
                               height: 150,
                               width: 250,
                               fit: BoxFit.cover,
+                              placeholder: (BuildContext context, String url) =>
+                                  const Center(
+                                child: CircularProgressIndicator(
+                                  color: tPrimaryActionColor,
+                                ),
+                              ),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  const Center(
+                                child: Icon(Icons.image_not_supported_outlined),
+                              ),
                             )
                           : const Placeholder(
                               color: Colors.grey,

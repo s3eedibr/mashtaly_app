@@ -128,6 +128,11 @@ class Assets {
   static const String assetsImagesIconsPath2red =
       "assets/images/icons/Path 2red.png";
 
+  /// Assets for assetsImagesIconsPath 416
+  /// assets/images/icons/Path 416.png
+  static const String assetsImagesIconsPath416 =
+      "assets/images/icons/Path 416.png";
+
   /// Assets for assetsImagesIconsPath 417
   /// assets/images/icons/Path 417.png
   static const String assetsImagesIconsPath417 =
@@ -145,6 +150,21 @@ class Assets {
   /// Assets for assetsImagesIconsPath 7
   /// assets/images/icons/Path 7.png
   static const String assetsImagesIconsPath7 = "assets/images/icons/Path 7.png";
+
+  /// Assets for assetsImagesIconsPath 465
+  /// assets/images/icons/Path 465.png
+  static const String assetsImagesIconsPath465 =
+      "assets/images/icons/Path 465.png";
+
+  /// Assets for assetsImagesIconsPath 466
+  /// assets/images/icons/Path 466.png
+  static const String assetsImagesIconsPath466 =
+      "assets/images/icons/Path 466.png";
+
+  /// Assets for assetsImagesIconsPath 467
+  /// assets/images/icons/Path 467.png
+  static const String assetsImagesIconsPath467 =
+      "assets/images/icons/Path 467.png";
 
   /// Assets for assetsImagesIconsPath 754561
   /// assets/images/icons/Path 754561.png

@@ -13,12 +13,14 @@ class PlantCard extends StatelessWidget {
   final String? status;
   final String? imageURL;
   final String? firstWatering;
+  final bool? active;
   const PlantCard({
     Key? key,
     this.plantName,
     this.status,
     this.imageURL,
     this.firstWatering,
+    this.active,
   }) : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class PlantCard extends StatelessWidget {
           ),
           child: Container(
             height: 280,
+            width: 210,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
@@ -93,62 +96,109 @@ class PlantCard extends StatelessWidget {
                   const SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    plantName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: tPrimaryTextColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 40,
-                    width: 100,
-                    decoration: const BoxDecoration(
-                      color: tWateringColor,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(35),
+                  Expanded(
+                    child: Text(
+                      plantName,
+                      softWrap: false,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: tPrimaryTextColor,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'status',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      Image.asset(
-                        Assets.assetsImagesIconsGroup200,
-                        height: 34,
-                        width: 34,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        '25 days 12hr',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: tWateringColor,
+                  active == true
+                      ? Container(
+                          height: 40,
+                          width: 90,
+                          decoration: const BoxDecoration(
+                            color: tWateringColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(35),
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'status',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 40,
+                          width: 90,
+                          decoration: const BoxDecoration(
+                            color: tDelayedTextColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(35),
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Off',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 10,
                   ),
+                  active == true
+                      ? Row(
+                          children: [
+                            Image.asset(
+                              Assets.assetsImagesIconsGroup200,
+                              height: 34,
+                              width: 34,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              '25 days 12hr',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: tWateringColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Image.asset(
+                              Assets.assetsImagesIconsGroup201,
+                              height: 34,
+                              width: 34,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              '25 days 12hr',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: tDelayedTextColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        )
                 ],
               ),
             ),
@@ -171,6 +221,7 @@ class PlantCard extends StatelessWidget {
           ),
           child: Container(
             height: 280,
+            width: 210,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
@@ -230,7 +281,7 @@ class PlantCard extends StatelessWidget {
                     highlightColor: Colors.grey[100]!,
                     child: Container(
                       height: 40,
-                      width: 100,
+                      width: 90,
                       decoration: const BoxDecoration(
                         color: tWateringColor,
                         borderRadius: BorderRadius.all(

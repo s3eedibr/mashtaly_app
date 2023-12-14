@@ -145,6 +145,16 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                           height: 250,
                           width: width,
                           fit: BoxFit.fitWidth,
+                          placeholder: (BuildContext context, String url) =>
+                              const Center(
+                                  child: CircularProgressIndicator(
+                            color: tPrimaryActionColor,
+                          )),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Center(
+                            child: Icon(Icons.image_not_supported_outlined),
+                          ),
                         )
                       : Container(
                           // Placeholder image when the photoUrls list is empty or URL is invalid
@@ -179,6 +189,20 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                               height: 95,
                               width: 85,
                               fit: BoxFit.cover,
+                              placeholder: (BuildContext context, String url) =>
+                                  const Center(
+                                      child: SizedBox(
+                                height: 55,
+                                width: 55,
+                                child: CircularProgressIndicator(
+                                  color: tPrimaryActionColor,
+                                ),
+                              )),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  const Center(
+                                child: Icon(Icons.image_not_supported_outlined),
+                              ),
                             ),
                           ),
                         );

@@ -180,8 +180,6 @@ class _PlantScreenState extends State<PlantScreen> {
     required String wind,
     required String humidity,
   }) {
-    // final myPlantCubit = BlocProvider.of<ShowPlantCubit>(context);
-    // myPlantCubit.loadData(FirebaseAuth.instance.currentUser!.uid);
     final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
     myPlantCubit.loadData(FirebaseAuth.instance.currentUser!.uid);
     return Scaffold(
@@ -210,8 +208,12 @@ class _PlantScreenState extends State<PlantScreen> {
                               width: 38,
                               placeholder: (BuildContext context, String url) =>
                                   const Center(
-                                      child: CircularProgressIndicator(
-                                color: tPrimaryActionColor,
+                                      child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: tPrimaryActionColor,
+                                ),
                               )),
                               errorWidget: (BuildContext context, String url,
                                       dynamic error) =>
@@ -477,7 +479,7 @@ class _PlantScreenState extends State<PlantScreen> {
               ),
             ),
             const SizedBox(
-              height: 19,
+              height: 15,
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
@@ -529,10 +531,12 @@ class _PlantScreenState extends State<PlantScreen> {
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-              child:
-                  // updateSchPro(),
-                  BlocBuilder<AddPlantCubit, AddPlantState>(
+              padding: const EdgeInsets.only(
+                right: 16,
+                bottom: 0,
+                left: 17,
+              ),
+              child: BlocBuilder<AddPlantCubit, AddPlantState>(
                 builder: (context, state) {
                   if (state is PlantNoDataState) {
                     return const NoPlantData();
@@ -563,8 +567,13 @@ class _PlantScreenState extends State<PlantScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MyPlantsInfoScreen(
+                                    id: myData[index]['id'],
                                     plantName: myData[index]['plantName'],
                                     imageUrl: myData[index]['myPlant_pic1'],
+                                    active: myData[index]['active'],
+                                    sensor: myData[index]['sensor'],
+                                    amountOfWater: myData[index]
+                                        ['amountOfWater'],
                                   ),
                                 ),
                               );
@@ -572,6 +581,7 @@ class _PlantScreenState extends State<PlantScreen> {
                             child: PlantCard(
                               imageURL: myData[index]['myPlant_pic1'],
                               plantName: myData[index]['plantName'],
+                              active: myData[index]['active'],
                             ),
                           );
                         },
@@ -592,71 +602,4 @@ class _PlantScreenState extends State<PlantScreen> {
       ),
     );
   }
-
-  // UpdateSchedule updateSchPro() {
-  //   BlocProvider.of<GetPlantCubit>(context).getPlant();
-  //   return const UpdateSchedule();
-  // }
 }
-
-// class UpdateSchedule extends StatefulWidget {
-//   const UpdateSchedule({super.key});
-
-//   @override
-//   State<UpdateSchedule> createState() => _UpdateScheduleState();
-// }
-
-// class _UpdateScheduleState extends State<UpdateSchedule> {
-//   List<Map<String, dynamic>> myData = [];
-
-//   bool isLoading = true;
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocConsumer<ShowPlantCubit, ShowPlantState>(
-//       listener: (context, state) {
-//         if (state is ShowPlantSucData) {
-//           myData = state.myData;
-//           isLoading = false;
-//         } else if (state is GetPlantLoading) {
-//           isLoading = true;
-//         } else if (state is GetPlantFailure) {
-//           isLoading = false;
-
-//           print('Failure');
-//         }
-//       },
-//       builder: (context, state) {
-//         return myData.isNotEmpty
-//             ? SizedBox(
-//                 height: 300,
-//                 child: isLoading != true
-//                     ? ListView.builder(
-//                         scrollDirection: Axis.horizontal,
-//                         itemCount: myData.length,
-//                         itemBuilder: (BuildContext context, index) {
-//                           return GestureDetector(
-//                             onTap: () {
-//                               Navigator.push(
-//                                 context,
-//                                 MaterialPageRoute(
-//                                   builder: (context) => MyPlantsInfoScreen(
-//                                     plantName: myData[index]['plantName'],
-//                                     imageUrl: myData[index]['myPlant_pic1'],
-//                                   ),
-//                                 ),
-//                               );
-//                             },
-//                             child: PlantCard(
-//                               imageURL: myData[index]['myPlant_pic1'],
-//                               plantName: myData[index]['plantName'],
-//                             ),
-//                           );
-//                         },
-//                       )
-//                     : const Center(child: CircularProgressIndicator()),
-//               )
-//             : const NoPlantData();
-//       },
-//     );
-//   }
-// }

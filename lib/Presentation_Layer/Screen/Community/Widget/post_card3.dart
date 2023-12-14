@@ -161,6 +161,20 @@ class PostCard3 extends StatelessWidget {
                           height: 82,
                           width: 82,
                           fit: BoxFit.cover,
+                          placeholder: (BuildContext context, String url) =>
+                              const Center(
+                                  child: SizedBox(
+                                    height: 55,
+                                    width: 55,
+                            child: CircularProgressIndicator(
+                              color: tPrimaryActionColor,
+                            ),
+                          )),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Center(
+                            child: Icon(Icons.image_not_supported_outlined),
+                          ),
                         )
                       : const Placeholder(
                           color: Colors.grey,

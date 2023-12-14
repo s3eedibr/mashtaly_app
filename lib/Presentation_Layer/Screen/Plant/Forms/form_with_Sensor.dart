@@ -158,6 +158,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
       body: ListView(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         children: [
           const SizedBox(height: 10),
           buildPlantImage(

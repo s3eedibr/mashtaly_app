@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -13,6 +14,11 @@ class WeatherCubit extends Cubit<WeatherState> {
   double? longitude;
   Timer? timer;
   LocationPermission? permission;
+
+  String? temperature;
+  String? wind;
+  String? humidity;
+  String? cloud;
 
   WeatherCubit() : super(WeatherLoadingState());
 
@@ -36,6 +42,10 @@ class WeatherCubit extends Cubit<WeatherState> {
           if (current != null) {
             final condition = current['condition'];
             if (condition != null) {
+              temperature = current['temp_c'].toString();
+              wind = current['wind_kph'].toString();
+              humidity = current['humidity'].toString();
+              cloud = current['cloud'].toString();
               emit(WeatherDataState(
                 weatherText: condition['text'] ?? '',
                 temperature: current['temp_c'].toString(),
