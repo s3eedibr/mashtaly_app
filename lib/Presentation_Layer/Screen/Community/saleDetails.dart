@@ -459,9 +459,9 @@ class SaleDetails extends StatelessWidget {
 
   // Build an image widget with or without an actual image URL
   Widget buildImageWidget(String? imageUrl) {
-    if (imageUrl?.isNotEmpty ?? false) {
+    if (imageUrl != null) {
       return CachedNetworkImage(
-        imageUrl: imageUrl!,
+        imageUrl: imageUrl,
         fit: BoxFit.cover,
         placeholder: (BuildContext context, String url) => const Center(
             child: CircularProgressIndicator(
@@ -473,14 +473,17 @@ class SaleDetails extends StatelessWidget {
         ),
       );
     } else {
-      return Container(
-        height: 95,
-        width: 85,
-        clipBehavior: Clip.antiAlias,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(6),
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 95,
+          width: 85,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
           ),
         ),
       );

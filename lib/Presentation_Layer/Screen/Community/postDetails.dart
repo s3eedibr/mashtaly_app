@@ -352,9 +352,9 @@ class PostDetails extends StatelessWidget {
 
   // Build an image widget with or without an actual image URL
   Widget buildImageWidget(String? imageURL) {
-    if (imageURL?.isNotEmpty ?? false) {
+    if (imageURL != null) {
       return CachedNetworkImage(
-        imageUrl: imageURL!,
+        imageUrl: imageURL,
         fit: BoxFit.cover,
         placeholder: (BuildContext context, String url) => const Center(
             child: CircularProgressIndicator(
@@ -366,14 +366,17 @@ class PostDetails extends StatelessWidget {
         ),
       );
     } else {
-      return Container(
-        height: 95,
-        width: 85,
-        clipBehavior: Clip.antiAlias,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(6),
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 95,
+          width: 85,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
           ),
         ),
       );

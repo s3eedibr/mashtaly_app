@@ -4,8 +4,11 @@ import '../../../../../Constants/colors.dart';
 import 'custom_Dropdown.dart';
 
 class WeatherConditionColumn extends StatefulWidget {
+  final String? selectedWeatherText;
+
   const WeatherConditionColumn({
     Key? key,
+    this.selectedWeatherText,
   }) : super(key: key);
 
   @override

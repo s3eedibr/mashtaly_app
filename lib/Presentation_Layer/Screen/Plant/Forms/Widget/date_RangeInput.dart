@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
-Widget buildDateRangeInput(BuildContext context, fromDateController,
-    untilDateController, showDialogDatePicker) {
+Widget buildDateRangeInput(
+  BuildContext context,
+  fromDateController,
+  untilDateController,
+  showDialogDatePicker,
+  from,
+  until,
+) {
+  fromDateController.text = from;
+  untilDateController.text = until;
   return Padding(
-    padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+    padding: const EdgeInsets.only(right: 16, bottom: 0, left: 16),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

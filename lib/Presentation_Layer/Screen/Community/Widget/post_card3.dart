@@ -164,8 +164,8 @@ class PostCard3 extends StatelessWidget {
                           placeholder: (BuildContext context, String url) =>
                               const Center(
                                   child: SizedBox(
-                                    height: 55,
-                                    width: 55,
+                            height: 55,
+                            width: 55,
                             child: CircularProgressIndicator(
                               color: tPrimaryActionColor,
                             ),
@@ -176,10 +176,19 @@ class PostCard3 extends StatelessWidget {
                             child: Icon(Icons.image_not_supported_outlined),
                           ),
                         )
-                      : const Placeholder(
-                          color: Colors.grey,
-                          fallbackHeight: 82,
-                          fallbackWidth: 82,
+                      : Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            height: 82,
+                            width: 82,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                          ),
                         ),
                 ),
               ),

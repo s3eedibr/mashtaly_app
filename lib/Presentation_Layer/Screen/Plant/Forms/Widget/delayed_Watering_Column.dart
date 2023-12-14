@@ -3,7 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Constants/colors.dart';
 
 class DelayedWateringColumn extends StatefulWidget {
-  const DelayedWateringColumn({super.key});
+  final int? days;
+  final int? hours;
+  final int? minutes;
+  const DelayedWateringColumn({super.key, this.days, this.hours, this.minutes});
 
   @override
   State<DelayedWateringColumn> createState() => _DelayedWateringColumnState();

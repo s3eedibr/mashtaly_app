@@ -59,9 +59,9 @@ class PostCard extends StatelessWidget {
             right: 16,
           ),
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.all(
+              borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),
             ),
@@ -148,9 +148,9 @@ class PostCard extends StatelessWidget {
             right: 16,
           ),
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.all(
+              borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),
             ),
@@ -189,10 +189,19 @@ class PostCard extends StatelessWidget {
                                 child: Icon(Icons.image_not_supported_outlined),
                               ),
                             )
-                          : const Placeholder(
-                              color: Colors.grey,
-                              fallbackHeight: 72,
-                              fallbackWidth: 72,
+                          : Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 150,
+                                width: 250,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                ),
+                              ),
                             ),
                     ),
                   ),

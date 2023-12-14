@@ -1,14 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:mashtaly_app/Presentation_Layer/Widget/snackBar.dart';
+
+import '../../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import '../../../../Constants/colors.dart';
 import '../../../../Services/scan_plant_service.dart';
+import '../Data/getData.dart';
+import 'Utils.dart';
 import 'Widget/date_RangeInput.dart';
 import 'Widget/delayed_Watering_Column.dart';
 import 'Widget/delayed_Watering_Input.dart';
@@ -17,27 +23,36 @@ import 'Widget/save_Schedule_Button.dart';
 import 'Widget/schedule_Header.dart';
 import 'Widget/schedule_Widget.dart';
 import 'Widget/watering_Amount_Input.dart';
-import 'Utils.dart';
-import 'package:http/http.dart' as http;
-
-import '../../HomeScreens/home_screen.dart';
 import 'Widget/weather_Condition_Column.dart';
 
-class AddPlantFormWithSen extends StatefulWidget {
-  const AddPlantFormWithSen({
+class EditPlantFormWithOutSen extends StatefulWidget {
+  final String imageURL;
+  final String plantName;
+  final String? from;
+  final String? until;
+  final String id;
+  final bool active;
+  final String? amountOfWater;
+  const EditPlantFormWithOutSen({
     Key? key,
+    required this.imageURL,
+    required this.plantName,
+    required this.id,
+    required this.active,
+    this.amountOfWater,
+    this.from,
+    this.until,
   }) : super(key: key);
 
   @override
-  State<AddPlantFormWithSen> createState() => _AddPlantFormWithSenState();
+  State<EditPlantFormWithOutSen> createState() =>
+      _EditPlantFormWithOutSenState();
 }
 
-class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
+class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController untilDateController = TextEditingController();
   final TextEditingController plantNameController = TextEditingController();
-  final TextEditingController sensorNameController = TextEditingController();
-
   final TextEditingController amountOfWaterController = TextEditingController();
   final ScanPlantService _scanPlantService = ScanPlantService();
 
@@ -68,19 +83,6 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
       }
     } catch (e) {
       print('Error capturing photo: $e');
-    }
-  }
-
-  Future<void> setUidToDweet() async {
-    try {
-      final currentUser = FirebaseAuth.instance.currentUser!.uid;
-      var response = await http.post(
-        Uri.parse("https://dweet.io/dweet/for/Uid"),
-        body: {'uid': currentUser},
-      );
-      print("Response from Dweet.io: ${response.body}");
-    } catch (e) {
-      print("Error connecting to Dweet.io: $e");
     }
   }
 
@@ -115,17 +117,39 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
   late String? plantName = '';
   late String? commonName = '';
   late String currentUserUid;
+  late bool switchValue;
 
   @override
   void initState() {
     super.initState();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+    switchValue = widget.active;
   }
 
   List<DelayedWateringInput> delayedCondition = [const DelayedWateringInput()];
+  List<List<dynamic>> weatherConditionAndDuration = [];
+  List<List<dynamic>> combineWeatherAndDuration() {
+    List<List<dynamic>> combinedList = [];
+    for (int i = 0; i < duration.length; i++) {
+      if (i < weatherCondition.length) {
+        combinedList.add([
+          weatherCondition[i],
+          duration[i][0], // days
+          duration[i][1], // hours
+          duration[i][2], // minutes
+        ]);
+      }
+    }
+    return combinedList;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
+    String editedImage = widget.imageURL;
+    String? amountOfWater = widget.amountOfWater;
+    String? from = widget.from;
+    String? until = widget.until;
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
@@ -136,24 +160,52 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
               FontAwesomeIcons.xmark,
             ),
             onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
+              Navigator.pop(context);
               delayedCondition.clear();
               weatherCondition.clear();
               duration.clear();
               timeInEachWeekAndDay.clear();
             }),
         title: const Text(
-          "Add Plant / With sensor",
+          "Watering Schedule",
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Switch(
+              value: switchValue,
+              onChanged: (newValue) async {
+                setState(
+                  () {
+                    switchValue = newValue;
+                  },
+                );
+                await updateActiveFlagForMyPlant(
+                    collectionName: 'myPlants',
+                    userId: FirebaseAuth.instance.currentUser!.uid,
+                    myId: widget.id,
+                    isActive: switchValue);
+                myPlantCubit.updateData(FirebaseAuth.instance.currentUser!.uid);
+
+                print(widget.id);
+                print(switchValue);
+              },
+              activeTrackColor: const Color(0xff9BEC79),
+              activeColor: const Color(0xff66B821),
+              inactiveTrackColor: const Color(0xFFFF3324),
+              inactiveThumbColor: tBgColor,
+              trackOutlineColor:
+                  const MaterialStatePropertyAll<Color?>(Colors.transparent),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -166,17 +218,20 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
             image,
             pickImageFromGallery,
             captureImageFromCamera,
+            editedImage,
           ),
-          _buildSensorNameInput(),
           _buildPlantNameInput(),
           buildWateringSizeInput(
             amountOfWaterController,
+            amountOfWater,
           ),
           buildDateRangeInput(
             context,
             fromDateController,
             untilDateController,
             showDialogDatePicker,
+            from,
+            until,
           ),
           const SizedBox(
             height: 25,
@@ -251,6 +306,10 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
           ),
           GestureDetector(
             onTap: () {
+              print(combineWeatherAndDuration());
+              print(delayedCondition);
+              print(weatherCondition);
+              print(duration);
               print(timeInEachWeekAndDay);
             },
             child: Padding(
@@ -283,15 +342,16 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
         amountOfWaterController: amountOfWaterController,
         fromDateController: fromDateController,
         untilDateController: untilDateController,
-        withSensor: true,
+        withSensor: false,
       ),
     );
   }
 
   int days = 0, hours = 0, min = 0;
   Widget _buildPlantNameInput() {
+    plantNameController.text = widget.plantName;
     return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -381,100 +441,6 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSensorNameInput() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 25,
-          ),
-          const Text(
-            "Sensor Name",
-            style: TextStyle(
-                fontSize: 15,
-                color: Color(0x7C0D1904),
-                fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 40,
-                width: 300,
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: sensorNameController,
-                  cursorColor: tPrimaryActionColor,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 15,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(6),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setUidToDweet();
-                  AppSettings.openAppSettings(
-                    type: AppSettingsType.wifi,
-                  );
-                  setState(() {
-                    sensorNameController.text = 'MashtalySensor';
-                  });
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: tPrimaryActionColor,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    Image.asset(
-                      'assets/images/icons/settings.png',
-                      height: 25,
-                      width: 25,
-                    )
-                  ],
-                ),
-              )
             ],
           ),
         ],

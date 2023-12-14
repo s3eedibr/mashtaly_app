@@ -116,7 +116,7 @@ class _SaveScheduleButtonState extends State<SaveScheduleButton> {
                   ],
                 )
               : const Text(
-                  "Publish",
+                  "Save Schedule",
                   style: TextStyle(
                     color: tThirdTextColor,
                     fontWeight: FontWeight.bold,

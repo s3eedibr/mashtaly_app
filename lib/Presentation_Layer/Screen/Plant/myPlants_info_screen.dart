@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Forms/edit_plant_with_Sensor.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Forms/edit_plant_without_Sensor.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/compare_environment_screen.dart';
 
 import 'package:mashtaly_app/Services/wikipedia_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import '../../../Business_Layer/cubits/show_weather/weatherCubit.dart';
@@ -24,6 +27,9 @@ class MyPlantsInfoScreen extends StatefulWidget {
   final bool? sensor;
   final String? amountOfWater;
   final String? id;
+  final String? from;
+  final String? until;
+
   const MyPlantsInfoScreen({
     Key? key,
     required this.plantName,
@@ -32,6 +38,8 @@ class MyPlantsInfoScreen extends StatefulWidget {
     required this.sensor,
     required this.id,
     this.amountOfWater,
+    this.from,
+    this.until,
   }) : super(key: key);
 
   @override
@@ -42,15 +50,12 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
   String para = '';
   late bool switchValue;
   late String? amountOfWater;
-  late Future<List<List<dynamic>>> weatherConditionAndDuration =
-      fetchWeatherConditionAndDuration(
-          myId: widget.id!, userId: FirebaseAuth.instance.currentUser!.uid);
+  late Future<List<List<dynamic>>> getDelayedAndWeatherCondition;
   @override
   void initState() {
     super.initState();
     switchValue = widget.active!;
     amountOfWater = widget.amountOfWater!;
-
     fetchPlantInformation(widget.plantName!, '').then((value) {
       setState(() {
         para = value;
@@ -58,11 +63,8 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
     }).catchError((error) {
       print('Error fetching plant information: $error');
     });
-  }
-
-  bool _isValidUrl(String url) {
-    return url.isNotEmpty &&
-        (url.startsWith("http://") || url.startsWith("https://"));
+    getDelayedAndWeatherCondition = fetchWeatherConditionAndDuration(
+        myId: widget.id!, userId: FirebaseAuth.instance.currentUser!.uid);
   }
 
   @override
@@ -84,7 +86,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
         title: const Text(
           "Plant Information",
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
             color: tPrimaryTextColor, // Adjust text color
           ),
@@ -139,22 +141,38 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.imageUrl!,
-                    height: 250,
-                    width: width,
-                    fit: BoxFit.fitWidth,
-                    placeholder: (BuildContext context, String url) =>
-                        const Center(
+                  child: widget.imageUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: widget.imageUrl!,
+                          height: 250,
+                          width: width,
+                          fit: BoxFit.fitWidth,
+                          placeholder: (BuildContext context, String url) =>
+                              const Center(
                             child: CircularProgressIndicator(
-                      color: tPrimaryActionColor,
-                    )),
-                    errorWidget:
-                        (BuildContext context, String url, dynamic error) =>
-                            const Center(
-                      child: Icon(Icons.not_interested_rounded),
-                    ),
-                  ),
+                              color: tPrimaryActionColor,
+                            ),
+                          ),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Center(
+                            child: Icon(Icons.not_interested_rounded),
+                          ),
+                        )
+                      : Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            height: 250,
+                            width: width,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(
@@ -220,7 +238,39 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                             ),
                           ),
                           MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.sensor == true
+                                  ? Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return EditPlantFormWithSen(
+                                            plantName: widget.plantName!,
+                                            imageURL: widget.imageUrl!,
+                                            id: widget.id!,
+                                            active: widget.active!,
+                                            amountOfWater: amountOfWater,
+                                            from: widget.from,
+                                            until: widget.until,
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  : Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return EditPlantFormWithOutSen(
+                                            plantName: widget.plantName!,
+                                            imageURL: widget.imageUrl!,
+                                            id: widget.id!,
+                                            active: widget.active!,
+                                            amountOfWater: amountOfWater,
+                                            from: widget.from,
+                                            until: widget.until,
+                                          );
+                                        },
+                                      ),
+                                    );
+                            },
                             child: const Text(
                               "Edit",
                               style: TextStyle(
@@ -413,12 +463,15 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                 ),
                           MaterialButton(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return CompareEnvironmentScreen(
-                                  plantName: widget.plantName,
-                                );
-                              }));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return CompareEnvironmentScreen(
+                                      plantName: widget.plantName,
+                                    );
+                                  },
+                                ),
+                              );
                             },
                             child: const Text(
                               "Compare",
@@ -704,7 +757,39 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                     Radius.circular(12.0),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  widget.sensor == true
+                      ? Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return EditPlantFormWithSen(
+                                plantName: widget.plantName!,
+                                imageURL: widget.imageUrl!,
+                                id: widget.id!,
+                                active: widget.active!,
+                                amountOfWater: amountOfWater,
+                                from: widget.from,
+                                until: widget.until,
+                              );
+                            },
+                          ),
+                        )
+                      : Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return EditPlantFormWithOutSen(
+                                plantName: widget.plantName!,
+                                imageURL: widget.imageUrl!,
+                                id: widget.id!,
+                                active: widget.active!,
+                                amountOfWater: amountOfWater,
+                                from: widget.from,
+                                until: widget.until,
+                              );
+                            },
+                          ),
+                        );
+                },
                 child: const Center(
                   child: Text(
                     "Edit My Plant",

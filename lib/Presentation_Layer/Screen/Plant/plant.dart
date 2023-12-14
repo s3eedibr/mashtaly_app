@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_States.dart';
+import 'package:shimmer/shimmer.dart';
 
 // import '../../../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 // import '../../../../../Business_Layer/cubits/add_plant/add_plant_States.dart';
@@ -221,7 +222,20 @@ class _PlantScreenState extends State<PlantScreen> {
                                 child: Icon(Icons.cloud_off_rounded),
                               ),
                             )
-                          : const Icon(Icons.cloud_off_rounded),
+                          : Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 38,
+                                width: 38,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         width: 5,
                       ),
@@ -574,6 +588,8 @@ class _PlantScreenState extends State<PlantScreen> {
                                     sensor: myData[index]['sensor'],
                                     amountOfWater: myData[index]
                                         ['amountOfWater'],
+                                    from: myData[index]['from'],
+                                    until: myData[index]['until'],
                                   ),
                                 ),
                               );

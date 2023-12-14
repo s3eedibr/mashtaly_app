@@ -87,10 +87,19 @@ class PlantCard extends StatelessWidget {
                                   .signal_wifi_connected_no_internet_4_rounded),
                             ),
                           )
-                        : const Placeholder(
-                            color: Colors.grey,
-                            fallbackHeight: 72,
-                            fallbackWidth: 72,
+                        : Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              height: 120,
+                              width: 180,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                            ),
                           ),
                   ),
                   const SizedBox(
