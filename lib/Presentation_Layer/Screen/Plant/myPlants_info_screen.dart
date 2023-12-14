@@ -83,7 +83,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
             }),
         title: const Text(
           "Plant Information",
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: tPrimaryTextColor, // Adjust text color
@@ -341,7 +341,15 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                               AsyncSnapshot<List<List<dynamic>>> snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  buildShimmerDelayedWatering(),
+                                  buildShimmerWeatherCondition(),
+                                ],
+                              );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (!snapshot.hasData ||

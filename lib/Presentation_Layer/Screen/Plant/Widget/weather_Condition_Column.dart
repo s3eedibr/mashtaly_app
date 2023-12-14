@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../Constants/colors.dart';
 
 class WeatherConditionColumn extends StatefulWidget {
@@ -146,4 +147,28 @@ class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
       ],
     );
   }
+}
+
+Widget buildShimmerWeatherCondition() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Shimmer.fromColors(
+        baseColor: Colors.grey[300]!, // Change this to your desired base color
+        highlightColor:
+            Colors.grey[100]!, // Change this to your desired highlight color
+        child: Container(
+          height: 40,
+          width: 150,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+        ),
+      ),
+      const SizedBox(
+        height: 5,
+      )
+    ],
+  );
 }

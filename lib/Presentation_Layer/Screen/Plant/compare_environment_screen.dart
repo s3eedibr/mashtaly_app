@@ -15,6 +15,9 @@ class CompareEnvironmentScreen extends StatefulWidget {
 }
 
 class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
+  int greatCounter = 0;
+  int goodCounter = 0;
+  int badCounter = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,24 +80,63 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  height: 40,
-                  width: 80,
-                  decoration: const BoxDecoration(
-                    color: tWateringColor,
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'State',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                double.parse(BlocProvider.of<WeatherCubit>(context)
+                                .temperature!) >=
+                            16 &&
+                        double.parse(BlocProvider.of<WeatherCubit>(context)
+                                .temperature!) <=
+                            25 &&
+                        double.parse(BlocProvider.of<WeatherCubit>(context).cloud!) >=
+                            0 &&
+                        double.parse(BlocProvider.of<WeatherCubit>(context).cloud!) <=
+                            50 &&
+                        double.parse(BlocProvider.of<WeatherCubit>(context)
+                                .humidity!) >=
+                            50 &&
+                        double.parse(BlocProvider.of<
+                                    WeatherCubit>(context)
+                                .humidity!) <=
+                            70 &&
+                        double.parse(
+                                BlocProvider.of<WeatherCubit>(context).wind!) >=
+                            1 &&
+                        double.parse(BlocProvider.of<WeatherCubit>(context).wind!) <= 5
+                    ? Container(
+                        height: 40,
+                        width: 80,
+                        decoration: const BoxDecoration(
+                          color: tPrimaryActionColor,
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Great',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 40,
+                        width: 80,
+                        decoration: const BoxDecoration(
+                          color: tWateringColor,
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Good',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ],
             ),
             const SizedBox(
@@ -126,8 +168,8 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                           children: [
                             Image.asset(
                               Assets.assetsImagesIconsPath465,
-                              height: 35,
-                              width: 35,
+                              height: 32,
+                              width: 32,
                             ),
                             const SizedBox(
                               width: 5,
@@ -141,26 +183,53 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 35,
-                          width: 80,
-                          decoration: const BoxDecoration(
-                            color: tDelayedColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'state',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                        double.parse(BlocProvider.of<WeatherCubit>(context)
+                                        .temperature!) >=
+                                    16 &&
+                                double.parse(
+                                        BlocProvider.of<WeatherCubit>(context)
+                                            .temperature!) <=
+                                    25
+                            ? Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tPrimaryActionColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Great',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tWateringColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Good',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                     Row(
@@ -177,7 +246,7 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '16-24 °C',
+                              '16-25 °C',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: tPrimaryTextColor,
@@ -246,8 +315,8 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                           children: [
                             Image.asset(
                               Assets.assetsImagesIconsPath466,
-                              height: 35,
-                              width: 35,
+                              height: 32,
+                              width: 32,
                             ),
                             const SizedBox(
                               width: 5,
@@ -261,26 +330,53 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 35,
-                          width: 80,
-                          decoration: const BoxDecoration(
-                            color: tDelayedColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'state',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                        double.parse(BlocProvider.of<WeatherCubit>(context)
+                                        .cloud!) >=
+                                    55 &&
+                                double.parse(
+                                        BlocProvider.of<WeatherCubit>(context)
+                                            .cloud!) <=
+                                    100
+                            ? Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tThirdTextErrorColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Bad',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tWateringColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Good',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                     Row(
@@ -297,7 +393,7 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '16-24 °C',
+                              '0-50%',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: tPrimaryTextColor,
@@ -366,8 +462,8 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                           children: [
                             Image.asset(
                               Assets.assetsImagesIconsPath416,
-                              height: 35,
-                              width: 35,
+                              height: 32,
+                              width: 32,
                             ),
                             const SizedBox(
                               width: 5,
@@ -381,26 +477,53 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 35,
-                          width: 80,
-                          decoration: const BoxDecoration(
-                            color: tDelayedColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'state',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                        double.parse(BlocProvider.of<WeatherCubit>(context)
+                                        .humidity!) >=
+                                    50 &&
+                                double.parse(
+                                        BlocProvider.of<WeatherCubit>(context)
+                                            .humidity!) <=
+                                    75
+                            ? Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tPrimaryActionColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Great',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tWateringColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Good',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                     Row(
@@ -417,7 +540,7 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '16-24 °C',
+                              '50-70%',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: tPrimaryTextColor,
@@ -486,8 +609,8 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                           children: [
                             Image.asset(
                               Assets.assetsImagesIconsPath467,
-                              height: 35,
-                              width: 35,
+                              height: 32,
+                              width: 32,
                             ),
                             const SizedBox(
                               width: 5,
@@ -501,26 +624,53 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 35,
-                          width: 80,
-                          decoration: const BoxDecoration(
-                            color: tDelayedColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'state',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                        double.parse(BlocProvider.of<WeatherCubit>(context)
+                                        .wind!) >=
+                                    1 &&
+                                double.parse(
+                                        BlocProvider.of<WeatherCubit>(context)
+                                            .wind!) <=
+                                    5
+                            ? Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tWateringColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Good',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 35,
+                                width: 80,
+                                decoration: const BoxDecoration(
+                                  color: tThirdTextErrorColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25),
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Bad',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                     Row(
@@ -537,7 +687,7 @@ class _CompareEnvironmentScreenState extends State<CompareEnvironmentScreen> {
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '16-24 °C',
+                              '1-5 Km/h',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: tPrimaryTextColor,

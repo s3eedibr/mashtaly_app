@@ -88,7 +88,6 @@ class MashtalyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Mulish',
-            useMaterial3: true,
             dialogBackgroundColor: Colors.white,
             datePickerTheme: const DatePickerThemeData(
               backgroundColor: Colors.white,
