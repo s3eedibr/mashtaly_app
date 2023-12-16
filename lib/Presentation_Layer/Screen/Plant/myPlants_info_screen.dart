@@ -50,7 +50,6 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
   String para = '';
   late bool switchValue;
   late String? amountOfWater;
-  late Future<List<List<dynamic>>> getDelayedAndWeatherCondition;
   @override
   void initState() {
     super.initState();
@@ -63,8 +62,6 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
     }).catchError((error) {
       print('Error fetching plant information: $error');
     });
-    getDelayedAndWeatherCondition = fetchWeatherConditionAndDuration(
-        myId: widget.id!, userId: FirebaseAuth.instance.currentUser!.uid);
   }
 
   @override
@@ -72,6 +69,9 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
     // final height = MediaQuery.of(context).size.height;
     final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
     final width = MediaQuery.of(context).size.width;
+
+    List<List<dynamic>> allWeatherData = [];
+
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -266,6 +266,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                             amountOfWater: amountOfWater,
                                             from: widget.from,
                                             until: widget.until,
+                                            delayedDuration: allWeatherData,
                                           );
                                         },
                                       ),
@@ -420,6 +421,11 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                       (BuildContext context, int index) {
                                     List<dynamic> weatherData =
                                         snapshot.data![index];
+
+                                    if (weatherData.isNotEmpty) {
+                                      allWeatherData.add(weatherData);
+                                    }
+
                                     return Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -770,6 +776,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                 amountOfWater: amountOfWater,
                                 from: widget.from,
                                 until: widget.until,
+                                delayedDuration: allWeatherData,
                               );
                             },
                           ),
@@ -785,6 +792,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                 amountOfWater: amountOfWater,
                                 from: widget.from,
                                 until: widget.until,
+                                delayedDuration: allWeatherData,
                               );
                             },
                           ),

@@ -506,13 +506,21 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: tPrimaryActionColor,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: tPrimaryTextColor,
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.white,
+            dialogBackgroundColor: Colors.white,
+            dividerTheme: const DividerThemeData(
+              color: Colors.transparent,
             ),
+            datePickerTheme: const DatePickerThemeData(
+              backgroundColor: Colors.white,
+            ),
+            // colorScheme: const ColorScheme.light(
+            //   primary: tPrimaryActionColor,
+            //   onPrimary: Colors.white,
+            //   surface: Colors.white,
+            //   onSurface: tPrimaryTextColor,
+            // ),
           ),
           child: child!,
         );

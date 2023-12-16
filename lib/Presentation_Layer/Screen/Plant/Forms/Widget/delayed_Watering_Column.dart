@@ -3,20 +3,28 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Constants/colors.dart';
 
 class DelayedWateringColumn extends StatefulWidget {
-  final int? days;
-  final int? hours;
-  final int? minutes;
-  const DelayedWateringColumn({super.key, this.days, this.hours, this.minutes});
+  final dynamic durationList;
+  const DelayedWateringColumn({
+    super.key,
+    this.durationList,
+  });
 
   @override
   State<DelayedWateringColumn> createState() => _DelayedWateringColumnState();
 }
 
 List<List<int>> duration = [];
+List<List<int>> editedDuration = [];
 
 class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
   DateTime delayedDate = DateTime.now();
   TimeOfDay delayedTime = TimeOfDay.now();
+  dynamic editedValue;
+  @override
+  void initState() {
+    super.initState();
+    editedValue = widget.durationList;
+  }
 
   Future<void> delayedDateTime() async {
     DateTime initialDate = delayedDate;
@@ -76,21 +84,40 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
           delayedTime = pickedTime;
           print(pickedDateTime);
           print(pickedTime);
-          removedIndex = duration.indexWhere((item) =>
-              item[0] == currentValue[0] &&
-              item[1] == currentValue[1] &&
-              item[2] == currentValue[2]);
-
-          if (removedIndex != -1) {
-            duration.removeWhere((item) =>
+          if (editedValue == null) {
+            removedIndex = duration.indexWhere((item) =>
                 item[0] == currentValue[0] &&
                 item[1] == currentValue[1] &&
                 item[2] == currentValue[2]);
-            duration.insert(removedIndex, calculateDuration());
+
+            if (removedIndex != -1) {
+              duration.removeWhere((item) =>
+                  item[0] == currentValue[0] &&
+                  item[1] == currentValue[1] &&
+                  item[2] == currentValue[2]);
+              duration.insert(removedIndex, calculateDuration());
+            } else {
+              // Add the new calculated duration
+              duration.add(calculateDuration());
+            }
           } else {
-            // Add the new calculated duration
-            duration.add(calculateDuration());
+            removedIndex = editedValue.indexWhere((item) =>
+                item[0] == currentValue[0] &&
+                item[1] == currentValue[1] &&
+                item[2] == currentValue[2]);
+
+            if (removedIndex != -1) {
+              editedValue.removeWhere((item) =>
+                  item[0] == currentValue[0] &&
+                  item[1] == currentValue[1] &&
+                  item[2] == currentValue[2]);
+              editedValue.insert(removedIndex, calculateDuration());
+            } else {
+              // Add the new calculated duration
+              editedValue.add(calculateDuration());
+            }
           }
+
           // Remove existing item if it exists
 
           print(calculateDuration());
@@ -175,10 +202,31 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
                         ),
                       ),
                     )
-                  : const Icon(
-                      FontAwesomeIcons.plus,
-                      color: Colors.white,
-                    ),
+                  : editedValue != null
+                      ? Container(
+                          height: 40,
+                          width: 150,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(6),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${editedValue[1]} days ${editedValue[2]}hr ${editedValue[3]}min',
+                              style: const TextStyle(
+                                color: tPrimaryTextColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const Icon(
+                          FontAwesomeIcons.plus,
+                          color: Colors.white,
+                        ),
             ),
           ),
           const SizedBox(

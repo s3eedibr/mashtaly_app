@@ -33,6 +33,7 @@ class EditPlantFormWithSen extends StatefulWidget {
   final String id;
   final bool active;
   final String? amountOfWater;
+  final List<List<dynamic>>? delayedDuration;
   EditPlantFormWithSen({
     Key? key,
     required this.imageURL,
@@ -42,6 +43,7 @@ class EditPlantFormWithSen extends StatefulWidget {
     required this.id,
     required this.active,
     this.amountOfWater,
+    this.delayedDuration,
   }) : super(key: key);
 
   @override
@@ -519,7 +521,7 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
+          data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: tPrimaryActionColor,
               onPrimary: Colors.white,

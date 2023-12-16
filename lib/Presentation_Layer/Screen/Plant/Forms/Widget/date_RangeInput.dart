@@ -8,8 +8,11 @@ Widget buildDateRangeInput(
   from,
   until,
 ) {
-  fromDateController.text = from;
-  untilDateController.text = until;
+  if (from != null && until != null) {
+    fromDateController.text = from;
+    untilDateController.text = until;
+  }
+
   return Padding(
     padding: const EdgeInsets.only(right: 16, bottom: 0, left: 16),
     child: Row(

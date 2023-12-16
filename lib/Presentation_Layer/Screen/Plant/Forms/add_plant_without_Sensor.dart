@@ -122,10 +122,10 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     return combinedList;
   }
 
-  String? editedImage = null;
-  String? amountOfWater = null;
-  String? from = null;
-  String? until = null;
+  String? editedImage;
+  String? amountOfWater;
+  String? from;
+  String? until;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -414,7 +414,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
+          data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: tPrimaryActionColor,
               onPrimary: Colors.white,

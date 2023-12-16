@@ -2,19 +2,28 @@ import 'package:flutter/material.dart';
 import 'delayed_Watering_Column.dart';
 import 'weather_Condition_Column.dart';
 
-class DelayedWateringInput extends StatelessWidget {
+class DelayedWateringInput extends StatefulWidget {
+  final dynamic delayedDuration;
+  final dynamic delayedWeather;
   const DelayedWateringInput({
     super.key,
+    this.delayedDuration,
+    this.delayedWeather,
   });
 
   @override
+  State<DelayedWateringInput> createState() => _DelayedWateringInputState();
+}
+
+class _DelayedWateringInputState extends State<DelayedWateringInput> {
+  @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        DelayedWateringColumn(),
-        WeatherConditionColumn(),
+        DelayedWateringColumn(durationList: widget.delayedDuration),
+        WeatherConditionColumn(ConditionList: widget.delayedWeather),
       ],
     );
   }

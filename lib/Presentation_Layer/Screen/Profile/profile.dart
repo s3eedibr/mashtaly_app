@@ -497,7 +497,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context: context,
                             builder: (context) {
                               return Theme(
-                                data: ThemeData(
+                                data: Theme.of(context).copyWith(
+                                  canvasColor: Colors.white,
                                   dialogBackgroundColor: Colors.white,
                                 ),
                                 child: AlertDialog(

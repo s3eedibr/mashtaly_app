@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../../Constants/colors.dart';
 
 Widget buildWateringSizeInput(amountOfWaterController, amountOfWater) {
-  amountOfWaterController.text = amountOfWater;
+  if (amountOfWater != null) {
+    amountOfWaterController.text = amountOfWater;
+  }
+
   return Padding(
     padding: const EdgeInsets.only(right: 16, bottom: 0, left: 16),
     child: Column(

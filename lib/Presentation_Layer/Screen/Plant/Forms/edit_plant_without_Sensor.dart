@@ -33,6 +33,7 @@ class EditPlantFormWithOutSen extends StatefulWidget {
   final String id;
   final bool active;
   final String? amountOfWater;
+  final List<List<dynamic>>? delayedDuration;
   const EditPlantFormWithOutSen({
     Key? key,
     required this.imageURL,
@@ -42,6 +43,7 @@ class EditPlantFormWithOutSen extends StatefulWidget {
     this.amountOfWater,
     this.from,
     this.until,
+    this.delayedDuration,
   }) : super(key: key);
 
   @override
@@ -126,23 +128,26 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
     switchValue = widget.active;
   }
 
-  List<DelayedWateringInput> delayedCondition = [const DelayedWateringInput()];
-  List<List<dynamic>> weatherConditionAndDuration = [];
-  List<List<dynamic>> combineWeatherAndDuration() {
-    List<List<dynamic>> combinedList = [];
-    for (int i = 0; i < duration.length; i++) {
-      if (i < weatherCondition.length) {
-        combinedList.add([
-          weatherCondition[i],
-          duration[i][0], // days
-          duration[i][1], // hours
-          duration[i][2], // minutes
-        ]);
-      }
-    }
-    return combinedList;
-  }
+  List<DelayedWateringInput> delayedCondition = [
+    const DelayedWateringInput(),
+  ];
 
+  List<List<dynamic>> weatherConditionAndDuration = [];
+  // List<List<dynamic>> combineWeatherAndDuration() {
+  //   List<List<dynamic>> combinedList = [];
+  //   for (int i = 0; i < widget.delayedDuration!.length; i++) {
+  //     if (i < widget.delayedWeather!.length) {
+  //       combinedList.add([
+  //         widget.delayedWeather![i],
+  //         widget.delayedDuration![0], // days
+  //         widget.delayedDuration![1], // hours
+  //         widget.delayedDuration![2], // minutes
+  //       ]);
+  //     }
+  //   }
+  //   return combinedList;
+  // }
+  List<DelayedWateringInput> editedDelayedCondition = [];
   @override
   Widget build(BuildContext context) {
     final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
@@ -150,6 +155,18 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
     String? amountOfWater = widget.amountOfWater;
     String? from = widget.from;
     String? until = widget.until;
+
+    if (widget.delayedDuration!.isNotEmpty) {
+      delayedCondition.clear();
+      for (int i = 0; i < widget.delayedDuration!.length; i++) {
+        delayedCondition.add(
+          DelayedWateringInput(
+            delayedDuration: widget.delayedDuration![i],
+            delayedWeather: widget.delayedDuration![i],
+          ),
+        );
+      }
+    }
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
@@ -306,7 +323,7 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
           ),
           GestureDetector(
             onTap: () {
-              print(combineWeatherAndDuration());
+              // print(combineWeatherAndDuration());
               print(delayedCondition);
               print(weatherCondition);
               print(duration);
@@ -465,7 +482,7 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
+          data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: tPrimaryActionColor,
               onPrimary: Colors.white,

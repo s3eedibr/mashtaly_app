@@ -98,45 +98,51 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Map<String, dynamic>>(
-      hint: const Text('Weather condition'),
-      borderRadius: BorderRadius.circular(6),
-      isExpanded: true,
-      onChanged: (Map<String, dynamic>? selectedItem) {
-        onChange(selectedItem);
-      },
-      items: mapWeatherData().map<DropdownMenuItem<Map<String, dynamic>>>(
-        (item) {
-          String path = item['path'];
-          String text = item['text'];
-
-          return DropdownMenuItem<Map<String, dynamic>>(
-            value: item,
-            child: Row(
-              children: [
-                const SizedBox(width: 8),
-                Image.asset(
-                  path,
-                  height: 40,
-                  width: 40,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: tPrimaryTextColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          );
+    return Theme(
+      data: Theme.of(context).copyWith(
+        canvasColor: Colors.white,
+        dialogBackgroundColor: Colors.white,
+      ),
+      child: DropdownButton<Map<String, dynamic>>(
+        hint: const Text('Weather condition'),
+        borderRadius: BorderRadius.circular(6),
+        isExpanded: true,
+        onChanged: (Map<String, dynamic>? selectedItem) {
+          onChange(selectedItem);
         },
-      ).toList(),
+        items: mapWeatherData().map<DropdownMenuItem<Map<String, dynamic>>>(
+          (item) {
+            String path = item['path'];
+            String text = item['text'];
+
+            return DropdownMenuItem<Map<String, dynamic>>(
+              value: item,
+              child: Row(
+                children: [
+                  const SizedBox(width: 8),
+                  Image.asset(
+                    path,
+                    height: 40,
+                    width: 40,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: tPrimaryTextColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ).toList(),
+      ),
     );
   }
 }
