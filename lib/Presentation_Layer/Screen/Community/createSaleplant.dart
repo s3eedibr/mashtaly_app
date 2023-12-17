@@ -145,32 +145,26 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
       bool isConnected = await checkConnectivity();
 
       if (!isConnected) {
-        print('No internet connection.');
         showSnackBar(context, 'No internet connection.');
         return;
       }
       if (_selectedImages.length < 3) {
-        print('Error: Please choose at least 3 pictures.');
         showSnackBar(context, 'Please choose at least 3 pictures.');
         return;
       }
       if (_titleController.text.isEmpty) {
-        print('Error: Please enter title for sale.');
         showSnackBar(context, 'Please enter title for sale.');
         return;
       }
       if (_phoneNumberController.text.isEmpty) {
-        print('Error: Please enter phone number for sale.');
         showSnackBar(context, 'Please enter phone number for sale.');
         return;
       } else if (!_phoneNumberRegExp.hasMatch(_phoneNumberController.text)) {
-        print('Error: Invalid phone number.');
         showSnackBar(context, 'E.g. 07 {7,8,9} * * * * * * *.');
         return;
       }
 
       if (_contentController.text.isEmpty) {
-        print('Error: Please enter content for sale.');
         showSnackBar(context, 'Please enter content for sale.');
         return;
       }

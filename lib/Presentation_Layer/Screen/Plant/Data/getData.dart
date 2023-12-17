@@ -182,3 +182,43 @@ Future<List<List<dynamic>>> fetchWeatherConditionAndDuration({
     throw e;
   }
 }
+
+Future<List<List<dynamic>>> fetchTimeInEachWeekAndDay({
+  required String myId,
+  required String userId,
+}) async {
+  List<List<dynamic>> saveTimeInEachWeekAndDay = [];
+  CollectionReference myPlantsCollection = FirebaseFirestore.instance
+      .collection('myPlants')
+      .doc(userId)
+      .collection('MyPlants');
+
+  try {
+    QuerySnapshot querySnapshot =
+        await myPlantsCollection.where('id', isEqualTo: myId).get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      // Assuming 'schedule' is an array field in your document
+      List<dynamic> timeInEachWeekAndDay = data['schedule'] ?? [];
+
+      if (timeInEachWeekAndDay.isNotEmpty) {
+        // Convert 'schedule' data to the desired format
+        saveTimeInEachWeekAndDay = timeInEachWeekAndDay
+            .map((item) => [
+                  item['week'],
+                  item['day'],
+                  item['time'],
+                ])
+            .toList();
+      }
+    }
+    return saveTimeInEachWeekAndDay;
+  } catch (e) {
+    // Handle errors when fetching data from Firebase
+    print('Error fetching weather data: $e');
+    throw e;
+  }
+}

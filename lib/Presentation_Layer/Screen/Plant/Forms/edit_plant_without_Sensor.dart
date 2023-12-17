@@ -34,6 +34,7 @@ class EditPlantFormWithOutSen extends StatefulWidget {
   final bool active;
   final String? amountOfWater;
   final List<List<dynamic>>? delayedDuration;
+  final List<List<dynamic>>? delaySchedule;
   const EditPlantFormWithOutSen({
     Key? key,
     required this.imageURL,
@@ -44,6 +45,7 @@ class EditPlantFormWithOutSen extends StatefulWidget {
     this.from,
     this.until,
     this.delayedDuration,
+    this.delaySchedule,
   }) : super(key: key);
 
   @override
@@ -120,44 +122,17 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
   late String? commonName = '';
   late String currentUserUid;
   late bool switchValue;
-
+  bool editMood = true;
+  late List<List<dynamic>> testt;
   @override
   void initState() {
     super.initState();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     switchValue = widget.active;
-  }
-
-  List<DelayedWateringInput> delayedCondition = [
-    const DelayedWateringInput(),
-  ];
-
-  List<List<dynamic>> weatherConditionAndDuration = [];
-  // List<List<dynamic>> combineWeatherAndDuration() {
-  //   List<List<dynamic>> combinedList = [];
-  //   for (int i = 0; i < widget.delayedDuration!.length; i++) {
-  //     if (i < widget.delayedWeather!.length) {
-  //       combinedList.add([
-  //         widget.delayedWeather![i],
-  //         widget.delayedDuration![0], // days
-  //         widget.delayedDuration![1], // hours
-  //         widget.delayedDuration![2], // minutes
-  //       ]);
-  //     }
-  //   }
-  //   return combinedList;
-  // }
-  List<DelayedWateringInput> editedDelayedCondition = [];
-  @override
-  Widget build(BuildContext context) {
-    final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
-    String editedImage = widget.imageURL;
-    String? amountOfWater = widget.amountOfWater;
-    String? from = widget.from;
-    String? until = widget.until;
-
+    weatherCondition.clear();
+    duration.clear();
+    delayedCondition.clear();
     if (widget.delayedDuration!.isNotEmpty) {
-      delayedCondition.clear();
       for (int i = 0; i < widget.delayedDuration!.length; i++) {
         delayedCondition.add(
           DelayedWateringInput(
@@ -167,6 +142,49 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
         );
       }
     }
+  }
+
+  List<DelayedWateringInput> delayedCondition = [
+    const DelayedWateringInput(),
+  ];
+
+  List<List<dynamic>> weatherConditionAndDuration = [];
+  List<List<dynamic>> combineWeatherAndDuration() {
+    List<List<dynamic>> combinedList = widget.delayedDuration!;
+
+    // widget.delayedDuration!.clear();
+
+    for (int i = 0; i < widget.delayedDuration!.length; i++) {
+      if (i < weatherCondition.length) {
+        widget.delayedDuration!.add([
+          // widget.delayedDuration!,
+          weatherCondition[i],
+          duration[i][0],
+          duration[i][1],
+          duration[i][2],
+
+          // widget.delayedDuration![0], // days
+          // widget.delayedDuration![1], // hours
+          // widget.delayedDuration![2], // minutes
+        ]);
+      }
+      weatherCondition.clear();
+      duration.clear();
+    }
+
+    return combinedList;
+  }
+
+  List<DelayedWateringInput> editedDelayedCondition = [];
+
+  @override
+  Widget build(BuildContext context) {
+    final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
+    String editedImage = widget.imageURL;
+    String? amountOfWater = widget.amountOfWater;
+    String? from = widget.from;
+    String? until = widget.until;
+
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
@@ -179,8 +197,11 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
             onPressed: () {
               Navigator.pop(context);
               delayedCondition.clear();
-              weatherCondition.clear();
+              editedWeatherCondition.clear();
+              editedDuration.clear();
               duration.clear();
+              weatherCondition.clear();
+              editedDelayedCondition.clear();
               timeInEachWeekAndDay.clear();
             }),
         title: const Text(
@@ -293,7 +314,7 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
           ),
           GestureDetector(
             onTap: () {
-              if (duration.isNotEmpty && weatherCondition.isNotEmpty) {
+              if (widget.delayedDuration!.isNotEmpty) {
                 addDelayedCondition();
               } else {
                 showSnackBar(context,
@@ -323,10 +344,11 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
           ),
           GestureDetector(
             onTap: () {
-              // print(combineWeatherAndDuration());
+              print(combineWeatherAndDuration());
+              print(widget.delayedDuration);
               print(delayedCondition);
-              print(weatherCondition);
-              print(duration);
+              print(editedWeatherCondition);
+              print(editedDuration);
               print(timeInEachWeekAndDay);
             },
             child: Padding(
@@ -348,7 +370,7 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
             ),
           ),
           buildScheduleHeader(),
-          const ScheduleWidget(),
+          ScheduleWidget(scheduleData: widget.delaySchedule),
           const SizedBox(height: 75),
         ],
       ),
@@ -360,6 +382,7 @@ class _EditPlantFormWithOutSenState extends State<EditPlantFormWithOutSen> {
         fromDateController: fromDateController,
         untilDateController: untilDateController,
         withSensor: false,
+        editMood: editMood,
       ),
     );
   }

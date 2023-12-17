@@ -23,7 +23,7 @@ class _DelayedWateringInputState extends State<DelayedWateringInput> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         DelayedWateringColumn(durationList: widget.delayedDuration),
-        WeatherConditionColumn(ConditionList: widget.delayedWeather),
+        WeatherConditionColumn(conditionList: widget.delayedWeather),
       ],
     );
   }

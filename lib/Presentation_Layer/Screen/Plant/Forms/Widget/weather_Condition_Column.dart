@@ -4,10 +4,10 @@ import '../../../../../Constants/colors.dart';
 import 'custom_Dropdown.dart';
 
 class WeatherConditionColumn extends StatefulWidget {
-  final dynamic ConditionList;
+  final dynamic conditionList;
   const WeatherConditionColumn({
     Key? key,
-    this.ConditionList,
+    this.conditionList,
   }) : super(key: key);
 
   @override
@@ -15,6 +15,7 @@ class WeatherConditionColumn extends StatefulWidget {
 }
 
 List<String?> weatherCondition = [];
+List<String?> editedWeatherCondition = [];
 
 class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
   String? selectedImagePath;
@@ -32,22 +33,45 @@ class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
           contentPadding: const EdgeInsets.only(left: 16, right: 17),
           content: CustomDropdown(
             onChange: (Map<String, dynamic>? selectedItem) {
-              if (selectedItem != null) {
-                setState(() {
-                  selectedImagePath = selectedItem['path'] as String?;
-                  selectedWeatherText = selectedItem['text'] as String?;
-                  removedIndex = weatherCondition
-                      .indexWhere((item) => item == currentValue[0]);
+              if (editedValue == null) {
+                if (selectedItem != null) {
+                  setState(() {
+                    selectedImagePath = selectedItem['path'] as String?;
+                    selectedWeatherText = selectedItem['text'] as String?;
+                    removedIndex = weatherCondition
+                        .indexWhere((item) => item == currentValue[0]);
 
-                  if (removedIndex != -1) {
-                    weatherCondition
-                        .removeWhere((item) => item == currentValue[0]);
-                    weatherCondition.insert(removedIndex, selectedWeatherText);
-                  } else {
-                    weatherCondition.add(selectedWeatherText);
-                  }
-                });
-                Navigator.pop(context);
+                    if (removedIndex != -1) {
+                      weatherCondition
+                          .removeWhere((item) => item == currentValue[0]);
+                      weatherCondition.insert(
+                          removedIndex, selectedWeatherText);
+                    } else {
+                      weatherCondition.add(selectedWeatherText);
+                    }
+                  });
+                  Navigator.pop(context);
+                }
+              } else {
+                if (selectedItem != null) {
+                  setState(() {
+                    selectedImagePath = selectedItem['path'] as String?;
+                    editedValue[0] = selectedItem['text'] as String?;
+                    removedIndex = editedWeatherCondition
+                        .indexWhere((item) => item == currentValue[0]);
+                    // print('$removedIndex=-=-==-=--==-=-=-=-=-=-=-=-=-=-=-=-=-');
+
+                    if (removedIndex != -1) {
+                      editedWeatherCondition
+                          .removeWhere((item) => item == currentValue[0]);
+                      editedWeatherCondition.insert(
+                          removedIndex, editedValue[0]);
+                    } else {
+                      editedWeatherCondition.add(editedValue[0]);
+                    }
+                  });
+                  Navigator.pop(context);
+                }
               }
             },
           ),
@@ -151,9 +175,9 @@ class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
   @override
   void initState() {
     super.initState();
-    editedValue = widget.ConditionList;
+    editedValue = widget.conditionList;
     if (editedValue != null) {
-      selectedImagePath = getSelectedImagePath(widget.ConditionList[0]);
+      selectedImagePath = getSelectedImagePath(widget.conditionList[0]);
     }
   }
 
@@ -172,8 +196,13 @@ class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
           GestureDetector(
             onTap: () {
               showDropdown();
-              currentValue = [selectedWeatherText];
-              print(currentValue);
+              if (editedValue == null) {
+                currentValue = [selectedWeatherText];
+                // print(currentValue);
+              } else {
+                currentValue = [widget.conditionList[0]];
+                // print(currentValue);
+              }
             },
             child: (selectedImagePath != null)
                 ? Container(
@@ -193,7 +222,7 @@ class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
                                   style: const TextStyle(
                                     fontSize: 15,
                                     color: tPrimaryTextColor,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 )
@@ -202,7 +231,7 @@ class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
                                   style: const TextStyle(
                                     fontSize: 15,
                                     color: tPrimaryTextColor,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),

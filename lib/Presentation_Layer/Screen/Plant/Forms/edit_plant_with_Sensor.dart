@@ -161,7 +161,7 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
                 ),
               );
               delayedCondition.clear();
-              weatherCondition.clear();
+              editedWeatherCondition.clear();
               duration.clear();
               timeInEachWeekAndDay.clear();
             }),
@@ -243,7 +243,7 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
           ),
           GestureDetector(
             onTap: () {
-              if (duration.isNotEmpty && weatherCondition.isNotEmpty) {
+              if (duration.isNotEmpty && editedWeatherCondition.isNotEmpty) {
                 addDelayedCondition();
               } else {
                 showSnackBar(context,

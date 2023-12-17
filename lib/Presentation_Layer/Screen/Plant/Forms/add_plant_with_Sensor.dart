@@ -258,7 +258,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
           ),
           GestureDetector(
             onTap: () {
-              print(timeInEachWeekAndDay);
+              // print(timeInEachWeekAndDay);
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
@@ -291,6 +291,7 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
         fromDateController: fromDateController,
         untilDateController: untilDateController,
         withSensor: true,
+        editMood: false,
       ),
     );
   }

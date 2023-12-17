@@ -19,16 +19,21 @@ List<List<int>> editedDuration = [];
 class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
   DateTime delayedDate = DateTime.now();
   TimeOfDay delayedTime = TimeOfDay.now();
+  DateTime forDuration = DateTime.now();
+
   dynamic editedValue;
   @override
   void initState() {
     super.initState();
     editedValue = widget.durationList;
+    if (editedValue != null) {
+      currentValue = [editedValue[1], editedValue[2], editedValue[3]];
+    }
   }
 
   Future<void> delayedDateTime() async {
-    DateTime initialDate = delayedDate;
-    TimeOfDay initialTime = delayedTime;
+    DateTime initialDate = DateTime.now();
+    TimeOfDay initialTime = TimeOfDay.now();
 
     DateTime? pickedDateTime = await showDatePicker(
       context: context,
@@ -51,6 +56,7 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
     );
 
     if (pickedDateTime != null) {
+      // ignore: use_build_context_synchronously
       TimeOfDay? pickedTime = await showTimePicker(
         context: context,
         initialTime: initialTime,
@@ -82,8 +88,8 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
         setState(() {
           delayedDate = pickedDateTime!;
           delayedTime = pickedTime;
-          print(pickedDateTime);
-          print(pickedTime);
+          // print(pickedDateTime);
+          // print(pickedTime);
           if (editedValue == null) {
             removedIndex = duration.indexWhere((item) =>
                 item[0] == currentValue[0] &&
@@ -102,25 +108,27 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
             }
           } else {
             removedIndex = editedValue.indexWhere((item) =>
-                item[0] == currentValue[0] &&
-                item[1] == currentValue[1] &&
-                item[2] == currentValue[2]);
+                item == currentValue[0] &&
+                item == currentValue[1] &&
+                item == currentValue[2]);
 
             if (removedIndex != -1) {
+              editedValue.removeAt((item) =>
+                  item == currentValue[0] &&
+                  item == currentValue[1] &&
+                  item == currentValue[2]);
               editedValue.removeWhere((item) =>
-                  item[0] == currentValue[0] &&
-                  item[1] == currentValue[1] &&
-                  item[2] == currentValue[2]);
+                  item == currentValue[0] &&
+                  item == currentValue[1] &&
+                  item == currentValue[2]);
               editedValue.insert(removedIndex, calculateDuration());
             } else {
               // Add the new calculated duration
-              editedValue.add(calculateDuration());
+              duration.add(calculateDuration());
             }
           }
 
-          // Remove existing item if it exists
-
-          print(calculateDuration());
+          // print(calculateDuration());
         });
       }
     }
@@ -128,7 +136,6 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
 
   List<int> calculateDuration() {
     // Calculate the total duration in days and hours
-    DateTime now = DateTime.now();
     DateTime selectedDateTime = DateTime(
       delayedDate.year,
       delayedDate.month,
@@ -137,7 +144,7 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
       delayedTime.minute,
     );
 
-    Duration selectedDuration = selectedDateTime.difference(now);
+    Duration selectedDuration = selectedDateTime.difference(forDuration);
 
     // Calculate days and hours separately
     int days = selectedDuration.inDays;
@@ -163,12 +170,21 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
           GestureDetector(
             onTap: () {
               delayedDateTime();
-              currentValue = [
-                calculateDuration()[0],
-                calculateDuration()[1],
-                calculateDuration()[2],
-              ];
-              print(currentValue);
+              if (editedValue == null) {
+                currentValue = [
+                  calculateDuration()[0],
+                  calculateDuration()[1],
+                  calculateDuration()[2],
+                ];
+                // print(currentValue);
+              } else {
+                currentValue = [
+                  editedValue[1],
+                  editedValue[2],
+                  editedValue[3],
+                ];
+                // print(currentValue);
+              }
             },
             child: Container(
               height: 40,
@@ -196,7 +212,7 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
                           '${calculateDuration()[0]} days ${calculateDuration()[1]}hr ${calculateDuration()[2]}min',
                           style: const TextStyle(
                             color: tPrimaryTextColor,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                         ),
@@ -217,7 +233,7 @@ class _DelayedWateringColumnState extends State<DelayedWateringColumn> {
                               '${editedValue[1]} days ${editedValue[2]}hr ${editedValue[3]}min',
                               style: const TextStyle(
                                 color: tPrimaryTextColor,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 16,
                               ),
                             ),

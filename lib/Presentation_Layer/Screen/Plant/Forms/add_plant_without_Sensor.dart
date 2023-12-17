@@ -293,6 +293,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         fromDateController: fromDateController,
         untilDateController: untilDateController,
         withSensor: false,
+        editMood: false,
       ),
     );
   }

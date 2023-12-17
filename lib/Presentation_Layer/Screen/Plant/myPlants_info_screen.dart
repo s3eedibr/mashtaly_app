@@ -69,9 +69,8 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
     // final height = MediaQuery.of(context).size.height;
     final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
     final width = MediaQuery.of(context).size.width;
-
     List<List<dynamic>> allWeatherData = [];
-
+    List<List<dynamic>>? allScheduleData = [];
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -239,6 +238,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                           ),
                           MaterialButton(
                             onPressed: () {
+                              print('$allWeatherData =- my plant info screen');
                               widget.sensor == true
                                   ? Navigator.of(context).push(
                                       MaterialPageRoute(
@@ -267,10 +267,12 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                             from: widget.from,
                                             until: widget.until,
                                             delayedDuration: allWeatherData,
+                                            delaySchedule: allScheduleData,
                                           );
                                         },
                                       ),
                                     );
+                              print(allScheduleData);
                             },
                             child: const Text(
                               "Edit",
@@ -442,6 +444,50 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                         ),
                                       ],
                                     );
+                                  },
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1,
+                        child: FutureBuilder<List<List<dynamic>>>(
+                          future: fetchTimeInEachWeekAndDay(
+                              myId: widget.id!,
+                              userId: FirebaseAuth.instance.currentUser!.uid),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<List<dynamic>>> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Text(
+                                'No delayed data available',
+                                style: TextStyle(
+                                  height: 3,
+                                  color: tPrimaryPlusTextColor,
+                                ),
+                              );
+                            } else {
+                              return SizedBox(
+                                height: 50,
+                                child: ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    List<dynamic> scheduleData =
+                                        snapshot.data![index];
+
+                                    if (scheduleData.isNotEmpty) {
+                                      allScheduleData.add(scheduleData);
+                                    }
+
+                                    return Container();
                                   },
                                 ),
                               );
@@ -764,6 +810,8 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                   ),
                 ),
                 onPressed: () {
+                  print('$allWeatherData =- my plant info screen second one');
+
                   widget.sensor == true
                       ? Navigator.of(context).push(
                           MaterialPageRoute(
@@ -793,6 +841,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                 from: widget.from,
                                 until: widget.until,
                                 delayedDuration: allWeatherData,
+                                delaySchedule: allScheduleData,
                               );
                             },
                           ),

@@ -598,6 +598,8 @@ class _PlantScreenState extends State<PlantScreen> {
                               imageURL: myData[index]['myPlant_pic1'],
                               plantName: myData[index]['plantName'],
                               active: myData[index]['active'],
+                              id: myData[index]['id'],
+                              user_id: myData[index]['user_id'],
                             ),
                           );
                         },

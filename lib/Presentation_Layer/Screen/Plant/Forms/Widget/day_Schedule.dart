@@ -59,7 +59,7 @@ class _DayScheduleWidgetState extends State<DayScheduleWidget> {
         times[dayIndex].add(Utils.getFormattedTimeSimple(
             DateTime(2023, 1, 1, value.hour, value.minute)
                 .millisecondsSinceEpoch));
-        print(times[dayIndex]);
+        // print(times[dayIndex]);
       });
     }, onError: (error) {
       // Handle any errors that occur when selecting a time (e.g. user cancels).
