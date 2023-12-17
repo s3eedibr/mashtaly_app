@@ -32,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (context) {
             return Theme(
-              data: ThemeData(
+              data: Theme.of(context).copyWith(
+                canvasColor: Colors.white,
                 dialogBackgroundColor: Colors.white,
               ),
               child: AlertDialog(

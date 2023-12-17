@@ -8,6 +8,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../Constants/colors.dart';
 import '../../Widget/snackBar.dart';
@@ -167,25 +168,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         radius: 54,
                         backgroundColor: Colors.white,
                         child: ClipOval(
-                          child: CachedNetworkImage(
-                            imageUrl: profilePic,
-                            width: 108,
-                            height: 108,
-                            fit: BoxFit.cover,
-                            placeholder: (BuildContext context, String url) =>
-                                const Center(
-                                    child: CircularProgressIndicator(
-                              color: tPrimaryActionColor,
-                            )),
-                            errorWidget: (BuildContext context, String url,
-                                    dynamic error) =>
-                                Image.asset(
-                              'assets/images/icons/default_profile.jpg',
-                              width: 108,
-                              height: 108,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                          child: profilePic.isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl: profilePic,
+                                  width: 108,
+                                  height: 108,
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      (BuildContext context, String url) =>
+                                          const Center(
+                                              child: CircularProgressIndicator(
+                                    color: tPrimaryActionColor,
+                                  )),
+                                  errorWidget: (BuildContext context,
+                                          String url, dynamic error) =>
+                                      Image.asset(
+                                    'assets/images/icons/default_profile.jpg',
+                                    width: 108,
+                                    height: 108,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    height: 108,
+                                    width: 108,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -480,7 +497,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context: context,
                             builder: (context) {
                               return Theme(
-                                data: ThemeData(
+                                data: Theme.of(context).copyWith(
+                                  canvasColor: Colors.white,
                                   dialogBackgroundColor: Colors.white,
                                 ),
                                 child: AlertDialog(

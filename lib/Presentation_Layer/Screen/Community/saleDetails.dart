@@ -216,7 +216,12 @@ class SaleDetails extends StatelessWidget {
                     child: Container(
                       width: 50,
                       height: 50,
-                      color: Colors.white,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(55),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -231,7 +236,12 @@ class SaleDetails extends StatelessWidget {
               child: Container(
                 width: 120,
                 height: 20,
-                color: Colors.white,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                ),
               ),
             ),
           ],
@@ -273,7 +283,12 @@ class SaleDetails extends StatelessWidget {
           child: Container(
             width: 150,
             height: 20,
-            color: Colors.white,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
           ),
         ),
         const SizedBox(
@@ -285,7 +300,12 @@ class SaleDetails extends StatelessWidget {
           child: Container(
             width: 100,
             height: 20,
-            color: Colors.white,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
           ),
         ),
         const SizedBox(
@@ -298,7 +318,12 @@ class SaleDetails extends StatelessWidget {
             height: 100,
             child: Container(
               width: double.infinity,
-              color: Colors.white,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
             ),
           ),
         ),
@@ -434,20 +459,31 @@ class SaleDetails extends StatelessWidget {
 
   // Build an image widget with or without an actual image URL
   Widget buildImageWidget(String? imageUrl) {
-    if (imageUrl?.isNotEmpty ?? false) {
+    if (imageUrl != null) {
       return CachedNetworkImage(
-        imageUrl: imageUrl!,
+        imageUrl: imageUrl,
         fit: BoxFit.cover,
+        placeholder: (BuildContext context, String url) => const Center(
+            child: CircularProgressIndicator(
+          color: tPrimaryActionColor,
+        )),
+        errorWidget: (BuildContext context, String url, dynamic error) =>
+            const Center(
+          child: Icon(Icons.image_not_supported_outlined),
+        ),
       );
     } else {
-      return Container(
-        height: 95,
-        width: 85,
-        clipBehavior: Clip.antiAlias,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(6),
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 95,
+          width: 85,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
           ),
         ),
       );

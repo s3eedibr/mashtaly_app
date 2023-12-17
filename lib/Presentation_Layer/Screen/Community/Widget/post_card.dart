@@ -59,14 +59,10 @@ class PostCard extends StatelessWidget {
             right: 16,
           ),
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.all(
+              borderRadius: BorderRadius.all(
                 Radius.circular(12),
-              ),
-              border: Border.all(
-                color: tSearchBarColor,
-                width: 2,
               ),
             ),
             child: Padding(
@@ -152,12 +148,11 @@ class PostCard extends StatelessWidget {
             right: 16,
           ),
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.all(
+              borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),
-              
             ),
             child: Padding(
               padding: const EdgeInsets.only(
@@ -182,11 +177,31 @@ class PostCard extends StatelessWidget {
                               height: 150,
                               width: 250,
                               fit: BoxFit.cover,
+                              placeholder: (BuildContext context, String url) =>
+                                  const Center(
+                                child: CircularProgressIndicator(
+                                  color: tPrimaryActionColor,
+                                ),
+                              ),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  const Center(
+                                child: Icon(Icons.image_not_supported_outlined),
+                              ),
                             )
-                          : const Placeholder(
-                              color: Colors.grey,
-                              fallbackHeight: 72,
-                              fallbackWidth: 72,
+                          : Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 150,
+                                width: 250,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                ),
+                              ),
                             ),
                     ),
                   ),

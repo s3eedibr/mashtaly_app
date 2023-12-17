@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:mashtaly_app/Constants/colors.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../../../../Constants/colors.dart';
 
-class CustomDropdown extends StatelessWidget {
-  final ValueChanged<Map<String, dynamic>?> onChange;
-  const CustomDropdown({Key? key, required this.onChange}) : super(key: key);
-  static List<Map<String, dynamic>> mapWeatherData() {
-    List<Map<String, dynamic>> dropdownItems = [];
+class WeatherConditionColumn extends StatefulWidget {
+  final String? selectedWeatherText;
+
+  const WeatherConditionColumn({
+    Key? key,
+    this.selectedWeatherText,
+  }) : super(key: key);
+
+  @override
+  State<WeatherConditionColumn> createState() => _WeatherConditionColumnState();
+}
+
+class _WeatherConditionColumnState extends State<WeatherConditionColumn> {
+  String? selectedImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedImagePath = getSelectedImagePath(widget.selectedWeatherText);
+  }
+
+  String? getSelectedImagePath(String? selectedWeatherText) {
+    if (selectedWeatherText == null) return null;
 
     final weatherData = [
       ['Sunny', 'Clear', 113],
@@ -83,66 +102,73 @@ class CustomDropdown extends StatelessWidget {
     ];
 
     for (var data in weatherData) {
-      dropdownItems.add({
-        'path': 'assets/images/weather_cond/day/${data[2].toString()}.png',
-        'text': data[0],
-      });
-      dropdownItems.add({
-        'path': 'assets/images/weather_cond/night/${data[2].toString()}.png',
-        'text': data[1],
-      });
+      if (data[0] == selectedWeatherText) {
+        return 'assets/images/weather_cond/day/${data[2].toString()}.png';
+      } else if (data[1] == selectedWeatherText) {
+        return 'assets/images/weather_cond/night/${data[2].toString()}.png';
+      }
     }
 
-    return dropdownItems;
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        canvasColor: Colors.white,
-        dialogBackgroundColor: Colors.white,
-      ),
-      child: DropdownButton<Map<String, dynamic>>(
-        hint: const Text('Weather condition'),
-        borderRadius: BorderRadius.circular(6),
-        isExpanded: true,
-        onChanged: (Map<String, dynamic>? selectedItem) {
-          onChange(selectedItem);
-        },
-        items: mapWeatherData().map<DropdownMenuItem<Map<String, dynamic>>>(
-          (item) {
-            String path = item['path'];
-            String text = item['text'];
-
-            return DropdownMenuItem<Map<String, dynamic>>(
-              value: item,
-              child: Row(
-                children: [
-                  const SizedBox(width: 8),
-                  Image.asset(
-                    path,
-                    height: 40,
-                    width: 40,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 40,
+          width: 150,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Row(
+            children: [
+              if (selectedImagePath != null) Image.asset(selectedImagePath!),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  widget.selectedWeatherText!,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: tPrimaryTextColor,
+                    fontWeight: FontWeight.w700,
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: tPrimaryTextColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            );
-          },
-        ).toList(),
-      ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        )
+      ],
     );
   }
+}
+
+Widget buildShimmerWeatherCondition() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Shimmer.fromColors(
+        baseColor: Colors.grey[300]!, // Change this to your desired base color
+        highlightColor:
+            Colors.grey[100]!, // Change this to your desired highlight color
+        child: Container(
+          height: 40,
+          width: 150,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+        ),
+      ),
+      const SizedBox(
+        height: 5,
+      )
+    ],
+  );
 }

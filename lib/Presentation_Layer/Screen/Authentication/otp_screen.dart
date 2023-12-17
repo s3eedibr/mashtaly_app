@@ -33,7 +33,7 @@ class _OTPScreenState extends State<OTPScreen> {
       EmailOTP(); // Instance of the EmailOTP class for OTP handling
   void sendOTP() async {
     myauth.setConfig(
-      appEmail: "noreply@mashtaly-hu.firebaseapp.com",
+      appEmail: "mashtalyapplication@gmail.com",
       appName: "Mashtaly",
       userEmail: widget.sendToEmail,
       otpLength: 5,

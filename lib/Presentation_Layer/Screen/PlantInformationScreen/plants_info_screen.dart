@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Services/wikipedia_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 import '../../../Constants/colors.dart';
 
@@ -145,13 +146,30 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                           height: 250,
                           width: width,
                           fit: BoxFit.fitWidth,
+                          placeholder: (BuildContext context, String url) =>
+                              const Center(
+                                  child: CircularProgressIndicator(
+                            color: tPrimaryActionColor,
+                          )),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Center(
+                            child: Icon(Icons.image_not_supported_outlined),
+                          ),
                         )
-                      : Container(
-                          // Placeholder image when the photoUrls list is empty or URL is invalid
-                          height: 250,
-                          width: width,
-                          color: Colors
-                              .grey, // You can customize this placeholder color
+                      : Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            height: 250,
+                            width: width,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                          ),
                         ),
                 ),
               ),
@@ -174,12 +192,43 @@ class _PlantsInfoScreenState extends State<PlantsInfoScreen> {
                           padding: const EdgeInsets.only(right: 12),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(6),
-                            child: CachedNetworkImage(
-                              imageUrl: photoUrls[index],
-                              height: 95,
-                              width: 85,
-                              fit: BoxFit.cover,
-                            ),
+                            child: photoUrls.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageUrl: photoUrls[index],
+                                    height: 95,
+                                    width: 85,
+                                    fit: BoxFit.cover,
+                                    placeholder:
+                                        (BuildContext context, String url) =>
+                                            const Center(
+                                                child: SizedBox(
+                                      height: 55,
+                                      width: 55,
+                                      child: CircularProgressIndicator(
+                                        color: tPrimaryActionColor,
+                                      ),
+                                    )),
+                                    errorWidget: (BuildContext context,
+                                            String url, dynamic error) =>
+                                        const Center(
+                                      child: Icon(
+                                          Icons.image_not_supported_outlined),
+                                    ),
+                                  )
+                                : Shimmer.fromColors(
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                    child: Container(
+                                      height: 95,
+                                      width: 85,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         );
                       } else {

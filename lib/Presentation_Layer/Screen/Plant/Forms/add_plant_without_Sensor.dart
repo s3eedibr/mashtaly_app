@@ -122,6 +122,10 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
     return combinedList;
   }
 
+  String? editedImage;
+  String? amountOfWater;
+  String? from;
+  String? until;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,6 +160,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
       body: ListView(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         children: [
           const SizedBox(height: 10),
           buildPlantImage(
@@ -163,16 +168,20 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
             image,
             pickImageFromGallery,
             captureImageFromCamera,
+            editedImage,
           ),
           _buildPlantNameInput(),
           buildWateringSizeInput(
             amountOfWaterController,
+            amountOfWater,
           ),
           buildDateRangeInput(
             context,
             fromDateController,
             untilDateController,
             showDialogDatePicker,
+            from,
+            until,
           ),
           const SizedBox(
             height: 25,
@@ -284,6 +293,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
         fromDateController: fromDateController,
         untilDateController: untilDateController,
         withSensor: false,
+        editMood: false,
       ),
     );
   }
@@ -405,7 +415,7 @@ class _AddPlantFormWithOutSenState extends State<AddPlantFormWithOutSen> {
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
+          data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: tPrimaryActionColor,
               onPrimary: Colors.white,

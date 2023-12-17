@@ -65,6 +65,7 @@ class AddPlantCubit extends Cubit<AddPlantState> {
       if (connectivityResult == ConnectivityResult.none) {
         print('No internet connection');
       }
+      emit(PlantLoadingState());
 
       if (image != null) {
         try {
@@ -74,6 +75,7 @@ class AddPlantCubit extends Cubit<AddPlantState> {
               storageRef.child(imagePath).putFile(File(image.path));
           TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
           String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
           return imageUrl;
         } catch (e) {
           print('Error adding photo to storage: $e');
@@ -94,6 +96,7 @@ class AddPlantCubit extends Cubit<AddPlantState> {
       untilDateController,
       withSensor) async {
     try {
+      emit(PlantLoadingState());
       final currentUser = auth.currentUser;
 
       if (currentUser == null) {
@@ -141,12 +144,12 @@ class AddPlantCubit extends Cubit<AddPlantState> {
                 })
             .toList();
       }
-      print(timeInEachWeekAndDay);
       await firestore
           .collection('myPlants')
           .doc(currentUser.uid)
           .collection('MyPlants')
           .add(plantData);
+      emit(PlantLoadingState());
     } catch (e) {
       print('Error adding plant: $e');
     }
@@ -164,6 +167,18 @@ class AddPlantCubit extends Cubit<AddPlantState> {
       } else {
         emit(UpdatePlantScreen(myData: myData));
       }
+    } catch (e) {
+      print('Error loading data: $e');
+      emit(PlantNoDataState());
+    }
+  }
+
+  Future<void> updateData(String userId) async {
+    try {
+      emit(PlantLoadingState());
+
+      loadData(userId);
+      emit(PlantLoadingState());
     } catch (e) {
       print('Error loading data: $e');
       emit(PlantNoDataState());

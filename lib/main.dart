@@ -9,7 +9,6 @@ import 'Animations/no_connection_screen.dart';
 import 'Animations/splash_screen.dart';
 import 'Auth/auth.dart';
 import 'Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
-import 'Business_Layer/cubits/show_plant/cubit/show_plant_data_cubit.dart';
 import 'Business_Layer/cubits/show_weather/weatherCubit.dart';
 import 'Constants/colors.dart';
 import 'Presentation_Layer/Screen/OnboradingScreen/onboarding_screen.dart';
@@ -83,20 +82,15 @@ class MashtalyApp extends StatelessWidget {
         BlocProvider<AddPlantCubit>(
           create: (context) => AddPlantCubit(),
         ),
-        BlocProvider<ShowPlantCubit>(
-          create: (context) => ShowPlantCubit(),
-        ),
       ],
       child: Builder(builder: (context) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Mulish',
-            useMaterial3: true,
-            dialogBackgroundColor: Colors.white,
-            datePickerTheme: const DatePickerThemeData(
-              backgroundColor: Colors.white,
-            ),
+            // datePickerTheme: const DatePickerThemeData(
+            //   backgroundColor: Colors.white,
+            // ),
             textSelectionTheme: TextSelectionThemeData(
               selectionColor: tPrimaryActionColor.withOpacity(.5),
               cursorColor: tPrimaryActionColor.withOpacity(.6),

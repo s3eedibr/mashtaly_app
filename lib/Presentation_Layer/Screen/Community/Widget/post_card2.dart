@@ -161,11 +161,34 @@ class PostCard2 extends StatelessWidget {
                           height: 72,
                           width: 72,
                           fit: BoxFit.cover,
+                          placeholder: (BuildContext context, String url) =>
+                              const Center(
+                                  child: SizedBox(
+                            height: 55,
+                            width: 55,
+                            child: CircularProgressIndicator(
+                              color: tPrimaryActionColor,
+                            ),
+                          )),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Center(
+                            child: Icon(Icons.person_2_rounded),
+                          ),
                         )
-                      : const Placeholder(
-                          color: Colors.grey,
-                          fallbackHeight: 72,
-                          fallbackWidth: 72,
+                      : Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            height: 72,
+                            width: 72,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                          ),
                         ),
                 ),
               ),

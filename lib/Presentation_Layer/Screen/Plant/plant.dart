@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_States.dart';
+import 'package:shimmer/shimmer.dart';
 
 // import '../../../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 // import '../../../../../Business_Layer/cubits/add_plant/add_plant_States.dart';
@@ -180,8 +181,6 @@ class _PlantScreenState extends State<PlantScreen> {
     required String wind,
     required String humidity,
   }) {
-    // final myPlantCubit = BlocProvider.of<ShowPlantCubit>(context);
-    // myPlantCubit.loadData(FirebaseAuth.instance.currentUser!.uid);
     final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
     myPlantCubit.loadData(FirebaseAuth.instance.currentUser!.uid);
     return Scaffold(
@@ -210,8 +209,12 @@ class _PlantScreenState extends State<PlantScreen> {
                               width: 38,
                               placeholder: (BuildContext context, String url) =>
                                   const Center(
-                                      child: CircularProgressIndicator(
-                                color: tPrimaryActionColor,
+                                      child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: tPrimaryActionColor,
+                                ),
                               )),
                               errorWidget: (BuildContext context, String url,
                                       dynamic error) =>
@@ -219,7 +222,20 @@ class _PlantScreenState extends State<PlantScreen> {
                                 child: Icon(Icons.cloud_off_rounded),
                               ),
                             )
-                          : const Icon(Icons.cloud_off_rounded),
+                          : Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 38,
+                                width: 38,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         width: 5,
                       ),
@@ -477,7 +493,7 @@ class _PlantScreenState extends State<PlantScreen> {
               ),
             ),
             const SizedBox(
-              height: 19,
+              height: 15,
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
@@ -529,10 +545,12 @@ class _PlantScreenState extends State<PlantScreen> {
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-              child:
-                  // updateSchPro(),
-                  BlocBuilder<AddPlantCubit, AddPlantState>(
+              padding: const EdgeInsets.only(
+                right: 16,
+                bottom: 0,
+                left: 17,
+              ),
+              child: BlocBuilder<AddPlantCubit, AddPlantState>(
                 builder: (context, state) {
                   if (state is PlantNoDataState) {
                     return const NoPlantData();
@@ -563,8 +581,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MyPlantsInfoScreen(
+                                    id: myData[index]['id'],
                                     plantName: myData[index]['plantName'],
                                     imageUrl: myData[index]['myPlant_pic1'],
+                                    active: myData[index]['active'],
+                                    sensor: myData[index]['sensor'],
+                                    amountOfWater: myData[index]
+                                        ['amountOfWater'],
+                                    from: myData[index]['from'],
+                                    until: myData[index]['until'],
                                   ),
                                 ),
                               );
@@ -572,6 +597,9 @@ class _PlantScreenState extends State<PlantScreen> {
                             child: PlantCard(
                               imageURL: myData[index]['myPlant_pic1'],
                               plantName: myData[index]['plantName'],
+                              active: myData[index]['active'],
+                              id: myData[index]['id'],
+                              user_id: myData[index]['user_id'],
                             ),
                           );
                         },
@@ -592,71 +620,4 @@ class _PlantScreenState extends State<PlantScreen> {
       ),
     );
   }
-
-  // UpdateSchedule updateSchPro() {
-  //   BlocProvider.of<GetPlantCubit>(context).getPlant();
-  //   return const UpdateSchedule();
-  // }
 }
-
-// class UpdateSchedule extends StatefulWidget {
-//   const UpdateSchedule({super.key});
-
-//   @override
-//   State<UpdateSchedule> createState() => _UpdateScheduleState();
-// }
-
-// class _UpdateScheduleState extends State<UpdateSchedule> {
-//   List<Map<String, dynamic>> myData = [];
-
-//   bool isLoading = true;
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocConsumer<ShowPlantCubit, ShowPlantState>(
-//       listener: (context, state) {
-//         if (state is ShowPlantSucData) {
-//           myData = state.myData;
-//           isLoading = false;
-//         } else if (state is GetPlantLoading) {
-//           isLoading = true;
-//         } else if (state is GetPlantFailure) {
-//           isLoading = false;
-
-//           print('Failure');
-//         }
-//       },
-//       builder: (context, state) {
-//         return myData.isNotEmpty
-//             ? SizedBox(
-//                 height: 300,
-//                 child: isLoading != true
-//                     ? ListView.builder(
-//                         scrollDirection: Axis.horizontal,
-//                         itemCount: myData.length,
-//                         itemBuilder: (BuildContext context, index) {
-//                           return GestureDetector(
-//                             onTap: () {
-//                               Navigator.push(
-//                                 context,
-//                                 MaterialPageRoute(
-//                                   builder: (context) => MyPlantsInfoScreen(
-//                                     plantName: myData[index]['plantName'],
-//                                     imageUrl: myData[index]['myPlant_pic1'],
-//                                   ),
-//                                 ),
-//                               );
-//                             },
-//                             child: PlantCard(
-//                               imageURL: myData[index]['myPlant_pic1'],
-//                               plantName: myData[index]['plantName'],
-//                             ),
-//                           );
-//                         },
-//                       )
-//                     : const Center(child: CircularProgressIndicator()),
-//               )
-//             : const NoPlantData();
-//       },
-//     );
-//   }
-// }
