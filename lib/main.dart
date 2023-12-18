@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/show_sensor_data/cubit/show_sensor_data_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Animations/no_connection_screen.dart';
@@ -81,6 +82,9 @@ class MashtalyApp extends StatelessWidget {
         ),
         BlocProvider<AddPlantCubit>(
           create: (context) => AddPlantCubit(),
+        ),
+        BlocProvider<ShowSensorDataCubit>(
+          create: (context) => ShowSensorDataCubit(),
         ),
       ],
       child: Builder(builder: (context) {

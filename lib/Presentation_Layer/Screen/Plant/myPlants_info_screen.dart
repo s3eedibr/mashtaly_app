@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mashtaly_app/Business_Layer/cubits/show_sensor_data/cubit/show_sensor_data_cubit.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Forms/edit_plant_with_Sensor.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Forms/edit_plant_without_Sensor.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/compare_environment_screen.dart';
 
 import 'package:mashtaly_app/Services/wikipedia_service.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import '../../../Business_Layer/cubits/show_weather/weatherCubit.dart';
@@ -29,7 +31,7 @@ class MyPlantsInfoScreen extends StatefulWidget {
   final String? id;
   final String? from;
   final String? until;
-
+  final String? userId;
   const MyPlantsInfoScreen({
     Key? key,
     required this.plantName,
@@ -40,6 +42,7 @@ class MyPlantsInfoScreen extends StatefulWidget {
     this.amountOfWater,
     this.from,
     this.until,
+    this.userId,
   }) : super(key: key);
 
   @override
@@ -68,6 +71,8 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
   Widget build(BuildContext context) {
     // final height = MediaQuery.of(context).size.height;
     final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
+    final showSensorData = BlocProvider.of<ShowSensorDataCubit>(context);
+    showSensorData.loadData(widget.userId!);
     final width = MediaQuery.of(context).size.width;
     List<List<dynamic>> allWeatherData = [];
     List<List<dynamic>>? allScheduleData = [];
@@ -251,6 +256,8 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                             amountOfWater: amountOfWater,
                                             from: widget.from,
                                             until: widget.until,
+                                            delayedDuration: allWeatherData,
+                                            delaySchedule: allScheduleData,
                                           );
                                         },
                                       ),
@@ -451,6 +458,99 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                           },
                         ),
                       ),
+                      Visibility(
+                        visible: widget.sensor == true,
+                        child: SizedBox(
+                          height: 340,
+                          child: Column(
+                            children: [
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Sensor Data",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              BlocBuilder<ShowSensorDataCubit,
+                                  ShowSensorDataState>(
+                                builder: (context, state) {
+                                  if (state is ShowSensorLoadingData) {
+                                    return const Text('Hii');
+                                  } else if (state is ShowSensorDataInitial) {
+                                    return SfCircularChart(
+                                      title: ChartTitle(
+                                        text: 'Water level',
+                                        alignment: ChartAlignment.near,
+                                        textStyle: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      legend: const Legend(
+                                        isVisible: true,
+                                        overflowMode:
+                                            LegendItemOverflowMode.wrap,
+                                      ),
+                                      palette: const [
+                                        tMidColor,
+                                        tPrimaryActionColor,
+                                        tDelayedColor,
+                                      ],
+                                      series: <CircularSeries>[
+                                        // Assuming you want a pie chart
+                                        DoughnutSeries<double, String>(
+                                          enableTooltip: true,
+                                          dataSource: <double>[
+                                            state.percentage,
+                                            state.percentage - 196,
+                                            196 - state.percentage,
+                                          ],
+                                          xValueMapper: (double value, _) {
+                                            print(
+                                                '${state.percentage},${state.percentage - 196},${196 - state.percentage}');
+                                            print('Value = $value');
+                                            if (value <= 25) {
+                                              return 'High';
+                                            }
+                                            if (value > 25 && value <= 75) {
+                                              return 'Average';
+                                            }
+                                            if (value > 75) {
+                                              return 'Low';
+                                            }
+                                            return null;
+                                          },
+                                          yValueMapper: (double value, _) =>
+                                              value,
+                                          dataLabelMapper: (double value, _) {
+                                            double percentage =
+                                                (((value + 14) / 228) * 100) *
+                                                    -1;
+                                            return '${percentage.toStringAsFixed(2)}%';
+                                          },
+                                          dataLabelSettings:
+                                              const DataLabelSettings(
+                                            isVisible: true,
+                                            textStyle: TextStyle(
+                                                fontFamily: 'Mulish',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: tPrimaryTextColor),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: 1,
                         child: FutureBuilder<List<List<dynamic>>>(
@@ -566,7 +666,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'Hour',
+                                      '2 Hour',
                                       style: TextStyle(
                                           color: tPrimaryTextColor,
                                           fontSize: 15,
@@ -608,7 +708,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 25.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -825,6 +925,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                 from: widget.from,
                                 until: widget.until,
                                 delayedDuration: allWeatherData,
+                                delaySchedule: allScheduleData,
                               );
                             },
                           ),

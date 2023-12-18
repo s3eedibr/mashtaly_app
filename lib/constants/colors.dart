@@ -9,6 +9,7 @@ const Color tPrimaryPlusTextColor = Color(0xC30D1904);
 const Color tThirdTextColor = Colors.white;
 
 const Color tPrimaryActionColor = Color(0xFF3ED400);
+
 const Color tSecondActionColor = Color(0xFFD2D8CF);
 const Color tThirdTextErrorColor = Color(0xFFFF6724);
 const Color tSearchBarColor = Color(0xFFF5F5F5);
@@ -17,3 +18,4 @@ const Color tSearchIconColor = Color(0xFFD6D6D6);
 const Color tWateringColor = Color(0xFF51B1FB);
 const Color tDelayedColor = Color(0xFFFF6724);
 const Color tDelayedTextColor = Color(0xFFBDC1BB);
+const Color tMidColor = Color(0xFFFFFF00);

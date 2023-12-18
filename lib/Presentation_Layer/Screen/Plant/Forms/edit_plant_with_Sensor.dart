@@ -5,15 +5,17 @@ import 'package:app_settings/app_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import 'package:mashtaly_app/Presentation_Layer/Widget/snackBar.dart';
 
+import '../../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import '../../../../Constants/colors.dart';
 import '../../../../Services/scan_plant_service.dart';
-import '../../HomeScreens/home_screen.dart';
+import '../Data/getData.dart';
 import 'Utils.dart';
 import 'Widget/date_RangeInput.dart';
 import 'Widget/delayed_Watering_Column.dart';
@@ -34,16 +36,18 @@ class EditPlantFormWithSen extends StatefulWidget {
   final bool active;
   final String? amountOfWater;
   final List<List<dynamic>>? delayedDuration;
-  EditPlantFormWithSen({
+  final List<List<dynamic>>? delaySchedule;
+  const EditPlantFormWithSen({
     Key? key,
     required this.imageURL,
     required this.plantName,
-    this.from,
-    this.until,
     required this.id,
     required this.active,
     this.amountOfWater,
+    this.from,
+    this.until,
     this.delayedDuration,
+    this.delaySchedule,
   }) : super(key: key);
 
   @override
@@ -133,17 +137,70 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
   late String? plantName = '';
   late String? commonName = '';
   late String currentUserUid;
-  String? editedImage;
+  late bool switchValue;
+  bool editMood = true;
+  late List<List<dynamic>> testt;
   @override
   void initState() {
     super.initState();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+    switchValue = widget.active;
+    weatherCondition.clear();
+    duration.clear();
+    delayedCondition.clear();
+    if (widget.delayedDuration!.isNotEmpty) {
+      for (int i = 0; i < widget.delayedDuration!.length; i++) {
+        delayedCondition.add(
+          DelayedWateringInput(
+            delayedDuration: widget.delayedDuration![i],
+            delayedWeather: widget.delayedDuration![i],
+          ),
+        );
+      }
+    }
   }
 
-  List<DelayedWateringInput> delayedCondition = [const DelayedWateringInput()];
+  List<DelayedWateringInput> delayedCondition = [
+    const DelayedWateringInput(),
+  ];
+
+  List<List<dynamic>> weatherConditionAndDuration = [];
+  List<List<dynamic>> combineWeatherAndDuration() {
+    List<List<dynamic>> combinedList = widget.delayedDuration!;
+
+    // widget.delayedDuration!.clear();
+
+    for (int i = 0; i < widget.delayedDuration!.length; i++) {
+      if (i < weatherCondition.length) {
+        widget.delayedDuration!.add([
+          // widget.delayedDuration!,
+          weatherCondition[i],
+          duration[i][0],
+          duration[i][1],
+          duration[i][2],
+
+          // widget.delayedDuration![0], // days
+          // widget.delayedDuration![1], // hours
+          // widget.delayedDuration![2], // minutes
+        ]);
+      }
+      weatherCondition.clear();
+      duration.clear();
+    }
+
+    return combinedList;
+  }
+
+  List<DelayedWateringInput> editedDelayedCondition = [];
 
   @override
   Widget build(BuildContext context) {
+    final myPlantCubit = BlocProvider.of<AddPlantCubit>(context);
+    String editedImage = widget.imageURL;
+    String? amountOfWater = widget.amountOfWater;
+    String? from = widget.from;
+    String? until = widget.until;
+
     return Scaffold(
       backgroundColor: tBgColor,
       appBar: AppBar(
@@ -154,24 +211,55 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
               FontAwesomeIcons.xmark,
             ),
             onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
+              Navigator.pop(context);
               delayedCondition.clear();
               editedWeatherCondition.clear();
+              editedDuration.clear();
               duration.clear();
+              weatherCondition.clear();
+              editedDelayedCondition.clear();
               timeInEachWeekAndDay.clear();
             }),
         title: const Text(
-          "Add Plant / With sensor",
+          "Watering Schedule",
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Switch(
+              value: switchValue,
+              onChanged: (newValue) async {
+                setState(
+                  () {
+                    switchValue = newValue;
+                  },
+                );
+                await updateActiveFlagForMyPlant(
+                    collectionName: 'myPlants',
+                    userId: FirebaseAuth.instance.currentUser!.uid,
+                    myId: widget.id,
+                    isActive: switchValue);
+                myPlantCubit.updateData(FirebaseAuth.instance.currentUser!.uid);
+
+                print(widget.id);
+                print(switchValue);
+              },
+              activeTrackColor: const Color(0xff9BEC79),
+              activeColor: const Color(0xff66B821),
+              inactiveTrackColor: const Color(0xFFFF3324),
+              inactiveThumbColor: tBgColor,
+              trackOutlineColor:
+                  const MaterialStatePropertyAll<Color?>(Colors.transparent),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -190,15 +278,15 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
           _buildPlantNameInput(),
           buildWateringSizeInput(
             amountOfWaterController,
-            widget.amountOfWater,
+            amountOfWater,
           ),
           buildDateRangeInput(
             context,
             fromDateController,
             untilDateController,
             showDialogDatePicker,
-            widget.from,
-            widget.until,
+            from,
+            until,
           ),
           const SizedBox(
             height: 25,
@@ -243,7 +331,7 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
           ),
           GestureDetector(
             onTap: () {
-              if (duration.isNotEmpty && editedWeatherCondition.isNotEmpty) {
+              if (widget.delayedDuration!.isNotEmpty) {
                 addDelayedCondition();
               } else {
                 showSnackBar(context,
@@ -273,6 +361,11 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
           ),
           GestureDetector(
             onTap: () {
+              print(combineWeatherAndDuration());
+              print(widget.delayedDuration);
+              print(delayedCondition);
+              print(editedWeatherCondition);
+              print(editedDuration);
               print(timeInEachWeekAndDay);
             },
             child: Padding(
@@ -294,7 +387,7 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
             ),
           ),
           buildScheduleHeader(),
-          const ScheduleWidget(),
+          ScheduleWidget(scheduleData: widget.delaySchedule),
           const SizedBox(height: 75),
         ],
       ),
@@ -306,14 +399,16 @@ class _EditPlantFormWithSenState extends State<EditPlantFormWithSen> {
         fromDateController: fromDateController,
         untilDateController: untilDateController,
         withSensor: true,
+        editMood: editMood,
       ),
     );
   }
 
   int days = 0, hours = 0, min = 0;
   Widget _buildPlantNameInput() {
+    plantNameController.text = widget.plantName;
     return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+      padding: const EdgeInsets.only(right: 16, bottom: 0, left: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
