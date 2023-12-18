@@ -590,6 +590,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                         ['amountOfWater'],
                                     from: myData[index]['from'],
                                     until: myData[index]['until'],
+                                    userId: myData[index]['user_id'],
                                   ),
                                 ),
                               );
