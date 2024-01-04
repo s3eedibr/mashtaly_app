@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/add_plant/add_plant_States.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:mashtaly_app/Services/activeUser.dart';
 
 // import '../../../../../Business_Layer/cubits/add_plant/add_plant_Cubit.dart';
 // import '../../../../../Business_Layer/cubits/add_plant/add_plant_States.dart';
@@ -19,7 +22,8 @@ import '../../../Business_Layer/cubits/show_weather/weatherCubit.dart';
 import '../../../Business_Layer/cubits/show_weather/weatherStates.dart';
 import '../../../Constants/colors.dart';
 // import '../../../sql.dart';
-import '../HomeScreens/notification.dart';
+import '../../../Services/notification_service.dart';
+import '../Notification/notification.dart';
 import 'Widget/buildLoadingUI.dart';
 import 'Widget/choiceButtons.dart';
 import 'Widget/noPlantData.dart';
@@ -42,15 +46,31 @@ class _PlantScreenState extends State<PlantScreen> {
     });
   }
 
+  @override
+  void initState() {
+    changeUserToken();
+    initUserStatus();
+    scheduleNotificationsFromFirestore();
+
+    getForegroundNotification();
+    super.initState();
+  }
+
   Future<bool> _loadData() async {
     await Future.delayed(const Duration(milliseconds: 4500));
     return true;
   }
 
+  final Stream<QuerySnapshot> plantsStream = FirebaseFirestore.instance
+      .collection('plants')
+      .orderBy('date')
+      .snapshots();
+
   @override
   Widget build(BuildContext context) {
     final weatherCubit = BlocProvider.of<WeatherCubit>(context);
     weatherCubit.getLocationAndFetchWeather();
+    final TextEditingController searchController = TextEditingController();
 
     const bool newNotification = true;
     return Scaffold(
@@ -66,6 +86,10 @@ class _PlantScreenState extends State<PlantScreen> {
                 height: 40,
                 width: 385,
                 child: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    searchController.text = value;
+                  },
                   cursorColor: tPrimaryActionColor,
                   style: const TextStyle(
                     fontSize: 16,
@@ -84,8 +108,9 @@ class _PlantScreenState extends State<PlantScreen> {
                       size: 27,
                     ),
                     border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12)),
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ),
@@ -133,43 +158,83 @@ class _PlantScreenState extends State<PlantScreen> {
           ],
         ),
       ),
-      body: FutureBuilder<bool>(
-        future: _loadData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Display a loading UI while waiting for the future to complete.
-            return buildLoadingUI();
-          } else if (snapshot.hasError) {
-            // Display an error message if there is an error in the future.
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // Use BlocBuilder to handle state changes from the WeatherCubit.
-            return BlocBuilder<WeatherCubit, WeatherState>(
-              builder: (context, state) {
-                if (state is WeatherLoadingState) {
-                  // Display a loading UI while waiting for weather data.
+      body: searchController.text == ''
+          ? FutureBuilder<bool>(
+              future: _loadData(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return buildLoadingUI();
-                } else if (state is WeatherDataState) {
-                  // Display the main UI with weather data when available.
-                  return buildMainUI(
-                    icon: state.icon,
-                    weatherText: state.weatherText,
-                    temperature: state.temperature,
-                    cloud: state.cloud,
-                    wind: state.wind,
-                    humidity: state.humidity,
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return BlocBuilder<WeatherCubit, WeatherState>(
+                    builder: (context, state) {
+                      if (state is WeatherLoadingState) {
+                        return buildMainUI(
+                          icon: '',
+                          weatherText: '',
+                          temperature: '',
+                          cloud: '',
+                          wind: '',
+                          humidity: '',
+                        );
+                      } else if (state is WeatherDataState) {
+                        return buildMainUI(
+                          icon: state.icon,
+                          weatherText: state.weatherText,
+                          temperature: state.temperature,
+                          cloud: state.cloud,
+                          wind: state.wind,
+                          humidity: state.humidity,
+                        );
+                      } else if (state is WeatherErrorState) {
+                        return Text(state.error);
+                      }
+                      return Container();
+                    },
                   );
-                } else if (state is WeatherErrorState) {
-                  // Display an error message if there is an error in the WeatherCubit.
-                  return Text(state.error);
                 }
-                // If none of the above conditions are met, return an empty Container.
-                return Container();
               },
-            );
-          }
-        },
-      ),
+            )
+          : StreamBuilder<QuerySnapshot>(
+              stream: searchController.text != ''
+                  ? FirebaseFirestore.instance
+                      .collection('plants')
+                      .orderBy('plantName')
+                      .startAt([searchController.text]).endAt(
+                          ["$searchController.text\uf8ff"]).snapshots()
+                  : plantsStream,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return SizedBox(
+                  child: ListView(
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+
+                      // Return the plant component and give it the data
+                      return Container(
+                        child: Column(
+                          children: [
+                            Text(data['plantName']),
+                            Text(data['plant_pic']),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
     );
   }
 
@@ -222,20 +287,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                 child: Icon(Icons.cloud_off_rounded),
                               ),
                             )
-                          : Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Container(
-                                height: 38,
-                                width: 38,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          : Container(),
                       const SizedBox(
                         width: 5,
                       ),

@@ -200,12 +200,17 @@ class PostCard2 extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: tPrimaryTextColor,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(
+                      width: 270,
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: tPrimaryTextColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                     const SizedBox(

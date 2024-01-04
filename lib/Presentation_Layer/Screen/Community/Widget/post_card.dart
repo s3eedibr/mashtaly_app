@@ -208,12 +208,17 @@ class PostCard extends StatelessWidget {
                   const SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: tPrimaryTextColor,
-                      fontWeight: FontWeight.bold,
+                  SizedBox(
+                    width: 250,
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: tPrimaryTextColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                   const SizedBox(

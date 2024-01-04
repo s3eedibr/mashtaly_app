@@ -28,6 +28,7 @@ Future<List<Map<String, dynamic>>> getAllData(String collectionName) async {
         // Get a snapshot of data for the current user, ordered by date in descending order
         QuerySnapshot userDataSnapshot = await userPostsRef
             .where('posted', isEqualTo: true)
+            .where('active', isEqualTo: true)
             .orderBy('date', descending: true)
             .get();
 

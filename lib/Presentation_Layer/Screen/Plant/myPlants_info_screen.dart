@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/show_sensor_data/cubit/show_sensor_data_cubit.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Forms/edit_plant_with_Sensor.dart';
 import 'package:mashtaly_app/Presentation_Layer/Screen/Plant/Forms/edit_plant_without_Sensor.dart';
@@ -207,14 +206,14 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const FaIcon(
-                              FontAwesomeIcons.ellipsisVertical,
-                              color: tSecondTextColor,
-                              size: 22,
-                            ),
-                          ),
+                          // IconButton(
+                          //   onPressed: () {},
+                          //   icon: const FaIcon(
+                          //     FontAwesomeIcons.ellipsisVertical,
+                          //     color: tSecondTextColor,
+                          //     size: 22,
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(
@@ -461,7 +460,7 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                       Visibility(
                         visible: widget.sensor == true,
                         child: SizedBox(
-                          height: 340,
+                          height: 375,
                           child: Column(
                             children: [
                               const Align(
@@ -478,69 +477,98 @@ class _MyPlantsInfoScreenState extends State<MyPlantsInfoScreen> {
                                   ShowSensorDataState>(
                                 builder: (context, state) {
                                   if (state is ShowSensorLoadingData) {
-                                    return const Text('Hii');
+                                    return const Center(
+                                      child: SizedBox(
+                                        height: 15,
+                                        width: 15,
+                                        child: CircularProgressIndicator(
+                                          color: tPrimaryActionColor,
+                                        ),
+                                      ),
+                                    );
                                   } else if (state is ShowSensorDataInitial) {
-                                    return SfCircularChart(
-                                      title: ChartTitle(
-                                        text: 'Water level',
-                                        alignment: ChartAlignment.near,
-                                        textStyle: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      legend: const Legend(
-                                        isVisible: true,
-                                        overflowMode:
-                                            LegendItemOverflowMode.wrap,
-                                      ),
-                                      palette: const [
-                                        tMidColor,
-                                        tPrimaryActionColor,
-                                        tDelayedColor,
-                                      ],
-                                      series: <CircularSeries>[
-                                        // Assuming you want a pie chart
-                                        DoughnutSeries<double, String>(
-                                          enableTooltip: true,
-                                          dataSource: <double>[
-                                            state.percentage,
-                                            state.percentage - 196,
-                                            196 - state.percentage,
-                                          ],
-                                          xValueMapper: (double value, _) {
-                                            print(
-                                                '${state.percentage},${state.percentage - 196},${196 - state.percentage}');
-                                            print('Value = $value');
-                                            if (value <= 25) {
-                                              return 'High';
-                                            }
-                                            if (value > 25 && value <= 75) {
-                                              return 'Average';
-                                            }
-                                            if (value > 75) {
-                                              return 'Low';
-                                            }
-                                            return null;
-                                          },
-                                          yValueMapper: (double value, _) =>
-                                              value,
-                                          dataLabelMapper: (double value, _) {
-                                            double percentage =
-                                                (((value + 14) / 228) * 100) *
-                                                    -1;
-                                            return '${percentage.toStringAsFixed(2)}%';
-                                          },
-                                          dataLabelSettings:
-                                              const DataLabelSettings(
-                                            isVisible: true,
-                                            textStyle: TextStyle(
-                                                fontFamily: 'Mulish',
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: tPrimaryTextColor),
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SfCircularChart(
+                                          title: ChartTitle(
+                                            text: 'Soil moisture percentage',
+                                            alignment: ChartAlignment.near,
+                                            textStyle: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
+                                          legend: const Legend(
+                                            isVisible: true,
+                                            overflowMode:
+                                                LegendItemOverflowMode.wrap,
+                                          ),
+                                          palette: const [
+                                            tMidColor,
+                                            tPrimaryActionColor,
+                                            tDelayedColor,
+                                          ],
+                                          series: <CircularSeries>[
+                                            // Assuming you want a pie chart
+                                            DoughnutSeries<double, String>(
+                                              enableTooltip: true,
+                                              dataSource: <double>[
+                                                state.percentage,
+                                                state.percentage - 196,
+                                                196 - state.percentage,
+                                              ],
+                                              xValueMapper: (double value, _) {
+                                                print(
+                                                    '${state.percentage},${state.percentage - 196},${196 - state.percentage}');
+                                                print('Value = $value');
+                                                if (value <= 25) {
+                                                  return 'High';
+                                                }
+                                                if (value > 25 && value <= 75) {
+                                                  return 'Average';
+                                                }
+                                                if (value > 75) {
+                                                  return 'Low';
+                                                }
+                                                return null;
+                                              },
+                                              yValueMapper: (double value, _) =>
+                                                  value,
+                                              dataLabelMapper:
+                                                  (double value, _) {
+                                                double percentage =
+                                                    (((value + 14) / 228) *
+                                                            100) *
+                                                        -1;
+                                                return '${percentage.toStringAsFixed(2)}%';
+                                              },
+                                              dataLabelSettings:
+                                                  const DataLabelSettings(
+                                                isVisible: true,
+                                                textStyle: TextStyle(
+                                                    fontFamily: 'Mulish',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: tPrimaryTextColor),
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                        GestureDetector(
+                                            onTap: () async {
+                                              await showSensorData
+                                                  .loadData(widget.userId!);
+                                            },
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.refresh,
+                                                  color: tPrimaryActionColor,
+                                                ),
+                                                Text('Update date'),
+                                              ],
+                                            )),
                                       ],
                                     );
                                   }

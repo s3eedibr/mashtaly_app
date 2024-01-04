@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +80,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await user.sendEmailVerification();
   }
 
+  Future<String> getToken() async {
+    try {
+      final String? token = await FirebaseMessaging.instance.getToken();
+      if (token == null) return '';
+      return token;
+    } catch (e) {
+      return '';
+    }
+  }
+
   /// Accesses the users collection in Firestore
   final usersCollection = FirebaseFirestore.instance.collection('users');
 
@@ -102,6 +113,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         "profile_pic":
             'https://firebasestorage.googleapis.com/v0/b/mashtaly-hu.appspot.com/o/default_profile.jpg?alt=media&token=c2365fe7-8e7d-4674-9c13-c88fc9f43b03',
         "isAdmin": false,
+        "active": true,
+        "token": await getToken(),
+        "date": '${DateTime.now().toUtc()}',
       });
     } catch (e) {
       print('Error adding user: $e');
@@ -123,7 +137,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       backgroundColor: tBgColor,
       body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             Padding(

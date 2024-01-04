@@ -77,6 +77,8 @@ Widget buildNewPlantsForSale(BuildContext context) {
                                 builder: (context) => SaleDetails(
                                   profileImage: sale['profile_pic'],
                                   user: sale['user'],
+                                  id: sale['id'],
+                                  userID: sale['user_id'],
                                   imageURL1: sale['sale_pic1'],
                                   imageURL2: sale['sale_pic2'],
                                   imageURL3: sale['sale_pic3'],
@@ -165,6 +167,7 @@ Widget buildPlantsForSaleUI(BuildContext context) {
                     children: [
                       PostCard2.buildShimmerCard(),
                       PostCard2.buildShimmerCard(),
+                      PostCard2.buildShimmerCard(),
                     ],
                   );
                 }
@@ -187,7 +190,7 @@ Widget buildPlantsForSaleUI(BuildContext context) {
                   height: 250,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: sales.length > 2 ? 2 : sales.length,
+                    itemCount: sales.length > 3 ? 3 : sales.length,
                     itemBuilder: (BuildContext context, index) {
                       if (index < sales.length) {
                         final sale = sales[index];
@@ -199,6 +202,8 @@ Widget buildPlantsForSaleUI(BuildContext context) {
                                 builder: (context) => SaleDetails(
                                   profileImage: sale['profile_pic'],
                                   user: sale['user'],
+                                  id: sale['id'],
+                                  userID: sale['user_id'],
                                   imageURL1: sale['sale_pic1'],
                                   imageURL2: sale['sale_pic2'],
                                   imageURL3: sale['sale_pic3'],

@@ -92,6 +92,8 @@ class _ListMySalesState extends State<ListMySales> {
                 builder: (context) => SaleDetails(
                   profileImage: sale['profile_pic'],
                   user: sale['user'],
+                  id: sale['id'],
+                  userID: sale['user_id'],
                   imageURL1: sale['sale_pic1'],
                   imageURL2: sale['sale_pic2'],
                   imageURL3: sale['sale_pic3'],

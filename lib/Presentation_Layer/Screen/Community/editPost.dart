@@ -12,16 +12,18 @@ import 'package:image_picker/image_picker.dart';
 import '../../../Constants/colors.dart';
 import '../../Widget/snackBar.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({
+class EditPost extends StatefulWidget {
+  const EditPost({
     super.key,
+    this.postID,
   });
+  final String? postID;
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<EditPost> createState() => _EditPostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _EditPostState extends State<EditPost> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   // List to store selected images
@@ -206,6 +208,42 @@ class _CreatePostState extends State<CreatePost> {
     } else {
       print("no image selected");
     }
+  }
+
+  Future<void> fetchDataFromFirebase(String postId) async {
+    try {
+      // Use a query to get documents where the ID matches postId
+      QuerySnapshot postQuery = await _firestore
+          .collection('posts')
+          .doc(_auth.currentUser?.uid)
+          .collection('Posts')
+          .where('id', isEqualTo: postId)
+          .get();
+
+      // Check if any documents match the query
+      if (postQuery.docs.isNotEmpty) {
+        // Extract data from the first document (assuming postId is unique)
+        Map<String, dynamic> postData =
+            postQuery.docs.first.data() as Map<String, dynamic>;
+
+        setState(() {
+          _titleController.text = postData['title'];
+          _contentController.text = postData['content'];
+          // You may need to handle loading existing images here
+        });
+      } else {
+        // Handle if no documents match the query
+        print('No post found with postId $postId.');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDataFromFirebase(widget.postID!);
   }
 
   @override

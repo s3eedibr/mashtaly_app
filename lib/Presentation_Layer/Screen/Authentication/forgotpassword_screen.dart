@@ -53,7 +53,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             // Image for the top of the screen

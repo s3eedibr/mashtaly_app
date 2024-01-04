@@ -4,7 +4,7 @@ import '../../../Constants/colors.dart';
 import 'Widget/appBar.dart';
 import 'Widget/expandedButton.dart';
 import 'Widget/articleWidget.dart';
-import 'Widget/salePlantWidget.dart';
+import 'Widget/sellPlantWidget.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({Key? key}) : super(key: key);

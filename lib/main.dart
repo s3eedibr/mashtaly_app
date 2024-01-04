@@ -1,9 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mashtaly_app/Business_Layer/cubits/show_sensor_data/cubit/show_sensor_data_cubit.dart';
+import 'package:mashtaly_app/Services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Animations/no_connection_screen.dart';
@@ -19,7 +21,8 @@ void main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.black));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  await notificationInitialize();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(const SplashScreenApp());
 }
 

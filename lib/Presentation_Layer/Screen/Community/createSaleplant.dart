@@ -130,6 +130,8 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
                 .doc(currentUser.uid)
                 .get())
             .get('profile_pic'),
+        "report": false,
+        "active": true,
       });
 
       showSnackBar(context, 'Post submitted! Admin review in progress.',
@@ -223,7 +225,7 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
           ),
         ),
         title: const Text(
-          "Create a sale",
+          "Create a sell",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -393,6 +395,7 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
               maxLine: 1,
               maxLength: 20,
               controller: _titleController,
+              type: TextInputType.text,
             ),
             CustomField(
               titleField: 'Phone number',
@@ -400,6 +403,7 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
               maxLine: 1,
               maxLength: 10,
               controller: _phoneNumberController,
+              type: TextInputType.phone,
             ),
             CustomField(
               titleField: 'Content',
@@ -407,6 +411,7 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
               maxLine: 50,
               maxLength: 2000,
               controller: _contentController,
+              type: TextInputType.text,
             ),
             const SizedBox(
               height: 75,
@@ -527,20 +532,23 @@ class _CreateSalePlantState extends State<CreateSalePlant> {
 }
 
 class CustomField extends StatelessWidget {
-  const CustomField({
-    Key? key,
-    required this.titleField,
-    required this.heightField,
-    required this.maxLine,
-    required this.maxLength,
-    required this.controller,
-  }) : super(key: key);
+  const CustomField(
+      {Key? key,
+      required this.titleField,
+      required this.heightField,
+      required this.maxLine,
+      required this.maxLength,
+      required this.controller,
+      required this.type})
+      : super(key: key);
 
   final String titleField;
   final double heightField;
   final int maxLine;
   final int maxLength;
   final TextEditingController controller;
+  final TextInputType type;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -570,6 +578,7 @@ class CustomField extends StatelessWidget {
             maxLines: maxLine,
             maxLength: maxLength,
             cursorColor: tPrimaryActionColor,
+            keyboardType: type,
             controller: controller,
             style: const TextStyle(
               fontWeight: FontWeight.w600,

@@ -217,9 +217,10 @@ class _PlantCardState extends State<PlantCard> {
                             fit: BoxFit.cover,
                             placeholder: (BuildContext context, String url) =>
                                 const Center(
-                                    child: CircularProgressIndicator(
-                              color: tPrimaryActionColor,
-                            )),
+                              child: CircularProgressIndicator(
+                                color: tPrimaryActionColor,
+                              ),
+                            ),
                             errorWidget: (BuildContext context, String url,
                                     dynamic error) =>
                                 const Center(
@@ -270,6 +271,21 @@ class _PlantCardState extends State<PlantCard> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 15,
+                                width: 55,
+                                decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             Shimmer.fromColors(
                               baseColor: Colors.grey[300]!,
                               highlightColor: Colors.grey[100]!,
@@ -389,6 +405,10 @@ class _PlantCardState extends State<PlantCard> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const Text('Plant status:'),
+                              const SizedBox(
+                                height: 5,
+                              ),
                               Container(
                                 height: 40,
                                 width: 90,
@@ -458,6 +478,10 @@ class _PlantCardState extends State<PlantCard> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Text('Plant status:'),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             Container(
                               height: 40,
                               width: 90,

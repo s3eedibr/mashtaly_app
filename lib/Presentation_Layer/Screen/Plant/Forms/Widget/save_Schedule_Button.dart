@@ -147,11 +147,14 @@ class _SaveScheduleButtonState extends State<SaveScheduleButton> {
                   decoration: const BoxDecoration(
                       color: tThirdTextErrorColor,
                       borderRadius: BorderRadius.all(Radius.circular(12))),
-                  child: const Center(
-                    child: Icon(
-                      Icons.delete_outline_rounded,
-                      size: 35,
-                      color: Colors.white,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: const Center(
+                      child: Icon(
+                        Icons.delete_outline_rounded,
+                        size: 35,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

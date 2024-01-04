@@ -58,7 +58,7 @@ Future<String> _fetchPlantInformation(
       return pageExtract;
     } else {
       // Handle the case where the expected keys are not present in the response.
-      return 'Invalid response format';
+      return 'There is no data about this plant';
     }
   } else {
     // Throw an exception if the response status code is not 200.

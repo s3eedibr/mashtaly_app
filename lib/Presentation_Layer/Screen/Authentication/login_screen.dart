@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mashtaly_app/Constants/assets.dart';
 
 import '../../../Constants/colors.dart';
+import '../../../Services/activeUser.dart';
 import '../../Widget/snackBar.dart';
 import 'forgotpassword_screen.dart';
 
@@ -19,6 +21,47 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
+  Future<bool> doesIsActive() async {
+    try {
+      // Reference to the Firestore collection
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+
+      // Assuming you have the user's ID, replace 'userId' with the actual ID
+      String? userId;
+      if (FirebaseAuth.instance.currentUser != null) {
+        userId = FirebaseAuth.instance.currentUser!.uid;
+        // Proceed with Firestore query
+      } else {
+        // User is not authenticated, handle accordingly
+      }
+      // Get the user's document
+      DocumentSnapshot documentSnapshot = await users
+          .doc(userId)
+          .get(); // Use 'doc' to specify a particular user
+
+      if (documentSnapshot.exists) {
+        bool isActive = documentSnapshot.get('active') ??
+            true; // Replace with the actual field name
+        if (isActive) {
+          initUserStatus();
+          showSnackBar(context,
+              'The user account has been disabled by an administrator.');
+        } else {
+          login(); // Assuming login is a function that handles login
+        }
+        return isActive;
+      } else {
+        // Document not found, handle accordingly
+        print('User document not found');
+        return false;
+      }
+    } catch (e) {
+      print('Error checking user status: $e');
+      return false;
+    }
+  }
+
   // Declare controllers for email and password input fields
   final _emilController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -39,13 +82,14 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
             email: _emilController.text.trim(),
             password: _passwordController.text.trim());
       } on FirebaseAuthException catch (e) {
+        print('${e.code}======================');
         // Handle Firebase Authentication errors
         switch (e.code) {
           case 'user-not-found':
             showSnackBar(context, 'No user found for that email.');
             break;
           case 'wrong-password':
-            showSnackBar(context, 'Wrong password provided for that user.');
+            showSnackBar(context, 'Incorrect email or password.');
             break;
           case 'user-disabled':
             showSnackBar(context,
@@ -54,6 +98,11 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
           case 'invalid-email':
             showSnackBar(context, 'The email address is badly formatted.');
             break;
+          case 'too-many-requests':
+            showSnackBar(context,
+                'Access to this account has been temporarily disabled due to many failed login attempts.');
+            break;
+
           default:
             showSnackBar(context, e.toString());
         }
@@ -87,7 +136,6 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
     return Scaffold(
       backgroundColor: tBgColor,
       body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         reverse: false,
         child: Column(
           children: [
@@ -254,7 +302,10 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                   Column(
                     children: [
                       GestureDetector(
-                        onTap: login,
+                        onTap: () {
+                          login();
+                          doesIsActive();
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             color: tPrimaryActionColor,

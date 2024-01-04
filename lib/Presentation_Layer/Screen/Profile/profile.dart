@@ -415,7 +415,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       onTap: () {
                         try {
-                          // Your settings code goes here
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const SettingScreen(),
+                          //   ),
+                          // );
                         } catch (e) {
                           print('Error in settings: $e');
                         }

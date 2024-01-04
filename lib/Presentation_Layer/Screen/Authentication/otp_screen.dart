@@ -63,7 +63,6 @@ class _OTPScreenState extends State<OTPScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             Padding(

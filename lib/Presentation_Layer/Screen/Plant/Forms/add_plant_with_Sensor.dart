@@ -253,31 +253,31 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          GestureDetector(
-            onTap: () {
-              // print(timeInEachWeekAndDay);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
-              child: Container(
-                height: 40,
-                width: 170,
-                decoration: const BoxDecoration(
-                  color: Color(0xffD2D8CF),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(6),
-                  ),
-                ),
-                child: const Icon(
-                  FontAwesomeIcons.print,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     // print(timeInEachWeekAndDay);
+          //   },
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(right: 16, bottom: 0, left: 17),
+          //     child: Container(
+          //       height: 40,
+          //       width: 170,
+          //       decoration: const BoxDecoration(
+          //         color: Color(0xffD2D8CF),
+          //         borderRadius: BorderRadius.all(
+          //           Radius.circular(6),
+          //         ),
+          //       ),
+          //       child: const Icon(
+          //         FontAwesomeIcons.print,
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           buildScheduleHeader(),
           const ScheduleWidget(),
           const SizedBox(height: 75),
@@ -455,8 +455,8 @@ class _AddPlantFormWithSenState extends State<AddPlantFormWithSen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  setUidToDweet();
+                onTap: () async {
+                  await setUidToDweet();
                   AppSettings.openAppSettings(
                     type: AppSettingsType.wifi,
                   );

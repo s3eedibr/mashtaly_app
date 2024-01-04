@@ -91,6 +91,8 @@ class _ListMyPostsState extends State<ListMyPosts> {
                 builder: (context) => PostDetails(
                   profileImage: post['profile_pic'],
                   user: post['user'],
+                  id: post['id'],
+                  userID: post['user_id'],
                   imageURL1: post['post_pic1'],
                   imageURL2: post['post_pic2'],
                   imageURL3: post['post_pic3'],

@@ -49,6 +49,8 @@ dependencies:
   cached_network_image: ^3.3.0
   firebase_database: ^10.3.8
   syncfusion_flutter_charts: ^23.2.7
+  firebase_messaging: ^14.7.9
+  awesome_notifications: ^0.8.2
 
 flutter_assets:
   assets_path: assets/images/

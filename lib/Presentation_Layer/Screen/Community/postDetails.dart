@@ -1,5 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mashtaly_app/Presentation_Layer/Screen/Community/editPost.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../Constants/colors.dart';
@@ -19,12 +23,16 @@ class PostDetails extends StatelessWidget {
     this.imageURL3,
     this.imageURL4,
     this.imageURL5,
+    this.id,
+    this.userID,
   }) : super(key: key);
 
   final String? title;
   final String? content;
   final String? date;
   final String? user;
+  final String? id;
+  final String? userID;
   final String? profileImage;
   final String? imageURL1;
   final String? imageURL2;
@@ -79,7 +87,7 @@ class PostDetails extends StatelessWidget {
               );
             } else {
               // Display actual content once data is available
-              return buildContent();
+              return buildContent(context, userID!, id!);
             }
           },
         ),
@@ -225,7 +233,7 @@ class PostDetails extends StatelessWidget {
   }
 
   // Widget for displaying actual content
-  Widget buildContent() {
+  Widget buildContent(BuildContext context, String userID, String postID) {
     return ListView(
       children: [
         const SizedBox(
@@ -268,29 +276,263 @@ class PostDetails extends StatelessWidget {
               Radius.circular(6),
             ),
           ),
-          child: buildImageWidget(imageURL1),
+          child: buildImageWidget(context, imageURL1),
         ),
         const SizedBox(
           height: 10.0,
         ),
         // Actual content for additional post images
+        imageURL4 == null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  imageURL2 != null
+                      ? buildImageContainer(context, imageURL2)
+                      : Container(),
+                  imageURL3 != null
+                      ? buildImageContainer(context, imageURL3)
+                      : Container(),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  imageURL2 != null
+                      ? buildImageContainer(context, imageURL2)
+                      : Container(),
+                  imageURL3 != null
+                      ? buildImageContainer(context, imageURL3)
+                      : Container(),
+                  imageURL4 != null
+                      ? buildImageContainer(context, imageURL4)
+                      : Container(),
+                  imageURL5 != null
+                      ? buildImageContainer(context, imageURL5)
+                      : Container(),
+                ],
+              ),
+        const SizedBox(height: 10),
+        // Actual content for post title
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            buildImageContainer(imageURL2),
-            buildImageContainer(imageURL3),
-            buildImageContainer(imageURL4),
-            buildImageContainer(imageURL5),
+            Text(
+              title ?? "",
+              style: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            userID != FirebaseAuth.instance.currentUser!.uid
+                ? GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: Colors.white,
+                              dialogBackgroundColor: Colors.white,
+                            ),
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              backgroundColor: Colors.white,
+                              titlePadding: const EdgeInsets.only(
+                                right: 16,
+                                bottom: 15,
+                                left: 16,
+                                top: 15,
+                              ),
+                              title: const Text(
+                                'Are you sure to report this post?',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              actionsAlignment: MainAxisAlignment.spaceBetween,
+                              actionsPadding: const EdgeInsets.only(
+                                right: 16,
+                                bottom: 15,
+                                left: 16,
+                              ),
+                              actions: [
+                                SizedBox(
+                                  height: 45,
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: tPrimaryActionColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      await reportPost(userID, postID);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "Yes",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 45,
+                                  width: 120,
+                                  child: OutlinedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      side: const BorderSide(
+                                        color: tThirdTextErrorColor,
+                                        width: 1,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'No',
+                                      style: TextStyle(
+                                        color: tThirdTextErrorColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 21,
+                      width: 21,
+                      decoration: const BoxDecoration(color: tBgColor),
+                      child: const Icon(
+                        FontAwesomeIcons.ellipsisVertical,
+                        size: 20,
+                      ),
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: Colors.white,
+                              dialogBackgroundColor: Colors.white,
+                            ),
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              backgroundColor: Colors.white,
+                              titlePadding: const EdgeInsets.only(
+                                right: 16,
+                                bottom: 15,
+                                left: 16,
+                                top: 15,
+                              ),
+                              actionsPadding: const EdgeInsets.only(
+                                right: 16,
+                                bottom: 15,
+                                left: 16,
+                              ),
+                              actionsAlignment: MainAxisAlignment.center,
+                              actions: [
+                                Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    SizedBox(
+                                      height: 45,
+                                      width: 150,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: tPrimaryActionColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          EditPost(
+                                            postID: id,
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "Edit post",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    SizedBox(
+                                      height: 45,
+                                      width: 150,
+                                      child: OutlinedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          side: const BorderSide(
+                                            color: tThirdTextErrorColor,
+                                            width: 1,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Delete post',
+                                          style: TextStyle(
+                                            color: tThirdTextErrorColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 21,
+                      width: 21,
+                      decoration: const BoxDecoration(color: tBgColor),
+                      child: const Icon(
+                        FontAwesomeIcons.ellipsisVertical,
+                        size: 20,
+                      ),
+                    ),
+                  ),
           ],
-        ),
-        const SizedBox(height: 10),
-        // Actual content for post title
-        Text(
-          title ?? "",
-          style: const TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
         ),
         const SizedBox(
           height: 10,
@@ -335,7 +577,7 @@ class PostDetails extends StatelessWidget {
   }
 
   // Build an image container with a shimmer effect
-  Widget buildImageContainer(String? imageURL) {
+  Widget buildImageContainer(BuildContext context, String? imageURL) {
     return Container(
       height: 95,
       width: 85,
@@ -346,23 +588,28 @@ class PostDetails extends StatelessWidget {
           Radius.circular(6),
         ),
       ),
-      child: buildImageWidget(imageURL),
+      child: buildImageWidget(context, imageURL),
     );
   }
 
   // Build an image widget with or without an actual image URL
-  Widget buildImageWidget(String? imageURL) {
+  Widget buildImageWidget(BuildContext context, String? imageURL) {
     if (imageURL != null) {
-      return CachedNetworkImage(
-        imageUrl: imageURL,
-        fit: BoxFit.cover,
-        placeholder: (BuildContext context, String url) => const Center(
-            child: CircularProgressIndicator(
-          color: tPrimaryActionColor,
-        )),
-        errorWidget: (BuildContext context, String url, dynamic error) =>
-            const Center(
-          child: Icon(Icons.image_not_supported_outlined),
+      return GestureDetector(
+        onTap: () {
+          _showImageDialog(context, imageURL);
+        },
+        child: CachedNetworkImage(
+          imageUrl: imageURL,
+          fit: BoxFit.cover,
+          placeholder: (BuildContext context, String url) => const Center(
+              child: CircularProgressIndicator(
+            color: tPrimaryActionColor,
+          )),
+          errorWidget: (BuildContext context, String url, dynamic error) =>
+              const Center(
+            child: Icon(Icons.image_not_supported_outlined),
+          ),
         ),
       );
     } else {
@@ -386,5 +633,39 @@ class PostDetails extends StatelessWidget {
   // Simulate fetching data after some delay
   Future<void> fetchData() async {
     await Future.delayed(const Duration(seconds: 2));
+  }
+}
+
+void _showImageDialog(BuildContext context, String imageUrl) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: Image.network(imageUrl),
+      );
+    },
+  );
+}
+
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+Future<void> reportPost(String userId, String postId) async {
+  try {
+    // Get the reference to the SalePlants collection for the specific user
+    CollectionReference postsCollection =
+        _firestore.collection('posts').doc(userId).collection('Posts');
+
+    // Query for documents with the specified post ID
+    QuerySnapshot querySnapshot =
+        await postsCollection.where('id', isEqualTo: postId).get();
+
+    // Iterate through the documents and update the 'report' field to true
+    for (QueryDocumentSnapshot document in querySnapshot.docs) {
+      await document.reference.update({'report': true});
+    }
+
+    print('Post reported successfully!');
+  } catch (e) {
+    print('Error reporting post: $e');
   }
 }

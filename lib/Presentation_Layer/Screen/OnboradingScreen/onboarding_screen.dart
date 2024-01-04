@@ -59,10 +59,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        // systemOverlayStyle: const SystemUiOverlayStyle(
-        //   statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-        // ),
-        // backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           TextButton(
@@ -218,23 +214,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        // Container(
-                        //   height: 80,
-                        //   decoration: const BoxDecoration(
-                        //     color: Colors.transparent,
-                        //     boxShadow: [
-                        //       BoxShadow(
-                        //           blurRadius: 12,
-                        //           offset: Offset(0, 3),
-                        //           color: Color(0x33000000)),
-                        //       BoxShadow(
-                        //           offset: Offset(-10, 0),
-                        //           color: Colors.white),
-                        //       BoxShadow(
-                        //           offset: Offset(10, 0), color: Colors.white),
-                        //     ],
-                        //   ),
-                        // ),
                         Padding(
                           padding: const EdgeInsets.only(
                             bottom: 15,
