@@ -1,3 +1,4 @@
+# Mashtaly
 **Mashtaly: IoT-Powered Plant Care and Water Conservation**
 
 Mashtaly is an innovative application leveraging Internet of Things (IoT) technology to tackle plant care and water conservation challenges. With a focus on addressing the global water crisis, Mashtaly empowers users to conserve water and foster sustainability through remote plant monitoring.
