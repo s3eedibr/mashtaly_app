@@ -35,3 +35,9 @@ Mashtaly is an innovative application leveraging Internet of Things (IoT) techno
 Mashtaly ensures usability, security, accuracy, reliability, and availability, guaranteeing a high-quality experience for users and contributing to the project's success.
 
 For more information, please refer to the detailed documentation provided.
+
+---
+
+📊 [Mashtaly Dashboard](https://github.com/s3eedibr/mashtaly_dashboard): The Mashtaly Dashboard streamlines community content management and provides statistical insights for efficient platform monitoring.
+
+🌱 [Mashtaly Sensor (Soil moisture sensor using IoT)](https://github.com/s3eedibr/mashtaly_sensor): Learn about the soil moisture sensor's pivotal role in Mashtaly for optimal plant hydration and water conservation.
