@@ -34,7 +34,8 @@ Mashtaly is an innovative application leveraging Internet of Things (IoT) techno
 
 Mashtaly ensures usability, security, accuracy, reliability, and availability, guaranteeing a high-quality experience for users and contributing to the project's success.
 
-For more information, please refer to the detailed documentation provided.
+For more information, please refer to the detailed [documentation](https://drive.google.com/file/d/1_7Y2jl7MLyO2ygkfANN9JndZax327qCb/view?usp=sharing) provided.
+
 
 ---
 
