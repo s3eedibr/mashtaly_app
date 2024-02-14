@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "607471003986",
+    "firebase_url": "https://mashtaly-hu-default-rtdb.firebaseio.com",
     "project_id": "mashtaly-hu",
     "storage_bucket": "mashtaly-hu.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "607471003986-pe5nm5dokqcdb3mg3tcc1gua9jgsc0s1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "607471003986-ia3cai305q2oajapotuf14pj1ahj4cbc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mashtalyApp"
+              }
             }
           ]
         }

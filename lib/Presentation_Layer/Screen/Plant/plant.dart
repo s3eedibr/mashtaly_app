@@ -70,6 +70,7 @@ class _PlantScreenState extends State<PlantScreen> {
   Widget build(BuildContext context) {
     final weatherCubit = BlocProvider.of<WeatherCubit>(context);
     weatherCubit.getLocationAndFetchWeather();
+
     final TextEditingController searchController = TextEditingController();
 
     const bool newNotification = true;
@@ -370,10 +371,10 @@ class _PlantScreenState extends State<PlantScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 16, bottom: 0, left: 16),
                 child: SizedBox(
-                  height: 80,
+                  height: 85,
                   child: DatePicker(
                     DateTime.now(),
-                    width: 45,
+                    width: 55,
                     initialSelectedDate: selectedDate,
                     selectionColor: tPrimaryActionColor,
                     selectedTextColor: Colors.white,
